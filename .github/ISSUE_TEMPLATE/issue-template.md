@@ -1,12 +1,3 @@
----
-name: issue template
-about: Create the task for this project
-title: ''
-labels: enhancement
-assignees: ''
-
----
-
 # Why?
 
 *Зачем выполняется реализация задачи и какую проблему она решает.*
