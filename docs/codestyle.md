@@ -16,6 +16,8 @@
     active_users = 105
     ```
 
++ Имена констант должны быть snake_case и в верхнем регистре `LAST_NUMBER`
+
 + Не используйте магические числа.
     ```python
     # Не рекомендуется
@@ -117,3 +119,70 @@ def send_email(subject: str, body: str, recipients: List[str], cache: Dict[str,s
 + Если документируется класс — после строки документации оставляется пустая строка. В остальных случаях код должен начинаться сразу после докстринга.
 
 Также о правилах оформления докстрингов можно ознакомиться подробнее в стандарте [PEP257](https://peps.python.org/pep-0257/).
+
+## Django codestyle
+
+### F строка
++ f-строки должны использовать только простой доступ к переменным и свойствам с предварительным назначением локальной переменной для более сложных случаев:
+    
+```python
+# Разрешено
+f'hello {user}'
+f'hello {user.name}'
+f'hello {self.user.name}'
+
+# Не разрешено
+f'hello {get_user()}'
+f'you are {user.age * 365.25} days old'
+```
+
+### Импорты
++ В каждой строке расположите элементы импорта в алфавитном порядке с элементами в верхнем регистре, перед элементами в нижнем регистре.
+
++ Разорвите длинные строки скобками и сделайте отступ на 4 пробела. Включите запятую после последнего импорта и поместите закрывающую круглую скобку в отдельную строку.
+
++ Используйте одну пустую строку между последним импортом и любым кодом уровня модуля и используйте две пустые строки над первой функцией или классом.
+
++ Например (комментарии предназначены только для пояснительных целей):
+``` python
+django / contrib / admin / example.py ¶
+# future
+from __future__ import unicode_literals
+
+# standard library
+import json
+from itertools import chain
+
+# third-party
+import bcrypt
+
+# Django
+from django.http import Http404
+from django.http.response import (
+    Http404, HttpResponse, HttpResponseNotAllowed, StreamingHttpResponse,
+    cookie,
+)
+
+# local Django
+from .models import LogEntry
+
+# try/except
+try:
+    import yaml
+except ImportError:
+    yaml = None
+
+CONSTANT = 'foo'
+
+
+class Example:
+    # ...
+```
++ По возможности используйте удобный импорт. Например, сделайте так:
+```python
+from django.views import View
+```
+вместо:
+```python
+from django.views.generic.base import View
+```
