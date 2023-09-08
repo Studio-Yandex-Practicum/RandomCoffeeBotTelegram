@@ -20,7 +20,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version-file: pyproject.toml
+          python-version: '3.11'
 
       - name: Install dependencies
         run: |
