@@ -6,7 +6,9 @@ authors = ["Ярослав Андреев <1frost34eone@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "^3.12"
+django = "^4.2.5"
+python-telegram-bot = "^20.5"
 
 
 [build-system]
