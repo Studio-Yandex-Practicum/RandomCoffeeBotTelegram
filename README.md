@@ -35,6 +35,7 @@ Random Coffee bot for the Telegram
 
 ## 1.2. ER - диаграмма сущностей<a id="er"></a>:
 ER диаграммы расположены в директории /docs в двух удобных форматах [.drowio, .jpg]
+![ER Диаграмма](/docs/RandomCoffeeER.jpg)
 
 # 2. Структура проекта <a id="structure"></a>
 
