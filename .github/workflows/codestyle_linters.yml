@@ -3,7 +3,7 @@ name: Python linters
 on:
   push:
     branches:
-      - feature/*
+      - '**'
   pull_request:
     branches:
       - develop
