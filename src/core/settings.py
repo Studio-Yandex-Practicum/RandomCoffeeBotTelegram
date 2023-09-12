@@ -21,6 +21,26 @@ INSTALLED_APPS = [
     "bot.apps.BotConfig"
 ]
 
+DEFAULT_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+]
+
+LOCAL_APPS = [
+    'bot',
+    'admin_user'
+]
+
+EXTERNAL_APPS = [
+
+]
+
+INSTALLED_APPS = DEFAULT_APPS + LOCAL_APPS + EXTERNAL_APPS
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
