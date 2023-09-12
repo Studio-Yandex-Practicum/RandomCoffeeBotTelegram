@@ -2,7 +2,7 @@ import asyncio
 import logging
 
 from django.conf import settings
-from telegram.ext import Application, PicklePersistence
+from telegram.ext import Application, PicklePersistence, ApplicationBuilder
 
 from .handlers import HANDLERS
 
@@ -18,14 +18,14 @@ class Bot:
         return cls._instance
 
     def __init__(self):
-        self._app = None
+        self._app: Application | None = None
         self._stop_event = asyncio.Event()
         logger.info('Bot instance created.')
 
     def start(self):
         logger.info('Bot starting...')
         self._stop_event.clear()
-        asyncio.create_task(self._run())
+        asyncio.ensure_future(self._run(), loop=asyncio.get_event_loop())
 
     def stop(self):
         logger.info('Bot stopping...')
@@ -40,10 +40,12 @@ class Bot:
         await self._stop_bot()
 
     async def _build_app(self):
-        app = Application.builder().token(
-            settings.TELEGRAM_TOKEN).persistence(
+        app = (
+            ApplicationBuilder()
+            .token(settings.TELEGRAM_TOKEN).persistence(
             PicklePersistence(filepath=settings.PERSISTANCE_PATH)
         ).build()
+        )
         app.add_handlers([HANDLERS])
         return app
 
@@ -60,5 +62,4 @@ class Bot:
         await self._app.start()
 
     async def _stop_bot(self):
-        await self._app.updater.stop()
-        await self._app.stop()
+        await Application.stop(self._app)

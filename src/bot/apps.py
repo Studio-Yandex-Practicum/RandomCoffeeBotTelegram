@@ -12,6 +12,7 @@ class BotConfig(AppConfig):
 
     def ready(self) -> None:
         from .bot import Bot
+
         self.bot = Bot()
 
         asgi_shutdown.connect(self.stop_bot)
