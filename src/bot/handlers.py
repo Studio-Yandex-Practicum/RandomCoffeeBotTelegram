@@ -9,11 +9,9 @@ logger = logging.getLogger(__name__)
 
 
 # Функция-обработчик для команды /start
-async def start(update: Update, context: CallbackContext):
+async def start_bot(update: Update, context: CallbackContext):
     user = update.effective_user
     await update.message.reply_html(
-        fr'Привет, {user.mention_html()}!',
-        parse_mode='HTML',
-    )
+        fr'Привет, {user.mention_html()}!')
 
-HANDLERS = CommandHandler("start", start)
+HANDLERS = CommandHandler("start", start_bot)
