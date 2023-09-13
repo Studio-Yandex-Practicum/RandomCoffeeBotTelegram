@@ -11,16 +11,6 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
-INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    "bot.apps.BotConfig"
-]
-
 DEFAULT_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -109,10 +99,11 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-TELEGRAM_TOKEN = ''
+TELEGRAM_TOKEN = '6197218804:AAG2tulDtlArBtwFen8bgj9gBaSnYnKpXV4'
 
 WEBHOOK_MODE = False
 WEBHOOK_URL = ''
+WEBHOOK_SECRET_KEY = ''
 
 PERSISTANCE_DIR = BASE_DIR / 'persistance_data'
 PERSISTANCE_PATH = PERSISTANCE_DIR / 'persistance_file'

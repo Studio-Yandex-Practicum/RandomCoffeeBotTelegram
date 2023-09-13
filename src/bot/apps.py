@@ -11,7 +11,7 @@ class BotConfig(AppConfig):
         self.bot.stop()
 
     def ready(self) -> None:
-        from .bot import Bot
+        from src.bot.bot import Bot
 
         self.bot = Bot()
 
