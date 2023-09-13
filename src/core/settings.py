@@ -3,22 +3,13 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+
 SECRET_KEY = 'django-insecure-&@jyyt-zi283urxz6+2^a+f0x!qb#69^zbe=*n4mblnm0-q2s6'
 
 DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
-INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    "bot.apps.BotConfig"
-]
 
 DEFAULT_APPS = [
     'django.contrib.admin',
@@ -70,12 +61,14 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'core.wsgi.application'
 
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -101,12 +94,18 @@ USE_I18N = True
 
 USE_TZ = True
 
+
 STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-TELEGRAM_TOKEN = ''
+TELEGRAM_TOKEN = '6197218804:AAG2tulDtlArBtwFen8bgj9gBaSnYnKpXV4'
+
 WEBHOOK_MODE = False
+WEBHOOK_URL = ''
+WEBHOOK_SECRET_KEY = ''
+
 PERSISTANCE_DIR = BASE_DIR / 'persistance_data'
 PERSISTANCE_PATH = PERSISTANCE_DIR / 'persistance_file'
+
 Path.mkdir(PERSISTANCE_DIR, exist_ok=True)

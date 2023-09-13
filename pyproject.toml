@@ -9,6 +9,8 @@ readme = "README.md"
 python = "^3.11"
 django = "^4.2.5"
 python-telegram-bot = "^20.5"
+django-asgi-lifespan = "^0.1.0"
+uvicorn = "^0.23.2"
 
 
 [tool.poetry.group.dev.dependencies]

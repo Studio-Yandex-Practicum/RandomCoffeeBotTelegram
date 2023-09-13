@@ -1,16 +1,23 @@
-import asyncio
-
 from django.apps import AppConfig
+from django_asgi_lifespan.signals import asgi_shutdown
 
 
 class BotConfig(AppConfig):
-    """Config for bot app."""
+    """Конфигурация приложения бота."""
 
     default_auto_field = "django.db.models.BigAutoField"
     name = "bot"
 
-    def ready(self) -> None:
-        """Start the bot application."""
-        from .bot import start_bot
+    def stop_bot(self, **kwargs):
+        """Вызывается при остановке приложения."""
+        self.bot.stop()
 
-        asyncio.ensure_future(start_bot(), loop=asyncio.get_event_loop())
+    def ready(self) -> None:
+        """Вызывается при запуске приложения."""
+        from bot.bot import Bot
+
+        self.bot = Bot()
+
+        asgi_shutdown.connect(self.stop_bot)
+
+        self.bot.start()
