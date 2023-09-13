@@ -1,10 +1,15 @@
+import os
 from pathlib import Path
+
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
-SECRET_KEY = 'django-insecure-&@jyyt-zi283urxz6+2^a+f0x!qb#69^zbe=*n4mblnm0-q2s6'
+SECRET_KEY = os.getenv('SECRET_KEY', default='django-insecure-&@jyyt-zi283urxz6+2^a+f0x!qb#69^zbe=*n4mblnm0-q2s6')
+TELEGRAM_TOKEN = os.getenv('TELEGRAM_TOKEN', default=None)
 
 DEBUG = True
 
