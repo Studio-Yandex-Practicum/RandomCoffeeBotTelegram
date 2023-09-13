@@ -6,13 +6,13 @@
 
 + Имена переменных должны быть snake_case и в нижнем регистре `first_name`
 
-+ Используйте информативные описательные имена, которые легко читаются. 
++ Используйте информативные описательные имена, которые легко читаются.
 
     ```python
     # Не рекомендуется
     au = 105
 
-    # Рекомендуется 
+    # Рекомендуется
     active_users = 105
     ```
 
@@ -23,10 +23,10 @@
     # Не рекомендуется
     def roll_dice():
         return random.randint(0, 4)  # what is 4 supposed to represent?
-    
+
     # Рекомендуется
     DICE_SIDES = 4
-    
+
     def roll_dice():
         return random.randint(0, DICE_SIDES)
     ```
@@ -41,8 +41,8 @@ DICE_SIDES = 4
 
 # Не рекомендуется
 def roll_dice_using_randint():
-    return random.randint(0, DICE_SIDES)  
-    
+    return random.randint(0, DICE_SIDES)
+
 # Рекомендуется
 def roll_dice():
     return random.randint(0, DICE_SIDES)
@@ -51,7 +51,7 @@ def roll_dice():
 
  Максимальная длина строки. Постарайтесь ограничить свои строки примерно 79 символами, что является рекомендацией, приведенной в руководстве по стилю [PEP 8](https://pythonworld.ru/osnovy/pep-8-rukovodstvo-po-napisaniyu-koda-na-python.html?ysclid=lmajzjrf9x736916353#section-5)
 
-### Аннотация типов 
+### Аннотация типов
 
 Чтобы держать типизацию под контролем — применяют аннотации типов данных `Type Hints`. Это явное указание типа ожидаемых данных при объявлении переменных, классов и функций.
 
@@ -109,10 +109,10 @@ def send_email(subject: str, body: str, recipients: List[str], cache: Dict[str,s
           """Можно перенести
           так.
           """
-      
+
       def muddy_func():
           """
-          А можно - 
+          А можно -
           так.
           """
     ```
@@ -124,7 +124,7 @@ def send_email(subject: str, body: str, recipients: List[str], cache: Dict[str,s
 
 ### F строка
 + f-строки должны использовать только простой доступ к переменным и свойствам с предварительным назначением локальной переменной для более сложных случаев:
-    
+
 ```python
 # Разрешено
 f'hello {user}'

@@ -1,3 +1,13 @@
-from django.db import models
+from django.contrib.auth.models import AbstractUser
 
-# Create your models here.
+
+class AdminUser(AbstractUser):
+    """Модель для создания администраторов."""
+
+    class Meta:
+        ordering = ("id",)
+        verbose_name = "AdminUser"
+        verbose_name_plural = "AdminUsers"
+
+    def __str__(self):
+        return self.username
