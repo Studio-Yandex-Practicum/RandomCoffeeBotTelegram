@@ -8,6 +8,7 @@ django_application = get_asgi_application()
 
 
 async def application(scope, receive, send):
+    """Точка входа для ASGI приложения."""
     if scope["type"] in {"http", "lifespan"}:
         await django_application(scope, receive, send)
     else:
