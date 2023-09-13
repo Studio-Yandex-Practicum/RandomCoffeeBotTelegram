@@ -1,15 +1,20 @@
 import os
 from pathlib import Path
 
-from dotenv import load_dotenv
+import environ
+from dotenv import find_dotenv
 
-load_dotenv()
 
+env = environ.Env()
+if DEBUG := env.bool("DEBUG", default=True):
+    environ.Env.read_env(find_dotenv(".env", raise_error_if_not_found=True))
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.getenv('SECRET_KEY', default='django-insecure-&@jyyt-zi283urxz6+2^a+f0x!qb#69^zbe=*n4mblnm0-q2s6')
-TELEGRAM_TOKEN = os.getenv('TELEGRAM_TOKEN', default=None)
+SECRET_KEY = os.getenv(
+    'SECRET_KEY',
+    default='django-insecure-&@jyyt-zi283urxz6+2^a+f0x!qb#69^zbe=*n4mblnm0-q2s6'
+)
 
 DEBUG = True
 
@@ -101,6 +106,8 @@ USE_TZ = True
 
 
 STATIC_URL = 'static/'
+
+TELEGRAM_TOKEN = os.getenv('TELEGRAM_TOKEN', default=None)
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
