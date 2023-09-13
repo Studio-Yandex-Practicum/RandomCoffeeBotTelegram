@@ -104,8 +104,6 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-TELEGRAM_TOKEN = '6197218804:AAG2tulDtlArBtwFen8bgj9gBaSnYnKpXV4'
-
 WEBHOOK_MODE = False
 WEBHOOK_URL = ''
 WEBHOOK_SECRET_KEY = ''
