@@ -17,6 +17,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    "bot.apps.BotConfig"
 ]
 
 DEFAULT_APPS = [
@@ -103,3 +104,9 @@ USE_TZ = True
 STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+TELEGRAM_TOKEN = ''
+WEBHOOK_MODE = False
+PERSISTANCE_DIR = BASE_DIR / 'persistance_data'
+PERSISTANCE_PATH = PERSISTANCE_DIR / 'persistance_file'
+Path.mkdir(PERSISTANCE_DIR, exist_ok=True)
