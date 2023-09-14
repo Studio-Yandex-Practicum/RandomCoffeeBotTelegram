@@ -48,8 +48,7 @@ class Student(PracticumUser):
     profession = models.ForeignKey(
         Profession,
         related_name="students",
-        on_delete=models.SET_NULL,
-        null=True,
+        on_delete=models.PROTECT,
         verbose_name="Профессия",
     )
 
