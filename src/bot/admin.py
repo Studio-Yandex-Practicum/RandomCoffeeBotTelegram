@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from bot.models import CreatedPair, PassedPair, Recruiter, Student
+from src.bot.models import CreatedPair, PassedPair, Recruiter, Student
 
 
 @admin.register(CreatedPair)
@@ -12,8 +12,8 @@ class CreatedPairAdmin(admin.ModelAdmin):
     search_fields = (
         "student__telegram_id",
         "recruiter__telegram_id",
-        "student__tg_username",
-        "recruiter__tg_username",
+        "student__telegram_username",
+        "recruiter__telegram_username",
     )
 
 
@@ -26,14 +26,14 @@ class PassedPairAdmin(admin.ModelAdmin):
         "student",
         "recruiter",
         "date",
-        "is_interview_successful",
+        "interview_successful",
     )
-    list_filter = ("date", "is_interview_successful")
+    list_filter = ("date", "interview_successful")
     search_fields = (
         "student__telegram_id",
         "recruiter__telegram_id",
-        "student__tg_username",
-        "recruiter__tg_username",
+        "student__telegram_username",
+        "recruiter__telegram_username",
     )
 
 
@@ -45,13 +45,13 @@ class StudentAdmin(admin.ModelAdmin):
         "telegram_id",
         "name",
         "surname",
-        "tg_username",
+        "telegram_username",
         "registration_date",
         "last_login_date",
-        "is_vacant",
+        "has_pair",
     )
-    list_filter = ("registration_date", "last_login_date", "is_vacant")
-    search_fields = ("telegram_id", "tg_username")
+    list_filter = ("registration_date", "last_login_date", "has_pair")
+    search_fields = ("telegram_id", "telegram_username")
 
 
 @admin.register(Recruiter)
@@ -62,10 +62,10 @@ class RecruiterAdmin(admin.ModelAdmin):
         "telegram_id",
         "name",
         "surname",
-        "tg_username",
+        "telegram_username",
         "registration_date",
         "last_login_date",
-        "is_vacant",
+        "has_pair",
     )
-    list_filter = ("registration_date", "last_login_date", "is_vacant")
-    search_fields = ("telegram_id", "tg_username")
+    list_filter = ("registration_date", "last_login_date", "has_pair")
+    search_fields = ("telegram_id", "telegram_username")

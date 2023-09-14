@@ -17,7 +17,7 @@ class PracticumUser(models.Model):
     )
     name = models.CharField(max_length=255, verbose_name="Имя")
     surname = models.CharField(max_length=255, verbose_name="Фамилия")
-    tg_username = models.CharField(
+    telegram_username = models.CharField(
         max_length=255, verbose_name="Ник в телеграмме", unique=True
     )
     registration_date = models.DateField(
@@ -26,13 +26,13 @@ class PracticumUser(models.Model):
     last_login_date = models.DateField(
         auto_now=True, verbose_name="Заходил в последний раз"
     )
-    is_vacant = models.BooleanField(default=False, verbose_name="Есть пара")
+    has_pair = models.BooleanField(default=False, verbose_name="Есть пара")
 
     class Meta:
         abstract = True
 
     def __str__(self):
-        return f"{self.tg_username} | id: {self.telegram_id}"
+        return f"{self.telegram_username} | id: {self.telegram_id}"
 
 
 class Student(PracticumUser):
@@ -75,8 +75,8 @@ class CustomPair(models.Model):
 
     def __str__(self):
         return (
-            f"Студент {self.student.tg_username} | "
-            f"Рекрутер {self.recruiter.tg_username}"
+            f"Студент {self.student.telegram_username} | "
+            f"Рекрутер {self.recruiter.telegram_username}"
         )
 
 
@@ -93,14 +93,14 @@ class CreatedPair(CustomPair):
                 fields=["student", "recruiter"], name="unique_created_pair"
             ),
         ]
-        verbose_name = "Текущая пара"
-        verbose_name_plural = "Текущие пары"
+        verbose_name = "Активная пара"
+        verbose_name_plural = "Активные пары"
 
 
 class PassedPair(CustomPair):
     """Модель созвона."""
 
-    is_interview_successful = models.BooleanField(
+    interview_successful = models.BooleanField(
         default=False, verbose_name="Встреча прошла успешно"
     )
 
