@@ -21,7 +21,7 @@ DEFAULT_APPS = [
     "django.contrib.staticfiles",
 ]
 
-LOCAL_APPS = ["bot", "admin_user"]
+LOCAL_APPS = ["bot",]
 
 EXTERNAL_APPS = []
 
