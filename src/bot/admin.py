@@ -1,6 +1,13 @@
 from django.contrib import admin
 
-from src.bot.models import CreatedPair, PassedPair, Recruiter, Student
+from bot.models import CreatedPair, PassedPair, Profession, Recruiter, Student
+
+
+@admin.register(Profession)
+class ProfessionAdmin(admin.ModelAdmin):
+    """Управление профессиями."""
+
+    list_display = ("name",)
 
 
 @admin.register(CreatedPair)

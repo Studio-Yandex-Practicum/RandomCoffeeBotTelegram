@@ -8,6 +8,13 @@ class Profession(models.Model):
         max_length=128, unique=True, verbose_name="Название профессии"
     )
 
+    class Meta:
+        verbose_name = "Профессия"
+        verbose_name_plural = "Профессии"
+
+    def __str__(self):
+        return self.name
+
 
 class PracticumUser(models.Model):
     """Базовая модель для пользователей."""

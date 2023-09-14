@@ -14,7 +14,7 @@ class BotConfig(AppConfig):
 
     def ready(self) -> None:
         """Вызывается при запуске приложения."""
-        from bot.bot import Bot
+        from bot.bot_interface import Bot
 
         self.bot = Bot()
 

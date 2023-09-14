@@ -3,9 +3,11 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-SECRET_KEY = ""
+SECRET_KEY = " "
 
 DEBUG = True
+
+AUTH_USER_MODEL = "admin_user.AdminUser"
 
 ALLOWED_HOSTS = []
 
@@ -19,7 +21,7 @@ DEFAULT_APPS = [
     "django.contrib.staticfiles",
 ]
 
-LOCAL_APPS = ["bot",]
+LOCAL_APPS = ["bot", "admin_user"]
 
 EXTERNAL_APPS = []
 
