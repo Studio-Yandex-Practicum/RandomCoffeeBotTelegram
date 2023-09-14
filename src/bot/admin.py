@@ -55,7 +55,7 @@ class StudentAdmin(admin.ModelAdmin):
 
 
 @admin.register(Recruiter)
-class RecruterAdmin(admin.ModelAdmin):
+class RecruiterAdmin(admin.ModelAdmin):
     """Управление моделью рекрутера."""
 
     list_display = (
