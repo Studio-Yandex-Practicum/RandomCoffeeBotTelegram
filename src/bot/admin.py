@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import CreatedPair, PassedPair, Recruiter, Student
+from bot.models import CreatedPair, PassedPair, Recruiter, Student
 
 
 @admin.register(CreatedPair)
@@ -10,8 +10,8 @@ class CreatedPairAdmin(admin.ModelAdmin):
     list_display = ("id", "student", "recruiter", "date")
     list_filter = ("date",)
     search_fields = (
-        "student__user_id",
-        "recruiter__user_id",
+        "student__telegram_id",
+        "recruiter__telegram_id",
         "student__tg_username",
         "recruiter__tg_username",
     )
@@ -30,8 +30,8 @@ class PassedPairAdmin(admin.ModelAdmin):
     )
     list_filter = ("date", "is_interview_successful")
     search_fields = (
-        "student__user_id",
-        "recruiter__user_id",
+        "student__telegram_id",
+        "recruiter__telegram_id",
         "student__tg_username",
         "recruiter__tg_username",
     )
@@ -42,7 +42,7 @@ class StudentAdmin(admin.ModelAdmin):
     """Управление моделью студента."""
 
     list_display = (
-        "user_id",
+        "telegram_id",
         "name",
         "surname",
         "tg_username",
@@ -51,7 +51,7 @@ class StudentAdmin(admin.ModelAdmin):
         "is_vacant",
     )
     list_filter = ("registration_date", "last_login_date", "is_vacant")
-    search_fields = ("user_id", "tg_username")
+    search_fields = ("telegram_id", "tg_username")
 
 
 @admin.register(Recruiter)
@@ -59,7 +59,7 @@ class RecruiterAdmin(admin.ModelAdmin):
     """Управление моделью рекрутера."""
 
     list_display = (
-        "user_id",
+        "telegram_id",
         "name",
         "surname",
         "tg_username",
@@ -68,4 +68,4 @@ class RecruiterAdmin(admin.ModelAdmin):
         "is_vacant",
     )
     list_filter = ("registration_date", "last_login_date", "is_vacant")
-    search_fields = ("user_id", "tg_username")
+    search_fields = ("telegram_id", "tg_username")

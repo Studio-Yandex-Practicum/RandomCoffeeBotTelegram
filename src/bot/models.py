@@ -1,19 +1,20 @@
 from django.db import models
 
 
-class ProfessionChoice(models.TextChoices):
-    """Класс для выбора профессий."""
+class Profession(models.Model):
+    """Модель для хранения профессий."""
 
-    ANALYST = "AN", "Аналитик"
-    BACKEND = "BA", "Бэкенд-разработчик"
-    FRONTEND = "FR", "Фронтенд-разработчик"
-    TESTER = "TE", "Тестировщик"
+    name = models.CharField(
+        max_length=128, unique=True, verbose_name="Название профессии"
+    )
 
 
 class PracticumUser(models.Model):
     """Базовая модель для пользователей."""
 
-    user_id = models.IntegerField(primary_key=True, verbose_name="Telegram id")
+    telegram_id = models.IntegerField(
+        primary_key=True, verbose_name="Telegram User ID"
+    )
     name = models.CharField(max_length=255, verbose_name="Имя")
     surname = models.CharField(max_length=255, verbose_name="Фамилия")
     tg_username = models.CharField(
@@ -31,16 +32,17 @@ class PracticumUser(models.Model):
         abstract = True
 
     def __str__(self):
-        return f"{self.tg_username} | id: {self.user_id}"
+        return f"{self.tg_username} | id: {self.telegram_id}"
 
 
 class Student(PracticumUser):
     """Модель для студентов."""
 
-    profession = models.CharField(
-        max_length=2,
-        choices=ProfessionChoice.choices,
-        default=ProfessionChoice.ANALYST,
+    profession = models.ForeignKey(
+        Profession,
+        related_name="students",
+        on_delete=models.SET_NULL,
+        null=True,
         verbose_name="Профессия",
     )
 

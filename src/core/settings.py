@@ -3,9 +3,7 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-SECRET_KEY = (
-    "django-insecure-&@jyyt-zi283urxz6+2^a+f0x!qb#69^zbe=*n4mblnm0-q2s6"
-)
+SECRET_KEY = ""
 
 DEBUG = True
 
@@ -82,7 +80,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-LANGUAGE_CODE = "en-us"
+LANGUAGE_CODE = "ru-RU"
 
 TIME_ZONE = "UTC"
 
