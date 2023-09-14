@@ -30,7 +30,7 @@ jobs:
         run: isort . --check --profile black --skip migrations --skip-glob "*settings*"
 
       - name: Check with black
-        run: black . --check --line-length 79 --exclude migrations --exclude "settings"
+        run: black . --check --line-length 79 --exclude migrations/|.*settings(\.py|/)?
 
       - name: Check with flake8
         run: flake8 .
