@@ -17,7 +17,7 @@ class PracticumUser(models.Model):
     name = models.CharField(max_length=255, verbose_name="Имя")
     surname = models.CharField(max_length=255, verbose_name="Фамилия")
     tg_username = models.CharField(
-        max_length=255, verbose_name="Ник в телеграмме"
+        max_length=255, verbose_name="Ник в телеграмме", unique=True
     )
     registration_date = models.DateField(
         auto_now_add=True, verbose_name="Дата регистрации"
