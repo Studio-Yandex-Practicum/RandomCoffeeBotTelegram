@@ -1,7 +1,10 @@
 import logging
 
-from telegram import Update
-from telegram.ext import CallbackContext, CommandHandler
+from telegram import InlineKeyboardMarkup, Update
+from telegram.ext import CallbackContext, CallbackQueryHandler, CommandHandler
+
+from bot.constants.messages import ASSISTANCE_MESSAGE
+from bot.keyboards.menu import support_keyboard
 
 # Инициализация логгера
 logging.basicConfig(
@@ -13,8 +16,18 @@ logger = logging.getLogger(__name__)
 
 async def start_bot(update: Update, context: CallbackContext):
     """Функция-обработчик для команды /start."""
-    user = update.effective_user
-    await update.message.reply_html(rf"Привет, {user.mention_html()}!")
+    assistance_keyboard_markup = await support_keyboard()
+    keyboards = [[assistance_keyboard_markup]]
+    reply_markup = InlineKeyboardMarkup(keyboards)
+    await update.message.reply_text(
+        "Please choose:", reply_markup=reply_markup
+    )
+
+
+async def support_bot(update: Update, context: CallbackContext):
+    """Функция-обработчик для команды /support."""
+    await update.callback_query.edit_message_text(ASSISTANCE_MESSAGE)
 
 
 HANDLERS = CommandHandler("start", start_bot)
+BATTON_SUPPORT_BOT = CallbackQueryHandler(support_bot)

@@ -1,0 +1,1 @@
+SUPPORT_BUTTON = "Помощь"
