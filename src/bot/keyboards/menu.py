@@ -1,9 +1,9 @@
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup
+from telegram import InlineKeyboardButton
 
 from bot.constants.buttons import SUPPORT_BUTTON
 
 
-async def support_keyboard() -> InlineKeyboardMarkup:
+async def support_keyboard() -> InlineKeyboardButton:
     """
     Build telegram assistance keyboard async.
 
