@@ -6,8 +6,8 @@ class AdminUser(AbstractUser):
 
     class Meta:
         ordering = ("id",)
-        verbose_name = "AdminUser"
-        verbose_name_plural = "AdminUsers"
+        verbose_name = "Администратор"
+        verbose_name_plural = "Администраторы"
 
     def __str__(self):
         return self.username
