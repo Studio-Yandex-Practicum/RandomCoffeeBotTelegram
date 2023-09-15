@@ -1,25 +1,20 @@
-import os
 from pathlib import Path
 
 import environ
 from dotenv import find_dotenv
 
 
+DEBUG = True
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+
 env = environ.Env()
 if DEBUG := env.bool("DEBUG", default=True):
     environ.Env.read_env(find_dotenv(".env", raise_error_if_not_found=True))
 
-BASE_DIR = Path(__file__).resolve().parent.parent
-
-SECRET_KEY = os.getenv(
-    'SECRET_KEY',
-    default='django-insecure-&@jyyt-zi283urxz6+2^a+f0x!qb#69^zbe=*n4mblnm0-q2s6'
-)
-
-DEBUG = True
+SECRET_KEY = env.str('SECRET_KEY')
 
 ALLOWED_HOSTS = []
-
 
 DEFAULT_APPS = [
     'django.contrib.admin',
@@ -107,7 +102,7 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-TELEGRAM_TOKEN = os.getenv('TELEGRAM_TOKEN', default=None)
+TELEGRAM_TOKEN = env.str('TELEGRAM_TOKEN')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
