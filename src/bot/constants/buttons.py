@@ -1,1 +1,1 @@
-SUPPORT_BUTTON = "Помощь"
+SUPPORT_BUTTON = "Поддержка"
