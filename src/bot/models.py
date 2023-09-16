@@ -19,8 +19,9 @@ class Profession(models.Model):
 class PracticumUser(models.Model):
     """Базовая модель для пользователей."""
 
-    telegram_id = models.IntegerField(primary_key=True,
-                                      verbose_name="Telegram User ID")
+    telegram_id = models.IntegerField(
+        primary_key=True, verbose_name="Telegram User ID"
+    )
     name = models.CharField(max_length=255, verbose_name="Имя")
     surname = models.CharField(max_length=255, verbose_name="Фамилия")
     telegram_username = models.CharField(
@@ -90,10 +91,10 @@ class CreatedPair(CustomPair):
 
     class Meta:
         constraints = [
-            models.UniqueConstraint(fields=["student"],
-                                    name="unique_student"),
-            models.UniqueConstraint(fields=["recruiter"],
-                                    name="unique_recruiter"),
+            models.UniqueConstraint(fields=["student"], name="unique_student"),
+            models.UniqueConstraint(
+                fields=["recruiter"], name="unique_recruiter"
+            ),
             models.UniqueConstraint(
                 fields=["student", "recruiter"], name="unique_created_pair"
             ),
