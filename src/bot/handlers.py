@@ -1,7 +1,7 @@
 import logging
 
 from telegram import Update
-from telegram.ext import CallbackContext, CallbackQueryHandler, CommandHandler
+from telegram.ext import CallbackContext, CommandHandler
 
 from bot.constants.messages import HELP_MESSAGE
 from bot.keyboards.help_keyboard import help_keyboard
