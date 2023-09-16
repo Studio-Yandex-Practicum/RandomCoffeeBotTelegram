@@ -22,9 +22,8 @@ async def start_bot(update: Update, context: CallbackContext):
 
 async def help_bot(update: Update, context: CallbackContext):
     """Функция-обработчик для команды /help."""
-    await update.message.reply_html(
-        text=(HELP_MESSAGE),
-        reply_markup=help_keyboard)
+    await update.message.reply_html(text=(HELP_MESSAGE), reply_markup=help_keyboard)
+
 
 HANDLERS = CommandHandler("start", start_bot)
 HELP_COMMAND = CommandHandler("help", help_bot)
