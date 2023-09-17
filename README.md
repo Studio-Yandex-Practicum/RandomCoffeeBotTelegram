@@ -310,3 +310,5 @@ make filldb
 функции перенаправления на сторонние или внутренние ресурсы.
 
 #### Рекомендации к написанию кода [Codestyle](https://github.com/Studio-Yandex-Practicum/RandomCoffeeBotTelegram/tree/develop/docs/codestyle.md)
+
+#### Диаграмма логики работы бота [Diagram](https://github.com/Studio-Yandex-Practicum/RandomCoffeeBotTelegram/tree/develop/docs/Diagramm_of_bot_logic.drawio)

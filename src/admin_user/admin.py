@@ -1,9 +1,12 @@
 from django.contrib import admin
 from django.contrib.auth import get_user_model
+from django.contrib.auth.admin import UserAdmin
 
-Admin = get_user_model()
+AdminUser = get_user_model()
 
 
-@admin.register(Admin)
-class AdminUser(admin.ModelAdmin):
+@admin.register(AdminUser)
+class AdminUserAdmin(UserAdmin):
     """Управление админкой."""
+
+    pass
