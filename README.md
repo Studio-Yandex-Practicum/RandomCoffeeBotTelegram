@@ -1,14 +1,16 @@
 # RandomCoffeeBotTelegram
 Random Coffee bot for the Telegram
 
+#### Проект телеграм-бота, который предоставляет возможность пообщаться с IT-специалистами - выпускниками разных IT направлений практикума.
+
 # Содержание
 
 
-1. [БРИФ](#brief)
+1. [БРИФ](docs/materials/briff.md)
 
-   1.1 [Инструкции и ритуалы на проекте]()
+   1.1 [Инструкции и ритуалы на проекте](docs/materials/instructions.md)
 
-   1.2 [ER - диаграмма сущностей](#er)
+   1.2 [ER - диаграмма сущностей](docs/RandomCoffeeER.jpg)
 
 2. [Структура проекта](#structure)
 3. [Подготовка к запуску](#start)
@@ -30,12 +32,6 @@ Random Coffee bot for the Telegram
 5. [Требования к тестам](#test-bot)
 
 <br><br>
-
-# 1. БРИФ <a id="brief"></a>
-
-## 1.2. ER - диаграмма сущностей<a id="er"></a>:
-ER диаграммы расположены в директории /docs в двух удобных форматах [.drowio, .jpg]
-![ER Диаграмма](/docs/RandomCoffeeER.jpg)
 
 # 2. Структура проекта <a id="structure"></a>
 
