@@ -1,11 +1,12 @@
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 
+PARTICIPATE = "Участвовать!"
+SUPPORT = "Написать в поддержку"
+
 keyboard_buttons = [
     [
-        InlineKeyboardButton("Учавствовать!", callback_data="go_bot"),
-        InlineKeyboardButton(
-            "Написать в поддержку", callback_data="support_bot"
-        ),
+        InlineKeyboardButton(PARTICIPATE, callback_data="go_bot"),
+        InlineKeyboardButton(SUPPORT, callback_data="support_bot"),
     ]
 ]
 help_keyboard = InlineKeyboardMarkup(keyboard_buttons)

@@ -28,4 +28,4 @@ async def help_bot(update: Update, context: CallbackContext):
 
 
 HANDLERS = CommandHandler("start", start_bot)
-HELP_COMMAND = CommandHandler("help", help_bot)
+help_hendler = CommandHandler("help", help_bot)
