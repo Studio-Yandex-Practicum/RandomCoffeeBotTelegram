@@ -3,8 +3,6 @@ from pathlib import Path
 import environ
 from dotenv import find_dotenv
 
-DEBUG = True
-
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 env = environ.Env()
@@ -14,6 +12,8 @@ if DEBUG := env.bool("DEBUG", default=True):
 SECRET_KEY = env.str('SECRET_KEY')
 
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['*'])
+
+AUTH_USER_MODEL = "admin_user.AdminUser"
 
 DEFAULT_APPS = [
     "django.contrib.admin",
