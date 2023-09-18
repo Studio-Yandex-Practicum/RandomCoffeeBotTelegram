@@ -16,8 +16,7 @@ logger = logging.getLogger(__name__)
 
 async def start_bot(update: Update, context: CallbackContext):
     """Функция-обработчик для команды /start."""
-    assistance_keyboard_markup = await support_keyboard()
-    keyboards = [[assistance_keyboard_markup]]
+    keyboards = [[support_keyboard()]]
     reply_markup = InlineKeyboardMarkup(keyboards)
     await update.message.reply_text(
         "Please choose:", reply_markup=reply_markup
@@ -30,4 +29,4 @@ async def support_bot(update: Update, context: CallbackContext):
 
 
 HANDLERS = CommandHandler("start", start_bot)
-BATTON_SUPPORT_BOT = CallbackQueryHandler(support_bot)
+SUPPORT_BOT_HANDLER = CallbackQueryHandler(support_bot)
