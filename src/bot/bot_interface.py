@@ -3,9 +3,17 @@ import logging
 from typing import Self
 
 from django.conf import settings
-from telegram.ext import Application, ApplicationBuilder, PicklePersistence
+from telegram.ext import (
+    Application,
+    ApplicationBuilder,
+    CallbackQueryHandler,
+    ConversationHandler,
+    PicklePersistence,
+)
 
-from bot.handlers.command_handlers import start_handler
+from bot.constants.states import States
+from bot.handlers.command_handlers import start, start_handler
+from bot.handlers.conversation_handlers import go, next_time
 
 logger = logging.getLogger(__name__)
 
@@ -55,7 +63,8 @@ class Bot:
             .persistence(PicklePersistence(filepath=settings.PERSISTANCE_PATH))
             .build()
         )
-        app.add_handlers([start_handler])
+        main_handler = await build_main_handler()
+        app.add_handlers([start_handler, main_handler])
         return app
 
     async def _manage_webhook(self) -> None:
@@ -79,3 +88,20 @@ class Bot:
     async def _stop_bot(self) -> None:
         """Останавливает основное ASGI-приложение."""
         await Application.stop(self._app)
+
+
+async def build_main_handler():
+    """123213."""
+    return ConversationHandler(
+        entry_points=[start_handler],
+        persistent=True,
+        name="main_handler",
+        states={
+            States.START: [
+                CallbackQueryHandler(go, pattern="^go$"),
+                CallbackQueryHandler(next_time, pattern="^next_time$"),
+            ],
+            States.NEXT_TIME: [CallbackQueryHandler(start, pattern="^start$")],
+        },
+        fallbacks=[],
+    )
