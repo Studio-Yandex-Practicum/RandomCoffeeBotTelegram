@@ -1,18 +1,19 @@
-import os
 from pathlib import Path
-from dotenv import load_dotenv
 
-BASE_DIR = Path(__file__).resolve().parent.parent
-load_dotenv()
-
-SECRET_KEY = " "
+import environ
+from dotenv import find_dotenv
 
 DEBUG = True
 
-AUTH_USER_MODEL = "admin_user.AdminUser"
+BASE_DIR = Path(__file__).resolve().parent.parent
 
-ALLOWED_HOSTS = []
+env = environ.Env()
+if DEBUG := env.bool("DEBUG", default=True):
+    environ.Env.read_env(find_dotenv(".env", raise_error_if_not_found=True))
 
+SECRET_KEY = env.str('SECRET_KEY')
+
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['*'])
 
 DEFAULT_APPS = [
     "django.contrib.admin",
@@ -62,12 +63,12 @@ WSGI_APPLICATION = "core.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": os.getenv("POSTGRES_ENGINE"),
-        "NAME": os.getenv("POSTGRES_NAME"),
-        "USER": os.getenv("POSTGRES_USER"),
-        "PASSWORD": os.getenv("POSTGRES_PASSWORD"),
-        "HOST": os.getenv("POSTGRES_HOST"),
-        "PORT": os.getenv("POSTGRES_PORT"),
+        "ENGINE": env.str("POSTGRES_ENGINE"),
+        "NAME": env.str("POSTGRES_NAME"),
+        "USER": env.str("POSTGRES_USER"),
+        "PASSWORD": env.str("POSTGRES_PASSWORD"),
+        "HOST": env.str("POSTGRES_HOST"),
+        "PORT": env.str("POSTGRES_PORT"),
     }
 }
 
@@ -99,9 +100,9 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 
-DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+TELEGRAM_TOKEN = env.str('TELEGRAM_TOKEN')
 
-TELEGRAM_TOKEN = ""
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 WEBHOOK_MODE = False
 WEBHOOK_URL = ""
