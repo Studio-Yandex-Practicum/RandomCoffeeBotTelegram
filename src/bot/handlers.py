@@ -29,4 +29,4 @@ async def support_bot(update: Update, context: CallbackContext):
 
 
 HANDLERS = CommandHandler("start", start_bot)
-SUPPORT_BOT_HANDLER = CallbackQueryHandler(support_bot)
+support_bot_handler = CallbackQueryHandler(support_bot)
