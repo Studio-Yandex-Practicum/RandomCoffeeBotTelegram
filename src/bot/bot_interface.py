@@ -5,7 +5,7 @@ from typing import Self
 from django.conf import settings
 from telegram.ext import Application, ApplicationBuilder, PicklePersistence
 
-from .handlers import HANDLERS
+from bot.handlers.command_handlers import start_handler
 
 logger = logging.getLogger(__name__)
 
@@ -55,7 +55,7 @@ class Bot:
             .persistence(PicklePersistence(filepath=settings.PERSISTANCE_PATH))
             .build()
         )
-        app.add_handlers([HANDLERS])
+        app.add_handlers([start_handler])
         return app
 
     async def _manage_webhook(self) -> None:
