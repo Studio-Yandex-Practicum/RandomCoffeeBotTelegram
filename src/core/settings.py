@@ -1,16 +1,19 @@
 from pathlib import Path
 
-BASE_DIR = Path(__file__).resolve().parent.parent
-
-
-SECRET_KEY = " "
+import environ
+from dotenv import find_dotenv
 
 DEBUG = True
 
-AUTH_USER_MODEL = "admin_user.AdminUser"
+BASE_DIR = Path(__file__).resolve().parent.parent
 
-ALLOWED_HOSTS = []
+env = environ.Env()
+if DEBUG := env.bool("DEBUG", default=True):
+    environ.Env.read_env(find_dotenv(".env", raise_error_if_not_found=True))
 
+SECRET_KEY = env.str('SECRET_KEY')
+
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['*'])
 
 DEFAULT_APPS = [
     "django.contrib.admin",
@@ -93,9 +96,9 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 
-DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+TELEGRAM_TOKEN = env.str('TELEGRAM_TOKEN')
 
-TELEGRAM_TOKEN = ""
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 WEBHOOK_MODE = False
 WEBHOOK_URL = ""
