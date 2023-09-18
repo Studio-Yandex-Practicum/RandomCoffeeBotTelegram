@@ -3,8 +3,8 @@ from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from bot.constants.buttons import (
     GO_BUTTON,
     NEXT_TIME_BUTTON,
-    PARTICIPATE,
-    SUPPORT,
+    PARTICIPATE_BUTTON,
+    SUPPORT_BUTTON,
 )
 
 start_keyboard_markup = InlineKeyboardMarkup(
@@ -21,8 +21,8 @@ start_keyboard_markup = InlineKeyboardMarkup(
 help_keyboard_markup = InlineKeyboardMarkup(
     [
         [
-            InlineKeyboardButton(PARTICIPATE, callback_data="go"),
-            InlineKeyboardButton(SUPPORT, callback_data="support"),
+            InlineKeyboardButton(PARTICIPATE_BUTTON, callback_data="go"),
+            InlineKeyboardButton(SUPPORT_BUTTON, callback_data="support"),
         ]
     ]
 )
