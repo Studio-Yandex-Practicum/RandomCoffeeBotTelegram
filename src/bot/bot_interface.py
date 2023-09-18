@@ -12,7 +12,7 @@ from telegram.ext import (
 )
 
 from bot.constants.states import States
-from bot.handlers.command_handlers import start, start_handler
+from bot.handlers.command_handlers import start_handler
 from bot.handlers.conversation_handlers import go, next_time
 
 logger = logging.getLogger(__name__)
@@ -64,7 +64,7 @@ class Bot:
             .build()
         )
         main_handler = await build_main_handler()
-        app.add_handlers([start_handler, main_handler])
+        app.add_handlers([main_handler])
         return app
 
     async def _manage_webhook(self) -> None:
@@ -101,7 +101,7 @@ async def build_main_handler():
                 CallbackQueryHandler(go, pattern="^go$"),
                 CallbackQueryHandler(next_time, pattern="^next_time$"),
             ],
-            States.NEXT_TIME: [CallbackQueryHandler(start, pattern="^start$")],
+            States.NEXT_TIME: [start_handler],
         },
         fallbacks=[],
     )

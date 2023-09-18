@@ -1,8 +1,7 @@
 from telegram import Update
-from telegram.ext import CallbackContext
+from telegram.ext import CallbackContext, ConversationHandler
 
 from bot.constants.messages import NEXT_TIME_MESSAGE
-from bot.constants.states import States
 
 
 async def go(update: Update, context: CallbackContext):
@@ -10,6 +9,7 @@ async def go(update: Update, context: CallbackContext):
     query = update.callback_query
     await query.answer()
     await query.edit_message_text("Тут будет логика для GO")
+    return ConversationHandler.END  # пока что так, чтобы бот не зависал
 
 
 async def next_time(update: Update, context: CallbackContext):
@@ -17,5 +17,5 @@ async def next_time(update: Update, context: CallbackContext):
     query = update.callback_query
     await query.answer()
     await query.edit_message_reply_markup(reply_markup=None)
-    await query.message.reply_text(NEXT_TIME_MESSAGE)
-    return States.NEXT_TIME
+    await query.message.reply_text(NEXT_TIME_MESSAGE, reply_markup=None)
+    return ConversationHandler.END
