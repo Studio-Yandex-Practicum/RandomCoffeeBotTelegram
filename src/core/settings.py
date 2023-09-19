@@ -9,7 +9,7 @@ env = environ.Env()
 if DEBUG := env.bool("DEBUG", default=True):
     environ.Env.read_env(find_dotenv(".env", raise_error_if_not_found=True))
 
-SECRET_KEY = env.str("SECRET_KEY")
+SECRET_KEY = env.str('SECRET_KEY')
 
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["*"])
 
@@ -96,7 +96,7 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 
-TELEGRAM_TOKEN = env.str("TELEGRAM_TOKEN")
+TELEGRAM_TOKEN = env.str('TELEGRAM_TOKEN')
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
