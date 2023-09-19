@@ -1,0 +1,14 @@
+ignore = ["D100", "D104", "D105", "D106"]
+select = [
+    "A", "B", "C", "D", "E", "F", "I", "N", "Q", "S", "T", "W", "BLE",
+    "DJ", "DTZ", "ERA", "EXE", "FBT", "ICN", "ISC", "NPY", "PD", "PGH", "PL",
+    "PT", "PTH", "PYI", "RET", "RSE", "SIM", "SLF", "TCH", "TID", "YTT"
+]
+extend-exclude = ["tests", "*migrations*", ".venv", "env"]
+per-file-ignores = { "*settings.py" = ["E501"] }
+line-length = 79
+unfixable = ["F401"]
+[isort]
+known-local-folder = ["bot"]
+[mccabe]
+max-complexity = 10

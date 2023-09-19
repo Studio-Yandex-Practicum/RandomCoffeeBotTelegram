@@ -24,13 +24,10 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install isort black flake8 flake8-docstrings
+          pip install black ruff
 
-      - name: Check with isort
-        run: isort . --check --profile black --skip migrations --skip-glob "*settings*"
+      - name: Check with ruff
+        run: ruff check .
 
       - name: Check with black
         run: black . --check --line-length 79 --exclude 'migrations/|.*settings(\.py|/)?'
-
-      - name: Check with flake8
-        run: flake8 .
