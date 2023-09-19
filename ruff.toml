@@ -1,9 +1,5 @@
 ignore = ["D100", "D104", "D105", "D106", "D203", "D212"]
-select = [
-    "A", "B", "C", "D", "E", "F", "I", "N", "Q", "S", "T", "W", "BLE",
-    "DJ", "DTZ", "ERA", "EXE", "FBT", "ICN", "ISC", "NPY", "PD", "PGH", "PL",
-    "PT", "PTH", "PYI", "RET", "RSE", "SIM", "SLF", "TCH", "TID", "YTT"
-]
+select = ["E", "F", "B", "W", "I", "D", "PL"]
 extend-exclude = ["tests", "*migrations*", ".venv", "env"]
 per-file-ignores = { "*settings.py" = ["E501"] }
 line-length = 79
