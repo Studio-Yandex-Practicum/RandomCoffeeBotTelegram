@@ -1,6 +1,7 @@
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 
 from bot.constants.buttons import GO_BUTTON, NEXT_TIME_BUTTON, SUPPORT_BUTTON
+from bot.constants.links import SUPPORT_FORM
 
 start_keyboard_markup = InlineKeyboardMarkup(
     [
@@ -13,10 +14,14 @@ start_keyboard_markup = InlineKeyboardMarkup(
     ]
 )
 
-
-def support_keyboard() -> InlineKeyboardButton:
-    """Build telegram assistance keyboard."""
-    return InlineKeyboardButton(
-        text=SUPPORT_BUTTON,
-        callback_data="Get support",
-    )
+support_keyboard_markup = InlineKeyboardMarkup(
+    [
+        [
+            InlineKeyboardButton(
+                text=SUPPORT_BUTTON,
+                callback_data="Get support",
+                url=SUPPORT_FORM,
+            )
+        ]
+    ]
+)
