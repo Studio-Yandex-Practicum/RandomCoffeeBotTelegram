@@ -8,12 +8,19 @@ from telegram.ext import (
     ApplicationBuilder,
     CallbackQueryHandler,
     ConversationHandler,
+    MessageHandler,
     PicklePersistence,
+    filters,
 )
 
+from bot.constants.patterns import (
+    GO_PATTERN,
+    NEXT_TIME_PATTERN,
+    ROLE_CHOICE_PATTERN,
+)
 from bot.constants.states import States
 from bot.handlers.command_handlers import start_handler
-from bot.handlers.conversation_handlers import go, next_time
+from bot.handlers.conversation_handlers import go, next_time, role_choice
 
 logger = logging.getLogger(__name__)
 
@@ -98,10 +105,12 @@ async def build_main_handler():
         name="main_handler",
         states={
             States.START: [
-                CallbackQueryHandler(go, pattern="^go$"),
-                CallbackQueryHandler(next_time, pattern="^next_time$"),
+                CallbackQueryHandler(go, pattern=GO_PATTERN),
+                CallbackQueryHandler(next_time, pattern=NEXT_TIME_PATTERN),
             ],
-            States.NEXT_TIME: [start_handler],
+            States.ROLE_CHOICE: [
+                MessageHandler(filters.Regex(ROLE_CHOICE_PATTERN), role_choice)
+            ],
         },
         fallbacks=[],
     )
