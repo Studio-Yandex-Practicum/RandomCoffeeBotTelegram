@@ -18,7 +18,7 @@ start_keyboard_markup = InlineKeyboardMarkup(
     ]
 )
 
-help_keyboard = InlineKeyboardMarkup(
+help_keyboard_markup = InlineKeyboardMarkup(
     [
         [
             InlineKeyboardButton(PARTICIPATE_BUTTON, callback_data="go"),

@@ -3,7 +3,7 @@ from telegram.ext import CallbackContext, CommandHandler
 
 from bot.constants.messages import HELP_MESSAGE, START_MESSAGE
 from bot.keyboards.command_keyboards import (
-    help_keyboard,
+    help_keyboard_markup,
     start_keyboard_markup,
 )
 
@@ -18,7 +18,7 @@ async def start(update: Update, context: CallbackContext) -> None:
 async def help(update: Update, context: CallbackContext) -> None:
     """Функция-обработчик для команды /help."""
     await update.message.reply_html(
-        text=(HELP_MESSAGE), reply_markup=help_keyboard
+        text=(HELP_MESSAGE), reply_markup=help_keyboard_markup
     )
 
 
