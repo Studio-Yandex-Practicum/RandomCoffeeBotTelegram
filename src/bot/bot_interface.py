@@ -98,7 +98,7 @@ class Bot:
 
 
 async def build_main_handler():
-    """123213."""
+    """Функция создания главного обработчика."""
     return ConversationHandler(
         entry_points=[start_handler],
         persistent=True,

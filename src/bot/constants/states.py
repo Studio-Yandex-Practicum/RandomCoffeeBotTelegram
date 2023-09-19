@@ -2,7 +2,7 @@ import enum
 
 
 class States(str, enum.Enum):
-    """111."""
+    """Класс, описывающий состояния бота."""
 
     START = "start"
     ROLE_CHOICE = "role_choice"
