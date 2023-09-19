@@ -12,11 +12,3 @@ start_keyboard_markup = InlineKeyboardMarkup(
         ]
     ]
 )
-
-help_command_markup = InlineKeyboardMarkup(
-    [
-        [
-            InlineKeyboardButton(text="HELP_ME", callback_data="go"),
-        ]
-    ]
-)
