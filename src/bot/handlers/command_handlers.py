@@ -1,5 +1,5 @@
 from telegram import Update
-from telegram.ext import CallbackContext, CommandHandler
+from telegram.ext import CallbackContext, CallbackQueryHandler, CommandHandler
 
 from bot.constants.messages import (
     ASSISTANCE_MESSAGE,
@@ -34,6 +34,16 @@ async def help(update: Update, context: CallbackContext) -> None:
     )
 
 
+async def keyboard_collback_handler(
+    update: Update, context: CallbackContext
+) -> None:
+    """Функция-обработчик для команд."""
+    query = update.callback_query
+    if query.data == "support":
+        await query.edit_message_reply_markup(support_keyboard_markup)
+
+
 start_handler = CommandHandler("start", start)
 support_bot_handler = CommandHandler("support", support_bot)
 help_handler = CommandHandler("help", help)
+collback_handler = CallbackQueryHandler(keyboard_collback_handler)
