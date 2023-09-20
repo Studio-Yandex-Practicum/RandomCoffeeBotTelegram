@@ -17,6 +17,7 @@ async def start(update: Update, context: CallbackContext) -> None:
     )
 
 
+@log_handler
 async def help(update: Update, context: CallbackContext) -> None:
     """Функция-обработчик для команды /help."""
     await update.message.reply_html(
