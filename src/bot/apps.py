@@ -1,6 +1,8 @@
 from django.apps import AppConfig
 from django_asgi_lifespan.signals import asgi_shutdown
 
+from core.config.logging import setup_logger
+
 
 class BotConfig(AppConfig):
     """Конфигурация приложения бота."""
@@ -17,6 +19,7 @@ class BotConfig(AppConfig):
         from bot.bot_interface import Bot
 
         self.bot = Bot()
+        setup_logger()
 
         asgi_shutdown.connect(self.stop_bot)
 
