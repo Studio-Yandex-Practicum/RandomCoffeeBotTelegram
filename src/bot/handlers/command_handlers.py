@@ -40,7 +40,9 @@ async def keyboard_collback_handler(
     """Функция-обработчик для команд."""
     query = update.callback_query
     if query.data == "support":
-        await query.edit_message_reply_markup(support_keyboard_markup)
+        await query.edit_message_text(
+            text=ASSISTANCE_MESSAGE, reply_markup=support_keyboard_markup
+        )
 
 
 start_handler = CommandHandler("start", start)
