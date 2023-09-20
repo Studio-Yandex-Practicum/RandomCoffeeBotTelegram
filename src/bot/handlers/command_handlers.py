@@ -3,8 +3,10 @@ from telegram.ext import CallbackContext, CommandHandler
 
 from bot.constants.messages import START_MESSAGE
 from bot.keyboards.command_keyboards import start_keyboard_markup
+from core.config.logging import log_handler
 
 
+@log_handler
 async def start(update: Update, context: CallbackContext) -> None:
     """Функция-обработчик команды start."""
     await update.message.reply_text(
