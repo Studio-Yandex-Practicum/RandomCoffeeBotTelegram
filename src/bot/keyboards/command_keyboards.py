@@ -4,6 +4,7 @@ from bot.constants.buttons import (
     GO_BUTTON,
     NEXT_TIME_BUTTON,
     PARTICIPATE_BUTTON,
+    START_BUTTON,
     SUPPORT_BUTTON,
 )
 
@@ -23,6 +24,14 @@ help_keyboard_markup = InlineKeyboardMarkup(
         [
             InlineKeyboardButton(PARTICIPATE_BUTTON, callback_data="go"),
             InlineKeyboardButton(SUPPORT_BUTTON, callback_data="support"),
+        ]
+    ]
+)
+
+next_time_keyboard_markup = InlineKeyboardMarkup(
+    [
+        [
+            InlineKeyboardButton(START_BUTTON, callback_data="start_return"),
         ]
     ]
 )
