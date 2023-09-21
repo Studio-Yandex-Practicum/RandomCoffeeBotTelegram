@@ -11,8 +11,10 @@ from bot.keyboards.command_keyboards import (
     start_keyboard_markup,
     support_keyboard_markup,
 )
+from core.config.logging import log_handler
 
 
+@log_handler
 async def start(update: Update, context: CallbackContext) -> None:
     """Функция-обработчик команды start."""
     await update.message.reply_text(
@@ -27,6 +29,7 @@ async def support_bot(update: Update, context: CallbackContext):
     )
 
 
+@log_handler
 async def help(update: Update, context: CallbackContext) -> None:
     """Функция-обработчик для команды /help."""
     await update.message.reply_html(
