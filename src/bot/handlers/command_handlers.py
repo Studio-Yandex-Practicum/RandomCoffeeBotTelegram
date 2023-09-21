@@ -2,9 +2,9 @@ from telegram import Update
 from telegram.ext import CallbackContext, CallbackQueryHandler, CommandHandler
 
 from bot.constants.messages import (
-    HELP_MESSAGE,
-    NEXT_TIME_MESSAGE
     ASSISTANCE_MESSAGE,
+    HELP_MESSAGE,
+    NEXT_TIME_MESSAGE,
     START_MESSAGE,
 )
 from bot.keyboards.command_keyboards import (
@@ -61,8 +61,8 @@ async def next_time(update: Update, context: CallbackContext):
     await query.message.reply_text(
         NEXT_TIME_MESSAGE, reply_markup=next_time_keyboard_markup
     )
-    
-    
+
+
 async def redirection_to_support(
     update: Update, context: CallbackContext
 ) -> None:

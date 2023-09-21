@@ -8,6 +8,7 @@ from telegram.ext import Application, ApplicationBuilder, PicklePersistence
 from bot.handlers.command_handlers import (
     help_handler,
     next_time_query_handler,
+    redirection_to_support_handler,
     start_handler,
     start_return_query_handler,
 )
@@ -66,6 +67,7 @@ class Bot:
                 help_handler,
                 next_time_query_handler,
                 start_return_query_handler,
+                redirection_to_support_handler,
             ]
         )
         return app
