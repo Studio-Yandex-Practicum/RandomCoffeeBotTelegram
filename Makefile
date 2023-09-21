@@ -23,19 +23,25 @@ runbot: # Run Telegram bot on Uvicorn
 
 # Запуск контейнера Postgres
 start-db:
-    docker-compose -f infra/dev/docker-compose.local.yaml up -d
+	docker-compose -f infra/dev/docker-compose.local.yaml up -d
 
 # Остановка контейнера Postgres
 stop-db:
-    docker-compose -f infra/dev/docker-compose.local.yaml down
+	docker-compose -f infra/dev/docker-compose.local.yaml down
+
+# Очистка БД Postgres
+clear-db:
+	docker-compose -f infra/dev/docker-compose.local.yaml down --volumes
 
 # Выполнение миграций Django
 migrate:
-    poetry run python src/manage.py migrate
+	poetry run python src/manage.py migrate
 
 # Запуск Django и Telegram бота
 run-app:
-    poetry run uvicorn src.core.asgi:application --reload
+	@echo -e "$(COLOR_YELLOW)Starting bot...$(COLOR_RESET)"
+	@cd src && poetry run uvicorn core.asgi:application --reload && cd .. && \
+	echo -e "$(COLOR_GREEN)Bot stopped$(COLOR_RESET)"
 
 # Базовая команда для запуска БД, миграций, бота и джанго
-bot-init: start-db migrate run-app
+bot-init: clear-db start-db migrate run-app
