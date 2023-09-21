@@ -6,8 +6,8 @@ from django.conf import settings
 from telegram.ext import Application, ApplicationBuilder, PicklePersistence
 
 from bot.handlers.command_handlers import (
-    collback_handler,
     help_handler,
+    redirection_to_support_handler,
     start_handler,
     support_bot_handler,
 )
@@ -65,7 +65,7 @@ class Bot:
                 start_handler,
                 support_bot_handler,
                 help_handler,
-                collback_handler,
+                redirection_to_support_handler,
             ]
         )
         return app

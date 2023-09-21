@@ -37,10 +37,10 @@ async def help(update: Update, context: CallbackContext) -> None:
     )
 
 
-async def keyboard_collback_handler(
+async def redirection_to_support(
     update: Update, context: CallbackContext
 ) -> None:
-    """Функция-обработчик для команд."""
+    """Перенаправление на команду /support."""
     query = update.callback_query
     if query.data == "support":
         await query.edit_message_text(
@@ -51,4 +51,4 @@ async def keyboard_collback_handler(
 start_handler = CommandHandler("start", start)
 support_bot_handler = CommandHandler("support", support_bot)
 help_handler = CommandHandler("help", help)
-collback_handler = CallbackQueryHandler(keyboard_collback_handler)
+redirection_to_support_handler = CallbackQueryHandler(redirection_to_support)
