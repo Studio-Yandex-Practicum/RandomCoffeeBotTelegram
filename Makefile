@@ -23,15 +23,15 @@ runbot: # Run Telegram bot on Uvicorn
 
 # Запуск контейнера Postgres
 start-db:
-	docker compose -f infra/dev/docker-compose.local.yaml up -d
+	docker-compose -f infra/dev/docker-compose.local.yaml up -d
 
 # Остановка контейнера Postgres
 stop-db:
-	docker compose -f infra/dev/docker-compose.local.yaml down
+	docker-compose -f infra/dev/docker-compose.local.yaml down
 
 # Очистка БД Postgres
 clear-db:
-	docker compose -f infra/dev/docker-compose.local.yaml down --volumes
+	docker-compose -f infra/dev/docker-compose.local.yaml down --volumes
 
 # Выполнение миграций Django
 migrate:
