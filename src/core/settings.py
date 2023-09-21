@@ -7,9 +7,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 env = environ.Env()
 if DEBUG := env.bool("DEBUG", default=True):
-    environ.Env.read_env(find_dotenv(".env", raise_error_if_not_found=True))
+    environ.Env.read_env(find_dotenv(".env"))
 
-SECRET_KEY = env.str('SECRET_KEY')
+DEFAULT = 'some_default_key'
+
+SECRET_KEY = env.str('SECRET_KEY', default=DEFAULT)
 
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['*'])
 
@@ -100,7 +102,7 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 
-TELEGRAM_TOKEN = env.str('TELEGRAM_TOKEN')
+TELEGRAM_TOKEN = env.str('TELEGRAM_TOKEN', default=DEFAULT)
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
