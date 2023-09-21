@@ -6,6 +6,7 @@ from bot.constants.buttons import (
     PARTICIPATE_BUTTON,
     SUPPORT_BUTTON,
 )
+from bot.constants.links import SUPPORT_FORM
 
 start_keyboard_markup = InlineKeyboardMarkup(
     [
@@ -14,6 +15,18 @@ start_keyboard_markup = InlineKeyboardMarkup(
             InlineKeyboardButton(
                 text=NEXT_TIME_BUTTON, callback_data="next_time"
             ),
+        ]
+    ]
+)
+
+support_keyboard_markup = InlineKeyboardMarkup(
+    [
+        [
+            InlineKeyboardButton(
+                text=SUPPORT_BUTTON,
+                callback_data="Get support",
+                url=SUPPORT_FORM,
+            )
         ]
     ]
 )

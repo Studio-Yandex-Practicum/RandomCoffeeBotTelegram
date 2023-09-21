@@ -1,10 +1,15 @@
 from telegram import Update
-from telegram.ext import CallbackContext, CommandHandler
+from telegram.ext import CallbackContext, CallbackQueryHandler, CommandHandler
 
-from bot.constants.messages import HELP_MESSAGE, START_MESSAGE
+from bot.constants.messages import (
+    ASSISTANCE_MESSAGE,
+    HELP_MESSAGE,
+    START_MESSAGE,
+)
 from bot.keyboards.command_keyboards import (
     help_keyboard_markup,
     start_keyboard_markup,
+    support_keyboard_markup,
 )
 from core.config.logging import log_handler
 
@@ -17,6 +22,13 @@ async def start(update: Update, context: CallbackContext) -> None:
     )
 
 
+async def support_bot(update: Update, context: CallbackContext):
+    """Функция-обработчик для команды /support."""
+    await update.message.reply_text(
+        text=ASSISTANCE_MESSAGE, reply_markup=support_keyboard_markup
+    )
+
+
 @log_handler
 async def help(update: Update, context: CallbackContext) -> None:
     """Функция-обработчик для команды /help."""
@@ -25,5 +37,18 @@ async def help(update: Update, context: CallbackContext) -> None:
     )
 
 
+async def redirection_to_support(
+    update: Update, context: CallbackContext
+) -> None:
+    """Перенаправление на команду /support."""
+    query = update.callback_query
+    if query.data == "support":
+        await query.edit_message_text(
+            text=ASSISTANCE_MESSAGE, reply_markup=support_keyboard_markup
+        )
+
+
 start_handler = CommandHandler("start", start)
+support_bot_handler = CommandHandler("support", support_bot)
 help_handler = CommandHandler("help", help)
+redirection_to_support_handler = CallbackQueryHandler(redirection_to_support)
