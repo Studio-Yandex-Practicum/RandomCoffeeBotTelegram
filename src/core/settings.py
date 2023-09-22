@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 
 import environ
@@ -98,7 +99,11 @@ USE_I18N = True
 USE_TZ = True
 
 
-STATIC_URL = "static/"
+STATIC_URL = '/static/'
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+]
 
 TELEGRAM_TOKEN = env.str('TELEGRAM_TOKEN')
 
