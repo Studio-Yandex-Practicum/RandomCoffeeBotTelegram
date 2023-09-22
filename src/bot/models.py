@@ -34,6 +34,12 @@ class PracticumUser(models.Model):
         auto_now=True, verbose_name="Заходил в последний раз"
     )
     has_pair = models.BooleanField(default=False, verbose_name="Есть пара")
+    waiting_time = models.DateField(
+        auto_now_add=True,
+        blank=True,
+        null=True,
+        verbose_name="Время ожидания пары",
+    )
 
     class Meta:
         abstract = True
