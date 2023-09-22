@@ -7,3 +7,4 @@ class States(str, enum.Enum):
     START = "start"
     ROLE_CHOICE = "role_choice"
     PAIR_SEARCH = "pair_search"
+    NEXT_TIME = "next_time"

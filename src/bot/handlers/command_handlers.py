@@ -8,9 +8,17 @@ from bot.keyboards.command_keyboards import start_keyboard_markup
 
 async def start(update: Update, context: CallbackContext):
     """Функция-обработчик команды start."""
-    await update.message.reply_text(
-        START_MESSAGE, reply_markup=start_keyboard_markup
-    )
+    if update.message:
+        await update.message.reply_text(
+            START_MESSAGE, reply_markup=start_keyboard_markup
+        )
+    else:
+        query = update.callback_query
+        await query.answer()
+        await query.edit_message_text(START_MESSAGE)
+        await query.edit_message_reply_markup(
+            reply_markup=start_keyboard_markup
+        )
 
     return States.START
 

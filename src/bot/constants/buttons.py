@@ -1,6 +1,7 @@
 GO_BUTTON = "GO"
 NEXT_TIME_BUTTON = "В следующий раз"
 START_BUTTON = "Start"
-CHOOSE_ROLE_BUTTON = ["Студент", "Рекрутер"]
+STUDENT_ROLE_BUTTON = "Студент"
+RECRUITER_ROLE_BUTTON = "Рекрутер"
 CONTINUE_BUTTON = "Продолжить"
 CHANGE_NAME_BUTTON = "Сменить имя"
