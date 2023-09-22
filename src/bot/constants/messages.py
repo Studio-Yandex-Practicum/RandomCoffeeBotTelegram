@@ -15,3 +15,7 @@ START_MESSAGE = (
     "Если вы не готовы на этой неделе участвовать в "
     'Random Coffee просто нажмите "В следующий раз".'
 )
+GO = "go"
+GET_SUPPORT = "Get support"
+NEXT_TIME = "next_time"
+SUPPORT = "support"
