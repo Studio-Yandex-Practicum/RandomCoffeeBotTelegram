@@ -61,6 +61,17 @@ TEMPLATES = [
 WSGI_APPLICATION = "core.wsgi.application"
 
 
+# DATABASES = {
+#     "default": {
+#         "ENGINE": env.str("POSTGRES_ENGINE"),
+#         "NAME": env.str("POSTGRES_NAME"),
+#         "USER": env.str("POSTGRES_USER"),
+#         "PASSWORD": env.str("POSTGRES_PASSWORD"),
+#         "HOST": env.str("POSTGRES_HOST"),
+#         "PORT": env.str("POSTGRES_PORT"),
+#     }
+# }
+
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",

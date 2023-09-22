@@ -15,8 +15,10 @@ from bot.keyboards.conversation_keyboards import (
     role_choice_keyboard_markup,
 )
 from bot.models import Recruiter, Student
+from core.config.logging import log_handler
 
 
+@log_handler
 async def go(update: Update, context: CallbackContext):
     """Обработчик кнопки "GO"."""
     user = update.callback_query.from_user
@@ -35,6 +37,7 @@ async def go(update: Update, context: CallbackContext):
         return ConversationHandler.END  # Тут будет States.PAIR_SEARCH
 
 
+@log_handler
 async def next_time(update: Update, context: CallbackContext):
     """Обработчик кнопки "В следующий раз"."""
     query = update.callback_query
@@ -44,6 +47,7 @@ async def next_time(update: Update, context: CallbackContext):
     return States.NEXT_TIME
 
 
+@log_handler
 async def restart_callback(update: Update, context: CallbackContext):
     """Обработчик для кнопки start."""
     query = update.callback_query
@@ -51,6 +55,7 @@ async def restart_callback(update: Update, context: CallbackContext):
     return await start(update, context)
 
 
+@log_handler
 async def role_choice(update: Update, context: CallbackContext):
     """Обработчик для выбора роли."""
     query = update.callback_query

@@ -14,11 +14,18 @@ from telegram.ext import (
 from bot.constants.patterns import (
     GO_PATTERN,
     NEXT_TIME_PATTERN,
+    PARTICIPATE_PATTERN,
     RESTART_PATTERN,
     ROLE_CHOICE_PATTERN,
+    TO_SUPPORT_PATTERN,
 )
 from bot.constants.states import States
-from bot.handlers.command_handlers import start_handler
+from bot.handlers.command_handlers import (
+    help_handler,
+    redirection_to_support,
+    start_handler,
+    support_bot_handler,
+)
 from bot.handlers.conversation_handlers import (
     go,
     next_time,
@@ -75,7 +82,7 @@ class Bot:
             .build()
         )
         main_handler = await build_main_handler()
-        app.add_handlers([main_handler])
+        app.add_handlers([main_handler, help_handler, support_bot_handler])
         return app
 
     async def _manage_webhook(self) -> None:
@@ -112,6 +119,14 @@ async def build_main_handler():
                 CallbackQueryHandler(go, pattern=GO_PATTERN),
                 CallbackQueryHandler(next_time, pattern=NEXT_TIME_PATTERN),
             ],
+            States.HELP: [
+                CallbackQueryHandler(
+                    restart_callback, pattern=PARTICIPATE_PATTERN
+                ),
+                CallbackQueryHandler(
+                    redirection_to_support, pattern=TO_SUPPORT_PATTERN
+                ),
+            ],
             States.ROLE_CHOICE: [
                 CallbackQueryHandler(role_choice, pattern=ROLE_CHOICE_PATTERN)
             ],
@@ -122,5 +137,5 @@ async def build_main_handler():
                 ),
             ],
         },
-        fallbacks=[],
+        fallbacks=[help_handler, start_handler],
     )
