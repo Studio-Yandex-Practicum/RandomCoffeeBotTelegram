@@ -1,15 +1,6 @@
 # Telegram-бот Random coffee
 
-<style type="text/css">
-.tg  {border-collapse:collapse;border-spacing:0;}
-.tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
-  overflow:hidden;padding:10px 5px;word-break:normal;}
-.tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
-  font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
-.tg .tg-item{background-color:#00d2cb;border-color:inherit;text-align:left;vertical-align:top}
-.tg .tg-7od5{background-color:#9aff99;border-color:inherit;text-align:left;vertical-align:top}
-.tg .tg-0pky{border-color:inherit;text-align:left;vertical-align:top}
-</style>
+
 <table class="tg">
 <thead>
   <tr>
@@ -28,13 +19,21 @@
     <td class="tg-0pky"></td>
     <td class="tg-0pky"></td>
   </tr>
+</tbody>
+</table>
+
+## Фичи для рекрутера
+
+<table class="tg">
+<thead>
   <tr>
-    <td class="tg-7od5">Фичи для рекрутера</td>
-    <td class="tg-7od5"></td>
-    <td class="tg-7od5"></td>
-    <td class="tg-7od5"></td>
-    <td class="tg-7od5"></td>
+    <th class="tg-item">№</th>
+    <th class="tg-item">Фича</th>
+    <th class="tg-item">Комментарии</th>
+    <th class="tg-item">Текст сообщения</th>
+    <th class="tg-item">Ограничения</th>
   </tr>
+</thead>
   <tr>
     <td class="tg-0pky">1</td>
     <td class="tg-0pky">Бот предлагает поучаствовать в неформальном разговоре с выпускником Практикума.</td>
@@ -203,13 +202,22 @@
     <td class="tg-0pky">Очень жаль, что не удалось встретиться с напарником. Пожалуйста, расскажи, почему не удалось поучаствовать, в форме обратной связи по ссылке &lt;ссылка&gt;</td>
     <td class="tg-0pky"></td>
   </tr>
+</tbody>
+</table>
+
+## Фичи для выпускника
+
+<table class="tg">
+<thead>
   <tr>
-    <td class="tg-7od5">Фичи для выпускника</td>
-    <td class="tg-7od5"></td>
-    <td class="tg-7od5"></td>
-    <td class="tg-7od5"></td>
-    <td class="tg-7od5"></td>
+    <th class="tg-item">№</th>
+    <th class="tg-item">Фича</th>
+    <th class="tg-item">Комментарии</th>
+    <th class="tg-item">Текст сообщения</th>
+    <th class="tg-item">Ограничения</th>
   </tr>
+</thead>
+<tbody>
   <tr>
     <td class="tg-0pky">1</td>
     <td class="tg-0pky">Бот предлагает поучаствовать в неформальном разговоре с IT-рекрутером.</td>
