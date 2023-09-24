@@ -7,9 +7,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 env = environ.Env()
 if DEBUG := env.bool("DEBUG", default=True):
-    environ.Env.read_env(find_dotenv(".env", raise_error_if_not_found=True))
+    environ.Env.read_env(find_dotenv(".env"))
 
-SECRET_KEY = env.str('SECRET_KEY')
+DEFAULT = 'some_default_key'
+
+SECRET_KEY = env.str('SECRET_KEY', default=DEFAULT)
 
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['*'])
 
@@ -63,12 +65,12 @@ WSGI_APPLICATION = "core.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": env.str("POSTGRES_ENGINE"),
-        "NAME": env.str("POSTGRES_NAME"),
-        "USER": env.str("POSTGRES_USER"),
-        "PASSWORD": env.str("POSTGRES_PASSWORD"),
-        "HOST": env.str("POSTGRES_HOST"),
-        "PORT": env.str("POSTGRES_PORT"),
+        "ENGINE": env.str("POSTGRES_ENGINE", default='django.db.backends.postgresql'),
+        "NAME": env.str("POSTGRES_NAME", default='postgres'),
+        "USER": env.str("POSTGRES_USER", default='postgres'),
+        "PASSWORD": env.str("POSTGRES_PASSWORD", default='postgres'),
+        "HOST": env.str("POSTGRES_HOST", default='db'),
+        "PORT": env.str("POSTGRES_PORT", default='5432'),
     }
 }
 
@@ -100,7 +102,7 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 
-TELEGRAM_TOKEN = env.str('TELEGRAM_TOKEN')
+TELEGRAM_TOKEN = env.str('TELEGRAM_TOKEN', default=DEFAULT)
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
