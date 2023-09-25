@@ -10,7 +10,7 @@ on:
 
 jobs:
   lint:
-    name: Check the code with pytest
+    name: Check the code with python linters
     runs-on: ubuntu-latest
 
     steps:
@@ -25,12 +25,8 @@ jobs:
       - name: Install poetry
         run: |
           curl -sSL https://install.python-poetry.org | python -
-
-      - name: Install settings
-        run: poetry config virtualenvs.in-project true
-
-      - name: Install dependencies
-        run: poetry install
+          poetry config virtualenvs.in-project true
+          poetry install
 
       - name: Run pytest
         run: poetry run pytest
