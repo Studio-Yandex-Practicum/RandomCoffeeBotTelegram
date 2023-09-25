@@ -1,10 +1,12 @@
 import pytest
 
 from bot.constants.buttons import SUPPORT_BUTTON
-from bot.constants.constant import FIRTS_KEYBOARD
 from bot.constants.links import SUPPORT_FORM
 from bot.constants.messages import GET_SUPPORT
 from bot.keyboards.command_keyboards import support_keyboard_markup
+
+
+FIRTS_KEYBOARD = 0
 
 
 @pytest.mark.asyncio
