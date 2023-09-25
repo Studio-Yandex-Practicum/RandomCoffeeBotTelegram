@@ -12,6 +12,8 @@ Random Coffee bot for the Telegram
 
    1.2 [ER - диаграмма сущностей](docs/RandomCoffeeER.jpg)
 
+   1.3 [Feature list проекта](docs/materials/featch_list.md)
+
 2. [Структура проекта](#structure)
 3. [Подготовка к запуску](#start)
 
