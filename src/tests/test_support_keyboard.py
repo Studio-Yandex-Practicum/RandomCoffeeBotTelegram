@@ -1,7 +1,5 @@
 import pytest
 
-from bot.constants.buttons import SUPPORT_BUTTON
-from bot.constants.links import SUPPORT_FORM
 from bot.keyboards.command_keyboards import support_keyboard_markup
 
 
@@ -12,7 +10,7 @@ FIRTS_KEYBOARD = 0
 async def test_support_keyboard():
     """Проверяем, что support_keyboard, возвращает сообщение, ссылку и кнопку."""
     for inline_keyboard in support_keyboard_markup.inline_keyboard:
-        assert inline_keyboard[FIRTS_KEYBOARD].text == SUPPORT_BUTTON
+        assert inline_keyboard[FIRTS_KEYBOARD].text == "Написать в поддержку"
         assert inline_keyboard[FIRTS_KEYBOARD].callback_data == "Get support"
-        assert inline_keyboard[FIRTS_KEYBOARD].url == SUPPORT_FORM
+        assert inline_keyboard[FIRTS_KEYBOARD].url == "https://ya.ru"
         assert len(inline_keyboard) == 1
