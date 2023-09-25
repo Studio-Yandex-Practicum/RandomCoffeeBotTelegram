@@ -2,13 +2,12 @@ import pytest
 
 from bot.constants.buttons import PARTICIPATE_BUTTON, SUPPORT_BUTTON
 from bot.keyboards.command_keyboards import help_keyboard_markup
-from bot.constants.messages import GO, SUPPORT
 
 
 LENGHT_START_KEYBOARD = 2
 INDEX_TEXT = 0
 INDEX_CALLBACK = 1
-messages = ([PARTICIPATE_BUTTON, GO], [SUPPORT_BUTTON, SUPPORT])
+messages = ([PARTICIPATE_BUTTON, "go"], [SUPPORT_BUTTON, "support"])
 
 
 @pytest.mark.asyncio
