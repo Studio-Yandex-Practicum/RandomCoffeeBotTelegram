@@ -37,6 +37,15 @@ clear-db:
 migrate:
 	poetry run python src/manage.py migrate
 
+# Собрать статику
+collectstatic:
+    poetry run python src/manage.py collectstatic --noinput
+
+# Создать супер пользователя
+createsuperuser:
+    poetry run python src/manage.py createsuperuser --noinput
+
+
 # Запуск Django и Telegram бота
 run-app:
 	@echo -e "$(COLOR_YELLOW)Starting bot...$(COLOR_RESET)"
@@ -44,4 +53,4 @@ run-app:
 	echo -e "$(COLOR_GREEN)Bot stopped$(COLOR_RESET)"
 
 # Базовая команда для запуска БД, миграций, бота и джанго
-bot-init: clear-db start-db migrate run-app
+bot-init: clear-db start-db migrate collectstatic createsuperuser run-app
