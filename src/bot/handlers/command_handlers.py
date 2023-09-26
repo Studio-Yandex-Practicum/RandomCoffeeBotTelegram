@@ -25,9 +25,9 @@ async def start(update: Update, context: CallbackContext):
     else:
         query = update.callback_query
         await query.answer()
-        await query.edit_message_text(START_MESSAGE)
-        await query.edit_message_reply_markup(
-            reply_markup=start_keyboard_markup
+        await query.edit_message_reply_markup(reply_markup=None)
+        await query.message.reply_text(
+            START_MESSAGE, reply_markup=start_keyboard_markup
         )
 
     return States.START
