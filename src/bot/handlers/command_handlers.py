@@ -20,7 +20,7 @@ async def start(update: Update, context: CallbackContext):
     """Функция-обработчик команды start."""
     if update.message:
         await update.message.reply_text(
-            START_MESSAGE, reply_markup=start_keyboard_markup
+            text=START_MESSAGE, reply_markup=start_keyboard_markup
         )
     else:
         query = update.callback_query
