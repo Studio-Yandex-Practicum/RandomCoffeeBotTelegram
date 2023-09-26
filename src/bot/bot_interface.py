@@ -8,10 +8,14 @@ from telegram.ext import (
     ApplicationBuilder,
     CallbackQueryHandler,
     ConversationHandler,
+    MessageHandler,
     PicklePersistence,
+    filters,
 )
 
 from bot.constants.patterns import (
+    CHANGE_NAME_PATTERN,
+    CONTINUE_NAME_PATTERN,
     GO_PATTERN,
     NEXT_TIME_PATTERN,
     PARTICIPATE_PATTERN,
@@ -27,10 +31,13 @@ from bot.handlers.command_handlers import (
     support_bot_handler,
 )
 from bot.handlers.conversation_handlers import (
+    change_name,
+    continue_name,
     go,
     next_time,
     restart_callback,
     role_choice,
+    set_new_name,
 )
 
 logger = logging.getLogger(__name__)
@@ -135,6 +142,15 @@ async def build_main_handler():
                 CallbackQueryHandler(
                     restart_callback, pattern=RESTART_PATTERN
                 ),
+            ],
+            States.SET_NAME: [
+                CallbackQueryHandler(
+                    continue_name, pattern=CONTINUE_NAME_PATTERN
+                ),
+                CallbackQueryHandler(change_name, pattern=CHANGE_NAME_PATTERN),
+            ],
+            States.SET_NEW_NAME: [
+                MessageHandler(filters.TEXT & ~filters.COMMAND, set_new_name)
             ],
         },
         fallbacks=[help_handler, start_handler],
