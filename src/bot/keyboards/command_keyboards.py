@@ -34,7 +34,9 @@ support_keyboard_markup = InlineKeyboardMarkup(
 help_keyboard_markup = InlineKeyboardMarkup(
     [
         [
-            InlineKeyboardButton(PARTICIPATE_BUTTON, callback_data="go"),
+            InlineKeyboardButton(
+                PARTICIPATE_BUTTON, callback_data="participate"
+            ),
             InlineKeyboardButton(SUPPORT_BUTTON, callback_data="support"),
         ]
     ]

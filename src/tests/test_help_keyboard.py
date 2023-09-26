@@ -6,7 +6,10 @@ from bot.keyboards.command_keyboards import help_keyboard_markup
 LENGHT_START_KEYBOARD = 2
 INDEX_TEXT = 0
 INDEX_CALLBACK = 1
-messages = (["Участвовать!", "go"], ["Написать в поддержку", "support"])
+messages = (
+    ["Участвовать!", "participate"],
+    ["Написать в поддержку", "support"],
+)
 
 
 @pytest.mark.asyncio

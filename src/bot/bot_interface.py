@@ -3,13 +3,34 @@ import logging
 from typing import Self
 
 from django.conf import settings
-from telegram.ext import Application, ApplicationBuilder, PicklePersistence
+from telegram.ext import (
+    Application,
+    ApplicationBuilder,
+    CallbackQueryHandler,
+    ConversationHandler,
+    PicklePersistence,
+)
 
+from bot.constants.patterns import (
+    GO_PATTERN,
+    NEXT_TIME_PATTERN,
+    PARTICIPATE_PATTERN,
+    RESTART_PATTERN,
+    ROLE_CHOICE_PATTERN,
+    TO_SUPPORT_PATTERN,
+)
+from bot.constants.states import States
 from bot.handlers.command_handlers import (
     help_handler,
-    redirection_to_support_handler,
+    redirection_to_support,
     start_handler,
     support_bot_handler,
+)
+from bot.handlers.conversation_handlers import (
+    go,
+    next_time,
+    restart_callback,
+    role_choice,
 )
 
 logger = logging.getLogger(__name__)
@@ -60,14 +81,8 @@ class Bot:
             .persistence(PicklePersistence(filepath=settings.PERSISTANCE_PATH))
             .build()
         )
-        app.add_handlers(
-            [
-                start_handler,
-                support_bot_handler,
-                help_handler,
-                redirection_to_support_handler,
-            ]
-        )
+        main_handler = await build_main_handler()
+        app.add_handlers([main_handler, help_handler, support_bot_handler])
         return app
 
     async def _manage_webhook(self) -> None:
@@ -91,3 +106,36 @@ class Bot:
     async def _stop_bot(self) -> None:
         """Останавливает основное ASGI-приложение."""
         await Application.stop(self._app)
+
+
+async def build_main_handler():
+    """Функция создания главного обработчика."""
+    return ConversationHandler(
+        entry_points=[start_handler],
+        persistent=True,
+        name="main_handler",
+        states={
+            States.START: [
+                CallbackQueryHandler(go, pattern=GO_PATTERN),
+                CallbackQueryHandler(next_time, pattern=NEXT_TIME_PATTERN),
+            ],
+            States.HELP: [
+                CallbackQueryHandler(
+                    restart_callback, pattern=PARTICIPATE_PATTERN
+                ),
+                CallbackQueryHandler(
+                    redirection_to_support, pattern=TO_SUPPORT_PATTERN
+                ),
+            ],
+            States.ROLE_CHOICE: [
+                CallbackQueryHandler(role_choice, pattern=ROLE_CHOICE_PATTERN)
+            ],
+            States.NEXT_TIME: [
+                start_handler,
+                CallbackQueryHandler(
+                    restart_callback, pattern=RESTART_PATTERN
+                ),
+            ],
+        },
+        fallbacks=[help_handler, start_handler],
+    )
