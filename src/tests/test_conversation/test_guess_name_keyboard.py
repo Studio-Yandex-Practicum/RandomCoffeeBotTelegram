@@ -1,20 +1,18 @@
 import pytest
 
-from bot.keyboards.command_keyboards import start_keyboard_markup
+from bot.keyboards.conversation_keyboards import guess_name_keyboard_markup
 
 
 LENGTH_START_KEYBOARD = 2
 INDEX_TEXT = 0
 INDEX_CALLBACK = 1
-messages = (["GO", "go"], ["В следующий раз", "next_time"])
+messages = (["Продолжить", "continue_name"], ["Сменить имя", "change_name"])
 
 
 @pytest.mark.asyncio
-async def test_start_keyboard():
-    """Проверяем, что start_keyboard, возвращает сообщение и кнопку."""
-
+async def test_guess_name_keyboard():
     for number_of_message, inline_keyboard_button in enumerate(
-        *start_keyboard_markup.inline_keyboard
+        *guess_name_keyboard_markup.inline_keyboard
     ):
         assert (
             inline_keyboard_button.text
@@ -24,4 +22,7 @@ async def test_start_keyboard():
             inline_keyboard_button.callback_data
             == messages[number_of_message][INDEX_CALLBACK]
         )
-    assert len(*start_keyboard_markup.inline_keyboard) == LENGTH_START_KEYBOARD
+    assert (
+        len(*guess_name_keyboard_markup.inline_keyboard)
+        == LENGTH_START_KEYBOARD
+    )
