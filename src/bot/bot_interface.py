@@ -3,6 +3,7 @@ import logging
 from typing import Self
 
 from django.conf import settings
+from telegram import BotCommand
 from telegram.ext import (
     Application,
     ApplicationBuilder,
@@ -76,6 +77,7 @@ class Bot:
         self._app = await self._build_app()
         await self._app.initialize()
         await self._manage_webhook()
+        await self.set_bot_commands()
         await self._start_bot()
         await self._stop_event.wait()
         await self._stop_bot()
@@ -113,6 +115,16 @@ class Bot:
     async def _stop_bot(self) -> None:
         """Останавливает основное ASGI-приложение."""
         await Application.stop(self._app)
+
+    async def set_bot_commands(self) -> None:
+        """Установить команды бота и их описание для кнопки menu."""
+        commands = [
+            BotCommand("start", "Запустить бота"),
+            BotCommand("help", "Получить помощь"),
+            BotCommand("support", "Связаться с поддержкой"),
+        ]
+
+        await self._app.bot.set_my_commands(commands)
 
 
 async def build_main_handler():
