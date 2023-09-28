@@ -11,7 +11,10 @@ messages = (["GO", "go"], ["В следующий раз", "next_time"])
 
 @pytest.mark.asyncio
 async def test_start_keyboard():
-    """Проверяем, что start_keyboard, возвращает сообщение и кнопку."""
+    """
+    Проверяем, что start_keyboard
+    возвращает сообщение и кнопку.
+    """
 
     for number_of_message, inline_keyboard_button in enumerate(
         *start_keyboard_markup.inline_keyboard

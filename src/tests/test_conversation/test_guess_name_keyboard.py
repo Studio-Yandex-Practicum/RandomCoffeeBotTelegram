@@ -11,6 +11,11 @@ messages = (["Продолжить", "continue_name"], ["Сменить имя",
 
 @pytest.mark.asyncio
 async def test_guess_name_keyboard():
+    """
+    Тест проверяет, что клавиатура guess_name_keyboard_markup корректно
+    формируется, с учетом текста и данных для callback на кнопках,
+    а также общей длины клавиатуры.
+    """
     for number_of_message, inline_keyboard_button in enumerate(
         *guess_name_keyboard_markup.inline_keyboard
     ):

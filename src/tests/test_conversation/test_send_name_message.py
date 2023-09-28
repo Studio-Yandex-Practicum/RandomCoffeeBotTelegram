@@ -9,6 +9,10 @@ from bot.keyboards.conversation_keyboards import guess_name_keyboard_markup
 
 @pytest.mark.asyncio
 async def test_send_name_message_with_callback_query(update, context):
+    """
+    Тест проверяет, что функция send_name_message корректно отправляет
+    сообщение и обновляет клавиатуру при наличии callback_query.
+    """
     update.callback_query = AsyncMock()
     context.user_data = {"name": "test"}
 
@@ -25,6 +29,10 @@ async def test_send_name_message_with_callback_query(update, context):
 
 @pytest.mark.asyncio
 async def test_send_name_message_without_callback_query(update, context):
+    """
+    Тест проверяет, что функция send_name_message корректно отправляет
+    сообщение и устанавливает клавиатуру, если callback_query отсутствует.
+    """
     update.callback_query = None
     update.message = AsyncMock()
     context.user_data = {"name": "test"}
