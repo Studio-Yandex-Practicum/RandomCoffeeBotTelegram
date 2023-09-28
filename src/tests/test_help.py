@@ -13,7 +13,10 @@ async def test_help_handler(
     context,
     mocked_reply_markup,
 ):
-    """Проверяем, что help handler, возвращает нужное сообщение и нужную клавиатуру."""
+    """
+    Проверяем, что help handler, возвращает нужное сообщение
+    и нужную клавиатуру.
+    """
     update.message = AsyncMock()
     context.bot.get_my_commands = AsyncMock(return_value=mocked_reply_markup)
 

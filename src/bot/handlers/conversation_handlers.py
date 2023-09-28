@@ -83,15 +83,6 @@ async def set_new_name(update: Update, context: CallbackContext):
     return States.SET_NAME
 
 
-@log_handler
-async def continue_name(update: Update, context: CallbackContext):
-    """Обработчик для кнопки "Продолжить"."""
-    query = update.callback_query
-    await query.answer()
-    await query.edit_message_reply_markup(reply_markup=None)
-    return ConversationHandler.END
-
-
 async def send_name_message(update: Update, context: CallbackContext):
     """Отправляет сообщение с именем."""
     query = update.callback_query
@@ -108,3 +99,12 @@ async def send_name_message(update: Update, context: CallbackContext):
             GUESS_NAME_MESSAGE.format(guessed_name),
             reply_markup=guess_name_keyboard_markup,
         )
+
+
+@log_handler
+async def continue_name(update: Update, context: CallbackContext):
+    """Обработчик для кнопки "Продолжить"."""
+    query = update.callback_query
+    await query.answer()
+    await query.edit_message_reply_markup(reply_markup=None)
+    return ConversationHandler.END
