@@ -6,3 +6,7 @@ TO_SUPPORT_PATTERN = "^support$"
 PARTICIPATE_PATTERN = "^participate$"
 CONTINUE_NAME_PATTERN = "^continue_name$"
 CHANGE_NAME_PATTERN = "^change_name$"
+PROFESSION_CHOICE_PATTERN = (
+    "^(analyst|backend-developer|frontend-developer|tester)$"
+)
+PROFILE_PATTERN = "^(all_right|fill_again)*$"
