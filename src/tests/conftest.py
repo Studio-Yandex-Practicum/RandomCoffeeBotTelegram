@@ -35,7 +35,7 @@ def mocked_message_text():
 def mocked_message(mocked_message_text):
     """Message object mock."""
     message = Mock()
-    message.value = mocked_message_text
+    message.text = mocked_message_text
     return message
 
 

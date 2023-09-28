@@ -13,7 +13,10 @@ async def test_redirection_to_support_handler(
     context,
     mocked_reply_markup,
 ):
-    """Проверяем, что redirection_to_support handler, возвращает нужное сообщение и нужную клавиатуру."""
+    """
+    Проверяем, что redirection_to_support handler
+    возвращает нужное сообщение и нужную клавиатуру.
+    """
     update.callback_query = AsyncMock()
     update.callback_query.data = "support"
     context.bot.get_my_commands = AsyncMock(return_value=mocked_reply_markup)
