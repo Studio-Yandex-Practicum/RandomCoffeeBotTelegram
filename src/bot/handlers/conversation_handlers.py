@@ -101,9 +101,8 @@ async def continue_name(update: Update, context: CallbackContext):
         return States.PROFESSION_CHOICE
     else:
         query = update.callback_query
-        username = query.from_user.username
         context.user_data["profession"] = "It-рекрутер"
-        if not username:
+        if not query.from_user.username:
             await query.edit_message_text(USERNAME_NOT_FOUND_MESSAGE)
             return States.SET_PHONE_NUMBER
         await send_profile_form(update, context)
@@ -115,8 +114,7 @@ async def profession_choice(update: Update, context: CallbackContext):
     """Обработчик для выбора профессии."""
     query = update.callback_query
     context.user_data["profession"] = query.data.title()
-    username = query.from_user.username
-    if not username:
+    if not query.from_user.username:
         await query.edit_message_text(USERNAME_NOT_FOUND_MESSAGE)
         return States.SET_PHONE_NUMBER
     await send_profile_form(update, context)
@@ -161,16 +159,6 @@ async def send_name_message(update: Update, context: CallbackContext):
             GUESS_NAME_MESSAGE.format(guessed_name),
             reply_markup=guess_name_keyboard_markup,
         )
-
-
-# async def check_username(update: Update, context: CallbackContext):
-#     """"""
-#     query = update.callback_query
-#     username = query.from_user.username
-#     username = ''
-#     if not username:
-#         await query.edit_message_text(USERNAME_NOT_FOUND_MESSAGE)
-#         return States.SET_PHONE_NUMBER
 
 
 async def send_profile_form(update: Update, context: CallbackContext):
