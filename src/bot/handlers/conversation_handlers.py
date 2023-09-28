@@ -1,3 +1,4 @@
+from asgiref.sync import sync_to_async
 from telegram import Update
 from telegram.ext import CallbackContext, ConversationHandler
 
@@ -20,7 +21,7 @@ from bot.keyboards.conversation_keyboards import (
     restart_keyboard_markup,
     role_choice_keyboard_markup,
 )
-from bot.models import Recruiter, Student
+from bot.models import Profession, Recruiter, Student
 from core.config.logging import log_handler
 
 
@@ -126,7 +127,7 @@ async def profession_choice(update: Update, context: CallbackContext):
 async def set_phone_number(update: Update, context: CallbackContext):
     """Обработчик для ввода номера телефона."""
     phone_number = update.message.text
-    context.user_data["phone"] = phone_number
+    context.user_data["contact"] = phone_number
     await send_profile_form(update, context)
     return States.PROFILE
 
@@ -140,8 +141,7 @@ async def profile(update: Update, context: CallbackContext):
         await query.edit_message_reply_markup(role_choice_keyboard_markup)
         return States.ROLE_CHOICE
     else:
-        # передать данные в базу данных
-        pass
+        await to_create(update, context)
     return ConversationHandler.END
 
 
@@ -179,15 +179,37 @@ async def send_profile_form(update: Update, context: CallbackContext):
     profession = context.user_data["profession"]
     name = context.user_data["name"]
     if query:
-        contact = query.from_user.username
+        context.user_data["contact"] = query.from_user.username
         await query.answer()
         await query.edit_message_text(
-            PROFILE_MESSAGE.format(name, profession, contact)
+            PROFILE_MESSAGE.format(
+                name, profession, context.user_data["contact"]
+            )
         )
         await query.edit_message_reply_markup(profile_keyboard_markup)
     else:
-        contact = context.user_data["phone"]
+        contact = context.user_data["contact"]
         await update.message.reply_text(
             PROFILE_MESSAGE.format(name, profession, contact),
             reply_markup=profile_keyboard_markup,
         )
+
+
+async def to_create(update: Update, context: CallbackContext):
+    """Создаёт таблицы."""
+    query = update.callback_query
+    if context.user_data["role"] == "recruiter":
+        person = Recruiter()
+    else:
+        person = Student()
+        profession = Profession()
+        profession.name = context.user_data["profession"]
+        await sync_to_async(profession.save)()
+        person.profession = await sync_to_async(Profession.objects.get)(
+            name=context.user_data["profession"]
+        )
+    person.telegram_id = query.from_user.id
+    person.name = context.user_data["name"]
+    person.surname = query.from_user.last_name
+    person.telegram_username = context.user_data["contact"]
+    await sync_to_async(person.save)()
