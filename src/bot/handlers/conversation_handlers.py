@@ -1,3 +1,5 @@
+import logging
+
 from asgiref.sync import sync_to_async
 from telegram import Update
 from telegram.ext import CallbackContext, ConversationHandler
@@ -199,6 +201,9 @@ async def to_create(update: Update, context: CallbackContext):
         "surname": query.from_user.last_name,
         "telegram_username": context.user_data["contact"],
     }
-    if context.user_data["role"] == "recruiter":
-        await Recruiter.objects.acreate(**user_data)
-    await Student.objects.acreate(profession=profession_id, **user_data)
+    try:
+        if context.user_data["role"] == "recruiter":
+            await Recruiter.objects.acreate(**user_data)
+        await Student.objects.acreate(profession=profession_id, **user_data)
+    except Exception as error:
+        logging.error(error)
