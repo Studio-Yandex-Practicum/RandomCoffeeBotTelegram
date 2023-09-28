@@ -185,19 +185,20 @@ async def send_profile_form(update: Update, context: CallbackContext):
 
 async def to_create(update: Update, context: CallbackContext):
     """Создаёт таблицы."""
+    if not await Profession.objects.filter(
+        name=context.user_data["profession"]
+    ).aexists():
+        await Profession.objects.acreate(name=context.user_data["profession"])
+    profession_id = await sync_to_async(Profession.objects.get)(
+        name=context.user_data["profession"]
+    )
     query = update.callback_query
+    user_data = {
+        "telegram_id": query.from_user.id,
+        "name": context.user_data["name"],
+        "surname": query.from_user.last_name,
+        "telegram_username": context.user_data["contact"],
+    }
     if context.user_data["role"] == "recruiter":
-        person = Recruiter()
-    else:
-        person = Student()
-        profession = Profession()
-        profession.name = context.user_data["profession"]
-        await sync_to_async(profession.save)()
-        person.profession = await sync_to_async(Profession.objects.get)(
-            name=context.user_data["profession"]
-        )
-    person.telegram_id = query.from_user.id
-    person.name = context.user_data["name"]
-    person.surname = query.from_user.last_name
-    person.telegram_username = context.user_data["contact"]
-    await sync_to_async(person.save)()
+        await Recruiter.objects.acreate(**user_data)
+    await Student.objects.acreate(profession=profession_id, **user_data)
