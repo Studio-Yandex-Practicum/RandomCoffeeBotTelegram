@@ -15,14 +15,13 @@ from telegram.ext import (
 )
 
 from bot.constants.commands import (
-    START_COMMAND,
-    START_DESCRIPTION,
     HELP_COMMAND,
     HELP_DESCRIPTION,
+    START_COMMAND,
+    START_DESCRIPTION,
     SUPPORT_COMMAND,
     SUPPORT_DESCRIPTION,
 )
-
 from bot.constants.patterns import (
     CHANGE_NAME_PATTERN,
     CONTINUE_NAME_PATTERN,
