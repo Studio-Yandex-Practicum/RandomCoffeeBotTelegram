@@ -1,6 +1,5 @@
 import logging
 
-from asgiref.sync import sync_to_async
 from telegram import Update
 from telegram.ext import CallbackContext, ConversationHandler
 
@@ -102,7 +101,6 @@ async def continue_name(update: Update, context: CallbackContext):
         )
         return States.PROFESSION_CHOICE
     else:
-        query = update.callback_query
         context.user_data["profession"] = "It-рекрутер"
         if not query.from_user.username:
             await query.edit_message_text(USERNAME_NOT_FOUND_MESSAGE)
@@ -188,19 +186,20 @@ async def send_profile_form(update: Update, context: CallbackContext):
 async def to_create(update: Update, context: CallbackContext):
     """Создаёт таблицы."""
     query = update.callback_query
-    pofession = context.user_data["profession"]
+    profession = context.user_data["profession"]
     user_data = {
         "telegram_id": query.from_user.id,
         "name": context.user_data["name"],
         "surname": query.from_user.last_name,
         "telegram_username": context.user_data["contact"],
     }
-    if not await Profession.objects.filter(name=pofession).aexists():
-        await Profession.objects.acreate(name=pofession)
-    profession_id = await sync_to_async(Profession.objects.get)(name=pofession)
+    profession, created = await Profession.objects.aget_or_create(
+        name=profession
+    )
     try:
         if context.user_data["role"] == "recruiter":
             await Recruiter.objects.acreate(**user_data)
-        await Student.objects.acreate(profession=profession_id, **user_data)
+        else:
+            await Student.objects.acreate(profession=profession, **user_data)
     except Exception as error:
         logging.error(error)
