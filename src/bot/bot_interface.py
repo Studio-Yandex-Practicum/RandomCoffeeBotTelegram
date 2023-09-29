@@ -25,6 +25,16 @@ from bot.constants.patterns import (
     TO_SUPPORT_PATTERN,
 )
 from bot.constants.states import States
+
+from bot.constants.commands import (
+    START_COMMAND,
+    START_DESCRIPTION,
+    HELP_COMMAND,
+    HELP_DESCRIPTION,
+    SUPPORT_COMMAND,
+    SUPPORT_DESCRIPTION,
+)
+
 from bot.handlers.command_handlers import (
     help_handler,
     redirection_to_support,
@@ -86,9 +96,9 @@ class Bot:
         """Создает и настраивает ASGI-приложение для бота."""
         app = (
             ApplicationBuilder()
-            .token(settings.TELEGRAM_TOKEN)
-            .persistence(PicklePersistence(filepath=settings.PERSISTANCE_PATH))
-            .build()
+                .token(settings.TELEGRAM_TOKEN)
+                .persistence(PicklePersistence(filepath=settings.PERSISTANCE_PATH))
+                .build()
         )
         main_handler = await build_main_handler()
         app.add_handlers([main_handler, help_handler, support_bot_handler])
@@ -117,11 +127,11 @@ class Bot:
         await Application.stop(self._app)
 
     async def set_bot_commands(self) -> None:
-        """Установить команды бота и их описание для кнопки menu."""
-        commands = [
-            BotCommand("start", "Запустить бота"),
-            BotCommand("help", "Получить помощь"),
-            BotCommand("support", "Связаться с поддержкой"),
+        """Установить команды бота и их описание для кнопки Menu."""
+        commands: list[BotCommand] = [
+            BotCommand(START_COMMAND, START_DESCRIPTION),
+            BotCommand(HELP_COMMAND, HELP_DESCRIPTION),
+            BotCommand(SUPPORT_COMMAND, SUPPORT_DESCRIPTION),
         ]
 
         await self._app.bot.set_my_commands(commands)
