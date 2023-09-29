@@ -204,4 +204,4 @@ async def to_create(update: Update, context: CallbackContext):
         else:
             await Student.objects.acreate(profession=profession, **user_data)
     except Exception as error:
-        logger.error(error)
+        logger.error(f"Не удалось сохранить данные в таблицу: {error}")
