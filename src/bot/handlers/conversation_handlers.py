@@ -102,11 +102,7 @@ async def continue_name(update: Update, context: CallbackContext):
         return States.PROFESSION_CHOICE
     else:
         context.user_data["profession"] = "It-рекрутер"
-        if not query.from_user.username:
-            await query.edit_message_text(USERNAME_NOT_FOUND_MESSAGE)
-            return States.SET_PHONE_NUMBER
-        await send_profile_form(update, context)
-        return States.PROFILE
+        return await check_username(update, context)
 
 
 @log_handler
@@ -114,11 +110,7 @@ async def profession_choice(update: Update, context: CallbackContext):
     """Обработчик для выбора профессии."""
     query = update.callback_query
     context.user_data["profession"] = query.data.title()
-    if not query.from_user.username:
-        await query.edit_message_text(USERNAME_NOT_FOUND_MESSAGE)
-        return States.SET_PHONE_NUMBER
-    await send_profile_form(update, context)
-    return States.PROFILE
+    return await check_username(update, context)
 
 
 @log_handler
@@ -161,6 +153,16 @@ async def send_name_message(update: Update, context: CallbackContext):
         )
 
 
+async def check_username(update: Update, context: CallbackContext):
+    """Проверяет наличие username."""
+    query = update.callback_query
+    if not query.from_user.username:
+        await query.edit_message_text(USERNAME_NOT_FOUND_MESSAGE)
+        return States.SET_PHONE_NUMBER
+    await send_profile_form(update, context)
+    return States.PROFILE
+
+
 async def send_profile_form(update: Update, context: CallbackContext):
     """Отправляет форму с именем или телефоном."""
     query = update.callback_query
@@ -176,9 +178,10 @@ async def send_profile_form(update: Update, context: CallbackContext):
         )
         await query.edit_message_reply_markup(profile_keyboard_markup)
     else:
-        contact = context.user_data["contact"]
         await update.message.reply_text(
-            PROFILE_MESSAGE.format(name, profession, contact),
+            PROFILE_MESSAGE.format(
+                name, profession, context.user_data["contact"]
+            ),
             reply_markup=profile_keyboard_markup,
         )
 
