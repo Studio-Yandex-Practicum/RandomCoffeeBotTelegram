@@ -1,5 +1,4 @@
-import logging
-
+from loguru import logger
 from telegram import Update
 from telegram.ext import CallbackContext, ConversationHandler
 
@@ -205,4 +204,4 @@ async def to_create(update: Update, context: CallbackContext):
         else:
             await Student.objects.acreate(profession=profession, **user_data)
     except Exception as error:
-        logging.error(error)
+        logger.error(error)
