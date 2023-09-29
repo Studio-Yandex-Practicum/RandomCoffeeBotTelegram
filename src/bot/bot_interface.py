@@ -14,6 +14,15 @@ from telegram.ext import (
     filters,
 )
 
+from bot.constants.commands import (
+    START_COMMAND,
+    START_DESCRIPTION,
+    HELP_COMMAND,
+    HELP_DESCRIPTION,
+    SUPPORT_COMMAND,
+    SUPPORT_DESCRIPTION,
+)
+
 from bot.constants.patterns import (
     CHANGE_NAME_PATTERN,
     CONTINUE_NAME_PATTERN,
@@ -25,15 +34,6 @@ from bot.constants.patterns import (
     TO_SUPPORT_PATTERN,
 )
 from bot.constants.states import States
-
-from bot.constants.commands import (
-    START_COMMAND,
-    START_DESCRIPTION,
-    HELP_COMMAND,
-    HELP_DESCRIPTION,
-    SUPPORT_COMMAND,
-    SUPPORT_DESCRIPTION,
-)
 
 from bot.handlers.command_handlers import (
     help_handler,
