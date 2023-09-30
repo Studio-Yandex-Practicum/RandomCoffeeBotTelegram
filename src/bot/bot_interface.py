@@ -34,16 +34,13 @@ from bot.constants.patterns import (
     ROLE_CHOICE_PATTERN,
     TO_SUPPORT_PATTERN,
 )
-
 from bot.constants.states import States
-
 from bot.handlers.command_handlers import (
     help_handler,
     redirection_to_support,
     start_handler,
     support_bot_handler,
 )
-
 from bot.handlers.conversation_handlers import (
     change_name,
     continue_name,
@@ -102,9 +99,9 @@ class Bot:
         """Создает и настраивает ASGI-приложение для бота."""
         app = (
             ApplicationBuilder()
-                .token(settings.TELEGRAM_TOKEN)
-                .persistence(PicklePersistence(filepath=settings.PERSISTANCE_PATH))
-                .build()
+            .token(settings.TELEGRAM_TOKEN)
+            .persistence(PicklePersistence(filepath=settings.PERSISTANCE_PATH))
+            .build()
         )
         main_handler = await build_main_handler()
         app.add_handlers([main_handler, help_handler, support_bot_handler])
