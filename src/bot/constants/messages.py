@@ -27,3 +27,11 @@ GUESS_NAME_MESSAGE = (
     '"Сменить имя"'
 )
 CHANGE_NAME_MESSAGE = "Напиши свое имя:"
+CHOOSE_PROFESSION_MESSAGE = "Укажи, пожалуйста, свою профессию:"
+USERNAME_NOT_FOUND_MESSAGE = (
+    "Не удалось автоматически получить твой никнейм.\n"
+    "Введите, пожалуйста, номер телефона:"
+)
+PROFILE_MESSAGE = (
+    "Твой профиль:\n" "Имя: {}\n" "Профессия: {}\n" "Telegram: {}"
+)

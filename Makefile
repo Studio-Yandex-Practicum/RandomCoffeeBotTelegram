@@ -24,6 +24,7 @@ runbot: # Run Telegram bot on Uvicorn
 # Запуск контейнера Postgres
 start-db:
 	docker-compose -f infra/dev/docker-compose.local.yaml up -d
+	@sleep 3;
 
 # Остановка контейнера Postgres
 stop-db:
@@ -39,11 +40,11 @@ migrate:
 
 # Собрать статику
 collectstatic:
-    poetry run python src/manage.py collectstatic --noinput
+	poetry run python src/manage.py collectstatic --noinput
 
 # Создать супер пользователя
 createsuperuser:
-    poetry run python src/manage.py createsuperuser --noinput
+	poetry run python src/manage.py createsuperuser --noinput
 
 
 # Запуск Django и Telegram бота
