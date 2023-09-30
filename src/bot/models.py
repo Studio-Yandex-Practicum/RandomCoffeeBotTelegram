@@ -36,7 +36,11 @@ class PracticumUser(models.Model):
         primary_key=True, verbose_name="Telegram User ID"
     )
     name = models.CharField(max_length=255, verbose_name="Имя")
-    surname = models.CharField(max_length=255, verbose_name="Фамилия")
+    surname = models.CharField(
+        max_length=255,
+        verbose_name="Фамилия",
+        null=True,
+    )
     telegram_username = models.CharField(
         max_length=255, verbose_name="Ник в телеграмме", unique=True
     )
