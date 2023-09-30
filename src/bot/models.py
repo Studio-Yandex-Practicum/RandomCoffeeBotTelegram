@@ -1,4 +1,8 @@
 from django.db import models
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
+
+from .utils import translation
 
 
 class Profession(models.Model):
@@ -7,6 +11,9 @@ class Profession(models.Model):
     name = models.CharField(
         max_length=128, unique=True, verbose_name="Название профессии"
     )
+    professional_key = models.CharField(
+        max_length=128, unique=True, blank=True, null=True
+    )
 
     class Meta:
         verbose_name = "Профессия"
@@ -14,6 +21,12 @@ class Profession(models.Model):
 
     def __str__(self):
         return self.name
+
+
+@receiver(pre_save, sender=Profession)
+def create_key(sender, instance, *args, **kwargs):
+    """Save translate field from Profession 'name' into 'professional_key'."""
+    instance.professional_key = translation(instance.name)
 
 
 class PracticumUser(models.Model):
