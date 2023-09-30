@@ -3,6 +3,7 @@ import logging
 from typing import Self
 
 from django.conf import settings
+from telegram import BotCommand
 from telegram.ext import (
     Application,
     ApplicationBuilder,
@@ -13,12 +14,22 @@ from telegram.ext import (
     filters,
 )
 
+from bot.constants.commands import (
+    HELP_COMMAND,
+    HELP_DESCRIPTION,
+    START_COMMAND,
+    START_DESCRIPTION,
+    SUPPORT_COMMAND,
+    SUPPORT_DESCRIPTION,
+)
 from bot.constants.patterns import (
     CHANGE_NAME_PATTERN,
     CONTINUE_NAME_PATTERN,
     GO_PATTERN,
     NEXT_TIME_PATTERN,
     PARTICIPATE_PATTERN,
+    PROFESSION_CHOICE_PATTERN,
+    PROFILE_PATTERN,
     RESTART_PATTERN,
     ROLE_CHOICE_PATTERN,
     TO_SUPPORT_PATTERN,
@@ -35,9 +46,12 @@ from bot.handlers.conversation_handlers import (
     continue_name,
     go,
     next_time,
+    profession_choice,
+    profile,
     restart_callback,
     role_choice,
     set_new_name,
+    set_phone_number,
 )
 
 logger = logging.getLogger(__name__)
@@ -76,6 +90,7 @@ class Bot:
         self._app = await self._build_app()
         await self._app.initialize()
         await self._manage_webhook()
+        await self.set_bot_commands()
         await self._start_bot()
         await self._stop_event.wait()
         await self._stop_bot()
@@ -114,6 +129,16 @@ class Bot:
         """Останавливает основное ASGI-приложение."""
         await Application.stop(self._app)
 
+    async def set_bot_commands(self) -> None:
+        """Установить команды бота и их описание для кнопки Menu."""
+        commands: list[BotCommand] = [
+            BotCommand(START_COMMAND, START_DESCRIPTION),
+            BotCommand(HELP_COMMAND, HELP_DESCRIPTION),
+            BotCommand(SUPPORT_COMMAND, SUPPORT_DESCRIPTION),
+        ]
+
+        await self._app.bot.set_my_commands(commands)
+
 
 async def build_main_handler():
     """Функция создания главного обработчика."""
@@ -143,6 +168,14 @@ async def build_main_handler():
                     restart_callback, pattern=RESTART_PATTERN
                 ),
             ],
+            States.PROFESSION_CHOICE: [
+                CallbackQueryHandler(
+                    profession_choice, pattern=PROFESSION_CHOICE_PATTERN
+                )
+            ],
+            States.PROFILE: [
+                CallbackQueryHandler(profile, pattern=PROFILE_PATTERN)
+            ],
             States.SET_NAME: [
                 CallbackQueryHandler(
                     continue_name, pattern=CONTINUE_NAME_PATTERN
@@ -151,6 +184,11 @@ async def build_main_handler():
             ],
             States.SET_NEW_NAME: [
                 MessageHandler(filters.TEXT & ~filters.COMMAND, set_new_name)
+            ],
+            States.SET_PHONE_NUMBER: [
+                MessageHandler(
+                    filters.TEXT & ~filters.COMMAND, set_phone_number
+                )
             ],
         },
         fallbacks=[help_handler, start_handler],
