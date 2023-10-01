@@ -24,8 +24,8 @@ class Profession(models.Model):
 
 
 @receiver(pre_save, sender=Profession)
-def create_key(sender, instance, *args, **kwargs):
-    """Save translate field from Profession 'name' into 'professional_key'."""
+def create_key(sender, instance, *args, **kwargs) -> None:
+    """Save transliterate field from 'name' into 'professional_key'."""
     instance.professional_key = translation(instance.name)
 
 
