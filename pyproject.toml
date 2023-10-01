@@ -26,6 +26,7 @@ pytils = "^0.4.1"
 pre-commit = "^3.4.0"
 ruff = "^0.0.290"
 black = "^23.9.1"
+isort = "^5.12.0"
 
 [build-system]
 requires = ["poetry-core"]
