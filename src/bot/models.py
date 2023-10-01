@@ -2,7 +2,7 @@ from django.db import models
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
 
-from .utils import translation
+from .utils import transliteration
 
 
 class Profession(models.Model):
@@ -26,7 +26,7 @@ class Profession(models.Model):
 @receiver(pre_save, sender=Profession)
 def create_key(sender, instance, *args, **kwargs) -> None:
     """Save transliterate field from 'name' into 'professional_key'."""
-    instance.professional_key = translation(instance.name)
+    instance.professional_key = transliteration(instance.name)
 
 
 class PracticumUser(models.Model):
