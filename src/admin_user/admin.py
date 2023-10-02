@@ -3,11 +3,14 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import Group
 
+ADMIN_HEADER = "Администрирование RandomCoffeeBot"
+ADMIN_TITLE = "Панель администратора бота"
+
 AdminUser = get_user_model()
 
 admin.site.unregister(Group)
-admin.site.site_header = "Администрирование RandomCoffeeBot"
-admin.site.index_title = "Панель администратора бота"
+admin.site.site_header = ADMIN_HEADER
+admin.site.index_title = ADMIN_TITLE
 
 
 @admin.register(AdminUser)
