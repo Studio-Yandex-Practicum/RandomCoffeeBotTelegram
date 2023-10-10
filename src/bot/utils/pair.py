@@ -1,11 +1,11 @@
-from http import HTTPStatus
-
+from django.db import IntegrityError
 from loguru import logger
 
+from bot.constants.states import States
 from bot.models import CreatedPair, Recruiter, Student
 
 
-async def make_pair(student: Student, recruiter: Recruiter) -> HTTPStatus:
+async def make_pair(student: Student, recruiter: Recruiter) -> States:
     """Функция для создания пары студент-рекрутер."""
     try:
         student.has_pair = True
@@ -15,14 +15,17 @@ async def make_pair(student: Student, recruiter: Recruiter) -> HTTPStatus:
         )
         await student.asave()
         await recruiter.asave()
-        status = HTTPStatus.OK
+        state = States.PAIR_FOUND
         logger.info(f"The pair was made with {created_pair}")
+    except IntegrityError as error:
+        state = States.PAIR_NOT_FOUND
+        logger.error(f"Error in creating objects in database: {error}")
     except Exception as exp:
-        status = HTTPStatus.BAD_REQUEST
+        state = States.PAIR_NOT_FOUND
         logger.error(
             (
                 f"Error in making pair with {student.name} "
                 f"and {recruiter.name}: {exp}"
             )
         )
-    return status
+    return state

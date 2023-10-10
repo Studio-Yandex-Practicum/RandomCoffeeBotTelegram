@@ -7,6 +7,8 @@ class States(str, enum.Enum):
     START = "start"
     ROLE_CHOICE = "role_choice"
     PAIR_SEARCH = "pair_search"
+    PAIR_FOUND = "pair_found"
+    PAIR_NOT_FOUND = "pair_not_found"
     PROFESSION_CHOICE = "profession_choice"
     PROFILE = "profile"
     NEXT_TIME = "next_time"
