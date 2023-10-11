@@ -222,5 +222,4 @@ async def user_is_exist(user_id: int) -> bool:
     ):
         # Может быть будет иметь смысл возвращать не bool, а объект из БД.
         return True
-    else:
-        return False
+    return False
