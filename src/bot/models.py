@@ -158,4 +158,4 @@ class FormUrl(models.Model):
         verbose_name_plural = "Ссылки на формы"
 
     def __str__(self):
-        return f"Название {self.title} | " f"Ссылка {self.url}"
+        return f"Название {self.title} | Ссылка {self.url}"
