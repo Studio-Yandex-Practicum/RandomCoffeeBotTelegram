@@ -35,3 +35,4 @@ USERNAME_NOT_FOUND_MESSAGE = (
 PROFILE_MESSAGE = (
     "Твой профиль:\n" "Имя: {}\n" "Профессия: {}\n" "Telegram: {}"
 )
+START_PAIR_SEARCH_MESSAGE = "Начать поиск пары?"
