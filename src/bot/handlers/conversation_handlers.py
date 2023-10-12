@@ -10,10 +10,12 @@ from bot.constants.messages import (
     NEXT_TIME_MESSAGE,
     PAIR_SEARCH_MESSAGE,
     PROFILE_MESSAGE,
+    START_PAIR_SEARCH_MESSAGE,
     USERNAME_NOT_FOUND_MESSAGE,
 )
 from bot.constants.states import States
 from bot.handlers.command_handlers import start
+from bot.keyboards.command_keyboards import start_keyboard_markup
 from bot.keyboards.conversation_keyboards import (
     guess_name_keyboard_markup,
     profession_choice_keyboard_markup,
@@ -32,10 +34,7 @@ async def go(update: Update, context: CallbackContext):
     query = update.callback_query
     await query.answer()
     await query.edit_message_reply_markup(reply_markup=None)
-    if not (
-        await Recruiter.objects.filter(telegram_id=user.id).aexists()
-        or await Student.objects.filter(telegram_id=user.id).aexists()
-    ):
+    if not user_is_exist(user.id):
         await query.edit_message_text(CHOOSE_ROLE_MESSAGE)
         await query.edit_message_reply_markup(role_choice_keyboard_markup)
         return States.ROLE_CHOICE
@@ -129,9 +128,17 @@ async def profile(update: Update, context: CallbackContext):
         await query.edit_message_text(CHOOSE_ROLE_MESSAGE)
         await query.edit_message_reply_markup(role_choice_keyboard_markup)
         return States.ROLE_CHOICE
+    await to_create_user_in_db(update, context)
+    if await user_is_exist(query.from_user.id):
+        await query.edit_message_text(START_PAIR_SEARCH_MESSAGE)
+        await query.edit_message_reply_markup(
+            reply_markup=start_keyboard_markup
+        )
+        return States.START
     else:
-        await to_create(update, context)
-    return ConversationHandler.END
+        logger.error(
+            f"Пользователь {query.from_user} не сохранен в базе данных."
+        )
 
 
 async def send_name_message(update: Update, context: CallbackContext):
@@ -185,8 +192,8 @@ async def send_profile_form(update: Update, context: CallbackContext):
         )
 
 
-async def to_create(update: Update, context: CallbackContext):
-    """Создаёт таблицы."""
+async def to_create_user_in_db(update: Update, context: CallbackContext):
+    """Сохраняет пользователя в базе данных."""
     query = update.callback_query
     profession = context.user_data["profession"]
     user_data = {
@@ -205,3 +212,14 @@ async def to_create(update: Update, context: CallbackContext):
             await Student.objects.acreate(profession=profession, **user_data)
     except Exception as error:
         logger.error(f"Не удалось сохранить данные в таблицу: {error}")
+
+
+async def user_is_exist(user_id: int) -> bool:
+    """Проверяет наличие юзера в базе данных."""
+    if (
+        await Recruiter.objects.filter(telegram_id=user_id).aexists()
+        or await Student.objects.filter(telegram_id=user_id).aexists()
+    ):
+        # Может быть будет иметь смысл возвращать не bool, а объект из БД.
+        return True
+    return False
