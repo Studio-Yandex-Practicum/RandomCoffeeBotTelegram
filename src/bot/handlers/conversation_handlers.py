@@ -146,7 +146,7 @@ async def profile(update: Update, context: CallbackContext):
 
 @log_handler
 async def is_pair_successful(update: Update, context: CallbackContext):
-    """Сохраняет пользователя в базе данных."""
+    """Обработчик для проверки состоялся зи звонок."""
     query = update.callback_query
     await query.message.reply_text(
         IS_PAIR_SUCCESSFUL_MESSAGE,
