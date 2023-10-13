@@ -34,7 +34,7 @@ async def go(update: Update, context: CallbackContext):
     query = update.callback_query
     await query.answer()
     await query.edit_message_reply_markup(reply_markup=None)
-    if not user_is_exist(user.id):
+    if not await user_is_exist(user.id):
         await query.edit_message_text(CHOOSE_ROLE_MESSAGE)
         await query.edit_message_reply_markup(role_choice_keyboard_markup)
         return States.ROLE_CHOICE
