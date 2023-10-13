@@ -7,15 +7,16 @@ def create_url_support(apps, schema_editor):
     """Create FormUrl 'Support'."""
     FormUrl = apps.get_model("bot", "FormUrl")
     FormUrl.objects.create(
-        title="Поддержка",
-        url_key="support"
+        title="Ссылка на форму поддержки бота",
+        url="https://practicum.yandex.ru/",
+        url_key="support_form"
     )
 
 
 def remove_url_support(apps, schema_editor):
     """Remove FormUrl 'Support' instance."""
     FormUrl = apps.get_model("bot", "FormUrl")
-    remove_form_url = FormUrl.objects.get(url_key="support")
+    remove_form_url = FormUrl.objects.get(url_key="support_form")
     remove_form_url.delete()
 
 
@@ -23,15 +24,16 @@ def create_url_guide(apps, schema_editor):
     """Create FormUrl 'Guide'."""
     FormUrl = apps.get_model("bot", "FormUrl")
     FormUrl.objects.create(
-        title="Гайд",
-        url_key="guide"
+        title="Ссылка на разговорный гайд",
+        url="https://practicum.yandex.ru/",
+        url_key="guide_form"
     )
 
 
 def remove_url_guide(apps, schema_editor):
     """Remove FormUrl 'Guide' instance."""
     FormUrl = apps.get_model("bot", "FormUrl")
-    remove_form_url = FormUrl.objects.get(url_key="guide")
+    remove_form_url = FormUrl.objects.get(url_key="guide_form")
     remove_form_url.delete()
 
 
@@ -39,15 +41,16 @@ def create_url_feedback(apps, schema_editor):
     """Create FormUrl 'Feedback'."""
     FormUrl = apps.get_model("bot", "FormUrl")
     FormUrl.objects.create(
-        title="Обратная связь",
-        url_key="feedback"
+        title="Ссылка на форму обратной связи",
+        url="https://practicum.yandex.ru/",
+        url_key="feedback_form"
     )
 
 
 def remove_url_feedback(apps, schema_editor):
     """Remove FormUrl 'Feedback' instance."""
     FormUrl = apps.get_model("bot", "FormUrl")
-    remove_form_url = FormUrl.objects.get(url_key="feedback")
+    remove_form_url = FormUrl.objects.get(url_key="feedback_form")
     remove_form_url.delete()
 
 
