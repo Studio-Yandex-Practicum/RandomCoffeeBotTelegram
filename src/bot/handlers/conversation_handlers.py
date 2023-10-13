@@ -44,7 +44,9 @@ async def go(update: Update, context: CallbackContext):
         await query.message.reply_text(PAIR_SEARCH_MESSAGE)
         TIME_IN_SECONDS = 10  # для теста сделал задержку в 10 секунд
         context.job_queue.run_once(
-            callback=is_pair_successful, when=TIME_IN_SECONDS, user_id=user.id
+            callback=send_is_pair_successful_message,
+            when=TIME_IN_SECONDS,
+            user_id=user.id,
         )
         return ConversationHandler.END  # Тут будет States.PAIR_SEARCH
 
@@ -147,8 +149,8 @@ async def profile(update: Update, context: CallbackContext):
         )
 
 
-async def is_pair_successful(context: CallbackContext):
-    """Отправляет сообщение состоялся зи звонок."""
+async def send_is_pair_successful_message(context: CallbackContext):
+    """Отправляет сообщение состоялся ли звонок."""
     await context.bot.send_message(
         chat_id=context.job.user_id,
         text=IS_PAIR_SUCCESSFUL_MESSAGE,
