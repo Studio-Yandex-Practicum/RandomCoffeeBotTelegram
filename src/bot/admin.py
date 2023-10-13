@@ -1,6 +1,13 @@
 from django.contrib import admin
 
-from bot.models import CreatedPair, PassedPair, Profession, Recruiter, Student
+from bot.models import (
+    CreatedPair,
+    FormUrl,
+    PassedPair,
+    Profession,
+    Recruiter,
+    Student,
+)
 
 
 @admin.register(Profession)
@@ -76,3 +83,24 @@ class RecruiterAdmin(admin.ModelAdmin):
     )
     list_filter = ("registration_date", "last_login_date", "has_pair")
     search_fields = ("telegram_id", "telegram_username")
+
+
+@admin.register(FormUrl)
+class FormUrlAdmin(admin.ModelAdmin):
+    """Управление моделью ссылок на формы."""
+
+    list_display = (
+        "title",
+        "url",
+        "url_key",
+    )
+    list_filter = ("title", "url_key")
+    search_fields = ("title", "url_key")
+
+    def has_delete_permission(self, request, obj=None):
+        """Запрещает удалять ссылки."""
+        return False
+
+    def has_add_permission(self, request):
+        """Запрещает создавать новые ссылки."""
+        return False
