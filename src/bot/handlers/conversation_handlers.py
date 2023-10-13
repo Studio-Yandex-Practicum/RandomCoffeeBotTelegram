@@ -7,6 +7,7 @@ from bot.constants.messages import (
     CHOOSE_PROFESSION_MESSAGE,
     CHOOSE_ROLE_MESSAGE,
     GUESS_NAME_MESSAGE,
+    IS_PAIR_SUCCESSFUL_MESSAGE,
     NEXT_TIME_MESSAGE,
     PAIR_SEARCH_MESSAGE,
     PROFILE_MESSAGE,
@@ -18,6 +19,7 @@ from bot.handlers.command_handlers import start
 from bot.keyboards.command_keyboards import start_keyboard_markup
 from bot.keyboards.conversation_keyboards import (
     guess_name_keyboard_markup,
+    is_pair_successful_keyboard_markup,
     profession_choice_keyboard_markup,
     profile_keyboard_markup,
     restart_keyboard_markup,
@@ -40,6 +42,7 @@ async def go(update: Update, context: CallbackContext):
         return States.ROLE_CHOICE
     else:
         await query.message.reply_text(PAIR_SEARCH_MESSAGE)
+        await is_pair_successful(update, context)  # Временный вызов хендлера
         return ConversationHandler.END  # Тут будет States.PAIR_SEARCH
 
 
@@ -139,6 +142,16 @@ async def profile(update: Update, context: CallbackContext):
         logger.error(
             f"Пользователь {query.from_user} не сохранен в базе данных."
         )
+
+
+@log_handler
+async def is_pair_successful(update: Update, context: CallbackContext):
+    """Сохраняет пользователя в базе данных."""
+    query = update.callback_query
+    await query.message.reply_text(
+        IS_PAIR_SUCCESSFUL_MESSAGE,
+        reply_markup=is_pair_successful_keyboard_markup,
+    )
 
 
 async def send_name_message(update: Update, context: CallbackContext):

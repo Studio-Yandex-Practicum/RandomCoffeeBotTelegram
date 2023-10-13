@@ -36,3 +36,4 @@ PROFILE_MESSAGE = (
     "Твой профиль:\n" "Имя: {}\n" "Профессия: {}\n" "Telegram: {}"
 )
 START_PAIR_SEARCH_MESSAGE = "Начать поиск пары?"
+IS_PAIR_SUCCESSFUL_MESSAGE = "Удалось ли созвониться? Спасибо :)"
