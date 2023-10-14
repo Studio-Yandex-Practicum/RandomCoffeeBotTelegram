@@ -5,6 +5,7 @@ from bot.constants.buttons import (
     CHANGE_NAME_BUTTON,
     CONTINUE_BUTTON,
     FILL_AGAIN_BUTTON,
+    NO_BUTTON,
     PROFESSION_ANALIST_BUTTON,
     PROFESSION_BACKEND_DEVELOPER_BUTTON,
     PROFESSION_FRONTEND_DEVELOPER_BUTTON,
@@ -12,6 +13,7 @@ from bot.constants.buttons import (
     RECRUITER_ROLE_BUTTON,
     START_BUTTON,
     STUDENT_ROLE_BUTTON,
+    YES_BUTTON,
 )
 
 restart_keyboard_markup = InlineKeyboardMarkup(
@@ -82,6 +84,15 @@ profile_keyboard_markup = InlineKeyboardMarkup(
             InlineKeyboardButton(
                 text=FILL_AGAIN_BUTTON, callback_data="fill_again"
             ),
+        ],
+    ]
+)
+
+is_pair_successful_keyboard_markup = InlineKeyboardMarkup(
+    [
+        [
+            InlineKeyboardButton(text=YES_BUTTON, callback_data="yes"),
+            InlineKeyboardButton(text=NO_BUTTON, callback_data="no"),
         ],
     ]
 )
