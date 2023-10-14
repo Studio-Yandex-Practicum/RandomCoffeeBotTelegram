@@ -60,3 +60,6 @@ run-app: # Запуск Django и Telegram бота
 
 bot-init: # Базовая команда для запуска БД, миграций, бота и джанго
 	make clear-db start-db migrate collectstatic createsuperuser run-app
+
+generate-recruiters: # Команда для заполнения БД сгенерированными рекрутерами
+	poetry run python src/manage.py seed --amount ${amount}
