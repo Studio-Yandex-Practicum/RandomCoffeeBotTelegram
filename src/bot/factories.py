@@ -13,13 +13,14 @@ HIGH_LIMIT_NUMBER = 999999999
 
 class RecruiterFactory(DjangoModelFactory):
     """Фабрика профиля рекрутера для тестирования проекта."""
+
     class Meta:
         model = Recruiter
 
-    name = factory.Faker('first_name')
-    surname = factory.Faker('last_name')
+    name = factory.Faker("first_name")
+    surname = factory.Faker("last_name")
     telegram_id = FuzzyInteger(LOW_LIMIT_NUMBER, HIGH_LIMIT_NUMBER)
-    telegram_username = factory.SelfAttribute('telegram_id')
+    telegram_username = factory.SelfAttribute("telegram_id")
     registration_date = timezone.now()
     last_login_date = timezone.now()
     has_pair = False
@@ -28,22 +29,22 @@ class RecruiterFactory(DjangoModelFactory):
 
 class StudentFactory(RecruiterFactory):
     """Фабрика профиля студента для тестирования проекта."""
+
     class Meta:
         model = Student
 
-    profession = factory.LazyFunction(
-        lambda: choice(Profession.objects.all())
-    )
+    profession = factory.LazyFunction(lambda: choice(Profession.objects.all()))
 
 
 class PairFactory(DjangoModelFactory):
     """Фабрика тестовой пары студент-рекрутёр."""
+
     class Meta:
         model = CreatedPair
 
     student = StudentFactory.create()
     recruiter = RecruiterFactory.create()
-    date = factory.Faker('date')
+    date = factory.Faker("date")
 
 
 def create_student(amount: int = 1):
