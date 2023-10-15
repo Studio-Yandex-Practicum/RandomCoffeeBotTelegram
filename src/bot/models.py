@@ -140,3 +140,22 @@ class PassedPair(CustomPair):
         ]
         verbose_name = "Завершенная пара"
         verbose_name_plural = "Завершенные пары"
+
+
+class FormUrl(models.Model):
+    """Модель для ссылок на формы."""
+
+    title = models.CharField(max_length=255, verbose_name="Название ссылки")
+    url = models.URLField(verbose_name="Ссылка", null=True)
+    url_key = models.CharField(
+        max_length=255,
+        unique=True,
+        verbose_name="Ключ ссылки",
+    )
+
+    class Meta:
+        verbose_name = "Ссылка на форму"
+        verbose_name_plural = "Ссылки на формы"
+
+    def __str__(self):
+        return f"Название {self.title} | Ссылка {self.url}"

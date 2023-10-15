@@ -11,6 +11,8 @@
 
 ### [Схема состояний](https://github.com/Studio-Yandex-Practicum/RandomCoffeeBotTelegram/blob/develop/docs/Diagramm%20of%20bot%20logic.jpg) - визуальное изображение стейтов
 
+### [Схема для поиска пары](https://github.com/Studio-Yandex-Practicum/RandomCoffeeBotTelegram/blob/develop/docs/flowchart_search_pair.jpg) - визуальное изображение поиска пары
+
 Ожидаемая функциональность:
 
 * создание профиля (учетной записи) каждого участника и хранение его в базе данных
