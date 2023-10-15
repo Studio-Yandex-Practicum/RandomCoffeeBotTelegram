@@ -101,8 +101,8 @@ USE_I18N = True
 USE_TZ = True
 
 REDIS = {
-    'host': env.str('REDIS_HOST'),
-    'port': env.str('REDIS_PORT')
+    'host': env.str('REDIS_HOST', default='localhost'),
+    'port': env.str('REDIS_PORT', default='6379')
 }
 
 
