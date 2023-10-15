@@ -12,6 +12,8 @@ from telegram.ext._utils.types import ConversationDict
 class RedisPersistence(BasePersistence):
     """Класс для использования Redis в боте."""
 
+    REDIS_HASH_TABLE = "TelegramBotPersistence"
+
     def __init__(self, redis: Redis, on_flush: bool = False):
         """Инициализация объекта хранения данных в Redis."""
         super().__init__(update_interval=1)
@@ -25,7 +27,7 @@ class RedisPersistence(BasePersistence):
     async def load_redis(self) -> None:
         """Загрузка всех данных из Redis."""
         try:
-            data_str = await self.redis.get("TelegramBotPersistence")
+            data_str = await self.redis.get(self.REDIS_HASH_TABLE)
             if data_str:
                 data = json.loads(data_str)
                 self.user_data = defaultdict(dict, data["user_data"])
@@ -55,34 +57,28 @@ class RedisPersistence(BasePersistence):
                 "bot_data": self.bot_data,
             }
             data_str = json.dumps(data)
-            await self.redis.set("TelegramBotPersistence", data_str)
+            await self.redis.set(self.REDIS_HASH_TABLE, data_str)
         except Exception as exc:
             logger.error(f"Error saving data to Redis: {exc}")
 
     async def update_and_dump(self, key: str, data: Any) -> None:
         """Обновление и сохранение конкретных данных в Redis."""
         try:
-            data_str = json.dumps(data)
-            await self.redis.hset("TelegramBotPersistence", key, data_str)
+            await self.redis.hset(self.REDIS_HASH_TABLE, key, json.dumps(data))
         except Exception as exc:
             logger.error(f"Error updating and saving {key} to Redis: {exc}")
 
     async def get_data(self, key: str) -> Any:
         """Получение конкретных данных из Redis."""
-        try:
-            data_str = await self.redis.hget("TelegramBotPersistence", key)
-            if data_str:
-                return json.loads(
-                    data_str,
-                    object_hook=lambda d: {
-                        int(k) if k.isdigit() else k: v for k, v in d.items()
-                    },
-                )
-            else:
-                return None
-        except Exception as exc:
-            logger.error(f"Error getting {key} from Redis: {exc}")
-            return None
+        data_str = await self.redis.hget(self.REDIS_HASH_TABLE, key)
+        if data_str:
+            return json.loads(data_str, object_hook=self._decode_redis_data)
+        return None
+
+    @staticmethod
+    def _decode_redis_data(data):
+        """Конвертирует ключи из Redis в int."""
+        return {int(k) if k.isdigit() else k: v for k, v in data.items()}
 
     async def get_user_data(self) -> DefaultDict[int, dict[Any, Any]]:
         """Получение данных пользователя из Redis."""
@@ -108,7 +104,7 @@ class RedisPersistence(BasePersistence):
         """Получение данных о разговорах из Redis."""
         if not self.conversations:
             self.conversations = await self.get_data("conversations") or {}
-        conversation_for_name = self.conversations.get(name, {}).copy()
+        conversation_for_name = self.conversations.get(name, {})
         return {
             tuple(json.loads(key)): value
             for key, value in conversation_for_name.items()
@@ -140,7 +136,7 @@ class RedisPersistence(BasePersistence):
             self.chat_data = defaultdict(dict)
         if self.chat_data.get(chat_id) == data:
             return
-        self.chat_data[chat_id] = data
+        self.chat_data[chat_id] = {**self.chat_data.get(chat_id, {}), **data}
         if not self.on_flush:
             await self.update_and_dump("chat_data", self.chat_data)
 
