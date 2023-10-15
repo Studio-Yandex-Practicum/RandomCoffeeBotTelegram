@@ -7,6 +7,7 @@ from bot.constants.messages import (
     CHOOSE_PROFESSION_MESSAGE,
     CHOOSE_ROLE_MESSAGE,
     GUESS_NAME_MESSAGE,
+    IS_PAIR_SUCCESSFUL_MESSAGE,
     NEXT_TIME_MESSAGE,
     PAIR_SEARCH_MESSAGE,
     PROFILE_MESSAGE,
@@ -18,6 +19,7 @@ from bot.handlers.command_handlers import start
 from bot.keyboards.command_keyboards import start_keyboard_markup
 from bot.keyboards.conversation_keyboards import (
     guess_name_keyboard_markup,
+    is_pair_successful_keyboard_markup,
     profession_choice_keyboard_markup,
     profile_keyboard_markup,
     restart_keyboard_markup,
@@ -40,6 +42,12 @@ async def go(update: Update, context: CallbackContext):
         return States.ROLE_CHOICE
     else:
         await query.message.reply_text(PAIR_SEARCH_MESSAGE)
+        TIME_IN_SECONDS = 10  # для теста сделал задержку в 10 секунд
+        context.job_queue.run_once(
+            callback=send_is_pair_successful_message,
+            when=TIME_IN_SECONDS,
+            user_id=user.id,
+        )
         return ConversationHandler.END  # Тут будет States.PAIR_SEARCH
 
 
@@ -139,6 +147,15 @@ async def profile(update: Update, context: CallbackContext):
         logger.error(
             f"Пользователь {query.from_user} не сохранен в базе данных."
         )
+
+
+async def send_is_pair_successful_message(context: CallbackContext):
+    """Отправляет сообщение состоялся ли звонок."""
+    await context.bot.send_message(
+        chat_id=context.job.user_id,
+        text=IS_PAIR_SUCCESSFUL_MESSAGE,
+        reply_markup=is_pair_successful_keyboard_markup,
+    )
 
 
 async def send_name_message(update: Update, context: CallbackContext):
