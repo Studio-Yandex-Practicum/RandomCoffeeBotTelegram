@@ -1,3 +1,5 @@
+from asgiref.sync import sync_to_async
+from django.core.paginator import Paginator
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 
 from bot.constants.buttons import (
@@ -13,6 +15,9 @@ from bot.constants.buttons import (
     START_BUTTON,
     STUDENT_ROLE_BUTTON,
 )
+from bot.constants.pagination import PAGE_SEP_SYMBOL, PROFESSION_PER_PAGE
+from bot.models import Profession
+from bot.utils.pagination import InlineKeyboardPaginator
 
 restart_keyboard_markup = InlineKeyboardMarkup(
     [[InlineKeyboardButton(text=START_BUTTON, callback_data="restart")]]
@@ -85,3 +90,24 @@ profile_keyboard_markup = InlineKeyboardMarkup(
         ],
     ]
 )
+
+
+async def build_profession_keyboard(page: int) -> InlineKeyboardPaginator:
+    """Создает клавиатуру с пагинацией для выбора профессии."""
+    professions = await sync_to_async(list)(
+        Profession.objects.all().values("name", "professional_key")
+    )
+    data_paginator = Paginator(professions, PROFESSION_PER_PAGE)
+    telegram_paginator = InlineKeyboardPaginator(
+        data_paginator.num_pages,
+        current_page=page,
+        data_pattern="".join(["continue_name", PAGE_SEP_SYMBOL, "{page}"]),
+    )
+    for profession in data_paginator.page(page):
+        telegram_paginator.add_before(
+            InlineKeyboardButton(
+                text=profession.get("name"),
+                callback_data=profession.get("name"),
+            )
+        )
+    return telegram_paginator
