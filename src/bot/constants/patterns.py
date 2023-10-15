@@ -4,7 +4,7 @@ ROLE_CHOICE_PATTERN = "^(student|recruiter)$"
 RESTART_PATTERN = "^restart$"
 TO_SUPPORT_PATTERN = "^support$"
 PARTICIPATE_PATTERN = "^participate$"
-CONTINUE_NAME_PATTERN = "^continue_name$"
+CONTINUE_NAME_PATTERN = "^continue_name.*"
 CHANGE_NAME_PATTERN = "^change_name$"
 # TODO поменять паттерны. Мы позже будем брать их с БД.
 PROFESSION_CHOICE_PATTERN = (
