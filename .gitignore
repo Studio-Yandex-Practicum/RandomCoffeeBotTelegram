@@ -162,3 +162,4 @@ cython_debug/
 .idea/
 /src/static/
 /src/persistance_data/persistance_file
+/src/bot/server.py

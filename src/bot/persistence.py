@@ -17,10 +17,10 @@ class RedisPersistence(BasePersistence):
         super().__init__(update_interval=1)
         self.redis: Redis = redis
         self.on_flush = on_flush
-        self.user_data: DefaultDict[int, dict] | None = None
-        self.chat_data: DefaultDict[int, dict] | None = None
-        self.bot_data: dict | None = None
-        self.conversations: dict[str, dict[tuple, Any]] | None = None
+        self.user_data = None
+        self.chat_data = None
+        self.bot_data = None
+        self.conversations = None
 
     async def load_redis(self) -> None:
         """Загрузка всех данных из Redis."""
@@ -72,7 +72,12 @@ class RedisPersistence(BasePersistence):
         try:
             data_str = await self.redis.hget("TelegramBotPersistence", key)
             if data_str:
-                return json.loads(data_str)
+                return json.loads(
+                    data_str,
+                    object_hook=lambda d: {
+                        int(k) if k.isdigit() else k: v for k, v in d.items()
+                    },
+                )
             else:
                 return None
         except Exception as exc:
@@ -96,16 +101,18 @@ class RedisPersistence(BasePersistence):
     async def get_chat_data(self) -> DefaultDict[int, dict[Any, Any]]:
         """Получение данных чата из Redis."""
         if not self.chat_data:
-            self.chat_data = await self.get_data("chat_data") or defaultdict(
-                dict
-            )
+            self.chat_data = await self.get_data("chat_data") or defaultdict()
         return deepcopy(self.chat_data)
 
     async def get_conversations(self, name: str) -> ConversationDict:
         """Получение данных о разговорах из Redis."""
         if not self.conversations:
             self.conversations = await self.get_data("conversations") or {}
-        return self.conversations.get(name, {}).copy()
+        conversation_for_name = self.conversations.get(name, {}).copy()
+        return {
+            tuple(json.loads(key)): value
+            for key, value in conversation_for_name.items()
+        }
 
     async def update_user_data(
         self, user_id: int, data: dict[Any, Any]
@@ -115,7 +122,7 @@ class RedisPersistence(BasePersistence):
             self.user_data = defaultdict(dict)
         if self.user_data.get(user_id) == data:
             return
-        self.user_data[user_id] = data
+        self.user_data[user_id] = {**self.user_data.get(user_id, {}), **data}
         if not self.on_flush:
             await self.update_and_dump("user_data", self.user_data)
 
@@ -141,11 +148,13 @@ class RedisPersistence(BasePersistence):
         self, name: str, key: tuple[int, ...], new_state: object | None
     ) -> None:
         """Обновление данных разговора и сохранение в Redis."""
+        key_str = json.dumps(key)
+
         if not self.conversations:
             self.conversations = dict()
-        if self.conversations.setdefault(name, {}).get(key) == new_state:
+        if self.conversations.setdefault(name, {}).get(key_str) == new_state:
             return
-        self.conversations[name][key] = new_state
+        self.conversations[name][key_str] = new_state
         if not self.on_flush:
             await self.update_and_dump("conversations", self.conversations)
 
