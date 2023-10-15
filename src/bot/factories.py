@@ -20,7 +20,7 @@ class RecruiterFactory(DjangoModelFactory):
     name = factory.Faker("first_name")
     surname = factory.Faker("last_name")
     telegram_id = FuzzyInteger(LOW_LIMIT_NUMBER, HIGH_LIMIT_NUMBER)
-    telegram_username = factory.SelfAttribute("telegram_id")
+    telegram_username = factory.Faker("user_name")
     registration_date = timezone.now()
     last_login_date = timezone.now()
     has_pair = False
@@ -42,9 +42,9 @@ class PairFactory(DjangoModelFactory):
     class Meta:
         model = CreatedPair
 
-    student = StudentFactory.create()
-    recruiter = RecruiterFactory.create()
-    date = factory.Faker("date")
+    student = factory.SubFactory(StudentFactory, has_pair=True)
+    recruiter = factory.SubFactory(RecruiterFactory, has_pair=True)
+    date = timezone.now()
 
 
 def create_student(amount: int = 1):
