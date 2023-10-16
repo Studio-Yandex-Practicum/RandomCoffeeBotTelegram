@@ -49,13 +49,13 @@ def async_mocked_reply_markup():
 
 @pytest.fixture
 async def profession(db):
-    """Message object mock."""
+    """Profession object."""
     return await Profession.objects.acreate(name="prof-1")
 
 
 @pytest.fixture
 async def student(db, profession):
-    """Message object mock."""
+    """Student object."""
     return await Student.objects.acreate(
         telegram_id=1,
         name="student-1",
