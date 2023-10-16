@@ -12,6 +12,7 @@ repos:
     rev: v0.0.289
     hooks:
       - id: ruff
+        args: ['--ignore=F405']
 
   - repo: https://github.com/psf/black
     rev: 23.7.0

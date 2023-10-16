@@ -34,7 +34,6 @@ async def test_profile_fill_again(update, context):
     )
 
 
-@pytest.mark.skip(reason="need connection to db")
 @pytest.mark.django_db
 @pytest.mark.asyncio
 async def test_profile_create_user(update, context):
