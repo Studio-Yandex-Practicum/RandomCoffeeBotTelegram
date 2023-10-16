@@ -1,8 +1,8 @@
 import asyncio
-import logging
 from typing import Self
 
 from django.conf import settings
+from loguru import logger
 from redis.asyncio import Redis
 from telegram import BotCommand
 from telegram.ext import (
@@ -55,8 +55,6 @@ from bot.handlers.conversation_handlers import (
     set_phone_number,
 )
 from bot.persistence import RedisPersistence
-
-logger = logging.getLogger(__name__)
 
 
 class Bot:
