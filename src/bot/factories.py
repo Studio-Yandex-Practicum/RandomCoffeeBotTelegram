@@ -24,7 +24,7 @@ class RecruiterFactory(DjangoModelFactory):
     registration_date = timezone.now()
     last_login_date = timezone.now()
     has_pair = False
-    search_start_time = None
+    search_start_time = timezone.now()
 
 
 class StudentFactory(RecruiterFactory):
