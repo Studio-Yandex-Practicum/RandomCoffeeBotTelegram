@@ -1,5 +1,5 @@
-from ...factories import create_student
-from ...utils.filldb_command import CommandCreateObjects as BaseCommand
+from bot.factories import create_student
+from bot.utils.filldb_command import CommandCreateObjects as BaseCommand
 
 
 class Command(BaseCommand):

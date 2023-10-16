@@ -1,5 +1,5 @@
-from ...factories import create_recruiter
-from ...utils.filldb_command import CommandCreateObjects as BaseCommand
+from bot.factories import create_recruiter
+from bot.utils.filldb_command import CommandCreateObjects as BaseCommand
 
 
 class Command(BaseCommand):
