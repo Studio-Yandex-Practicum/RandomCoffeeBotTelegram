@@ -10,10 +10,6 @@ class CommandCreateObjects(BaseCommand):
             "--amount", type=int, help="Необходимое количество объектов."
         )
 
-    def _generate(self, amount: int):
-        """Создание объектов."""
-        pass
-
     def handle(self, *args, **options):
         """Реализация."""
         self._generate(options.get("amount"))

@@ -5,7 +5,7 @@ from django.utils import timezone
 from factory.django import DjangoModelFactory
 from factory.fuzzy import FuzzyInteger
 
-from bot.models import CreatedPair, Profession, Recruiter, Student
+from bot.models import CreatedPair, PassedPair, Profession, Recruiter, Student
 
 LOW_LIMIT_NUMBER = 900000000
 HIGH_LIMIT_NUMBER = 999999999
@@ -47,6 +47,18 @@ class PairFactory(DjangoModelFactory):
     date = timezone.now()
 
 
+class PassedPairFactory(DjangoModelFactory):
+    """Фабрика тестовой пары студент-рекрутёр, которая созвонилась."""
+
+    class Meta:
+        model = PassedPair
+
+    interview_successful = True
+    student = factory.SubFactory(StudentFactory)
+    recruiter = factory.SubFactory(RecruiterFactory)
+    date = timezone.now()
+
+
 def create_student(amount: int = 1):
     """Создание профиля студента для тестов программы."""
     StudentFactory.create_batch(amount)
@@ -60,3 +72,8 @@ def create_recruiter(amount: int = 1):
 def create_pair(amount: int = 1):
     """Создание тестовой пары студент-рекрутёр."""
     PairFactory.create_batch(amount)
+
+
+def create_passedpair(amount: int = 1):
+    """Создание тестовой пары студент-рекрутёр, которая созвонилась."""
+    PassedPairFactory.create_batch(amount)

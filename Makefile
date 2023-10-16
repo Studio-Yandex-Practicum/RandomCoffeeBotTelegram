@@ -69,3 +69,6 @@ create-recruiter: # Команда для создания тестового п
 
 create-pair: # Команда для создания пары студент-рекрутер
 	poetry run python src/manage.py create_pair --amount ${amount}
+
+create-passedpair: # Команда для создания пары студент-рекрутер
+	poetry run python src/manage.py create_passedpair --amount ${amount}
