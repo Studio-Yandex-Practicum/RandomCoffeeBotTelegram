@@ -60,3 +60,15 @@ run-app: # Запуск Django и Telegram бота
 
 bot-init: # Базовая команда для запуска БД, миграций, бота и джанго
 	make clear-db start-db migrate collectstatic createsuperuser run-app
+
+create-student: # Команда для создания тестового профиля студента
+	poetry run python src/manage.py create_student --amount ${amount}
+
+create-recruiter: # Команда для создания тестового профиля рекрутера
+	poetry run python src/manage.py create_recruiter --amount ${amount}
+
+create-pair: # Команда для создания пары студент-рекрутер
+	poetry run python src/manage.py create_pair --amount ${amount}
+
+create-passedpair: # Команда для создания пары студент-рекрутер
+	poetry run python src/manage.py create_passedpair --amount ${amount}
