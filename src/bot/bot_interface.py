@@ -3,6 +3,7 @@ import logging
 from typing import Self
 
 from django.conf import settings
+from redis.asyncio import Redis
 from telegram import BotCommand
 from telegram.ext import (
     Application,
@@ -53,6 +54,7 @@ from bot.handlers.conversation_handlers import (
     set_new_name,
     set_phone_number,
 )
+from bot.persistence import RedisPersistence
 
 logger = logging.getLogger(__name__)
 
@@ -97,10 +99,19 @@ class Bot:
 
     async def _build_app(self) -> Application:
         """Создает и настраивает ASGI-приложение для бота."""
+        if settings.USE_REDIS_PERSISTENCE:
+            redis_instance = Redis(
+                host=settings.REDIS["host"],
+                port=settings.REDIS["port"],
+                decode_responses=True,
+            )
+            persistence = RedisPersistence(redis_instance)
+        else:
+            persistence = PicklePersistence(filepath=settings.PERSISTENCE_PATH)
         app = (
             ApplicationBuilder()
             .token(settings.TELEGRAM_TOKEN)
-            .persistence(PicklePersistence(filepath=settings.PERSISTANCE_PATH))
+            .persistence(persistence)
             .build()
         )
         main_handler = await build_main_handler()
