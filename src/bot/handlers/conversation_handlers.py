@@ -106,10 +106,8 @@ async def continue_name(update: Update, context: CallbackContext):
         await query.answer()
         keyboard = await build_profession_keyboard(page_number)
         if query.message.reply_markup.to_json() != keyboard.markup:
-            await query.edit_message_text(
-                text=CHOOSE_PROFESSION_MESSAGE,
-                reply_markup=keyboard.markup,
-            )
+            await query.edit_message_text(CHOOSE_PROFESSION_MESSAGE)
+            await query.edit_message_reply_markup(reply_markup=keyboard.markup)
         return States.PROFESSION_CHOICE
     else:
         context.user_data["profession"] = "It-рекрутер"
