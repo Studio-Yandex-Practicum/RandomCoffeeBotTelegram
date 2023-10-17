@@ -70,7 +70,6 @@ is_pair_successful_keyboard_markup = InlineKeyboardMarkup(
 
 async def profession() -> InlineKeyboardMarkup:
     """Получение inline кнопок для профессий."""
-    professions = [profession async for profession in Profession.objects.all()]
     return InlineKeyboardMarkup(
         [
             [
@@ -79,6 +78,6 @@ async def profession() -> InlineKeyboardMarkup:
                     callback_data=profession.professional_key,
                 )
             ]
-            for profession in professions
+            async for profession in Profession.objects.all()
         ]
     )
