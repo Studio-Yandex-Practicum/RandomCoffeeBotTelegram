@@ -4,13 +4,11 @@ import pytest
 
 from bot.constants.messages import CHOOSE_PROFESSION_MESSAGE
 from bot.handlers.conversation_handlers import continue_name
-from bot.keyboards.conversation_keyboards import (
-    profession_choice_keyboard_markup,
-)
+from bot.keyboards.conversation_keyboards import profession
 
 
 @pytest.mark.asyncio
-async def test_continue_name_student_role(update, context):
+async def test_continue_name_student_role(update, context, db):
     """
     Проверяем, что continue_name handler
     возвращает нужное сообщение и клавиатуру
@@ -18,14 +16,12 @@ async def test_continue_name_student_role(update, context):
     """
     update.callback_query = AsyncMock()
     context.user_data = {"role": "student"}
-
     await continue_name(update, context)
-
     update.callback_query.edit_message_text.assert_awaited_with(
         CHOOSE_PROFESSION_MESSAGE
     )
     update.callback_query.edit_message_reply_markup.assert_awaited_with(
-        profession_choice_keyboard_markup
+        reply_markup=await profession()
     )
 
 

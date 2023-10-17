@@ -11,6 +11,7 @@ from bot.constants.buttons import (
     STUDENT_ROLE_BUTTON,
     YES_BUTTON,
 )
+from bot.models import Profession
 
 restart_keyboard_markup = InlineKeyboardMarkup(
     [[InlineKeyboardButton(text=START_BUTTON, callback_data="restart")]]
@@ -67,8 +68,9 @@ is_pair_successful_keyboard_markup = InlineKeyboardMarkup(
 )
 
 
-def profession(data) -> InlineKeyboardMarkup:
+async def profession() -> InlineKeyboardMarkup:
     """Получение inline кнопок для профессий."""
+    professions = [profession async for profession in Profession.objects.all()]
     return InlineKeyboardMarkup(
         [
             [
@@ -77,6 +79,6 @@ def profession(data) -> InlineKeyboardMarkup:
                     callback_data=profession.professional_key,
                 )
             ]
-            for profession in data
+            for profession in professions
         ]
     )

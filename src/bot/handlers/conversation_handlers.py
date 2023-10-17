@@ -1,4 +1,3 @@
-from asgiref.sync import sync_to_async
 from loguru import logger
 from telegram import Update
 from telegram.ext import CallbackContext, ConversationHandler
@@ -103,9 +102,7 @@ async def continue_name(update: Update, context: CallbackContext):
     query = update.callback_query
     if context.user_data["role"] == "student":
         await query.edit_message_text(CHOOSE_PROFESSION_MESSAGE)
-        await query.edit_message_reply_markup(
-            profession(await sync_to_async(list)(Profession.objects.all()))
-        )
+        await query.edit_message_reply_markup(reply_markup=await profession())
         return States.PROFESSION_CHOICE
     else:
         context.user_data["profession"] = "It-рекрутер"
