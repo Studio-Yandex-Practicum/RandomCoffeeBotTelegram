@@ -25,10 +25,10 @@ from bot.keyboards.conversation_keyboards import (
     role_choice_keyboard_markup,
 )
 from bot.models import Profession, Recruiter, Student
-from core.config.logging import log_handler
+from core.config.logging import log_function
 
 
-@log_handler
+@log_function
 async def go(update: Update, context: CallbackContext):
     """Обработчик кнопки "GO"."""
     user = update.callback_query.from_user
@@ -51,7 +51,7 @@ async def go(update: Update, context: CallbackContext):
         return ConversationHandler.END  # Тут будет States.PAIR_SEARCH
 
 
-@log_handler
+@log_function
 async def next_time(update: Update, context: CallbackContext):
     """Обработчик кнопки "В следующий раз"."""
     query = update.callback_query
@@ -61,7 +61,7 @@ async def next_time(update: Update, context: CallbackContext):
     return States.NEXT_TIME
 
 
-@log_handler
+@log_function
 async def restart_callback(update: Update, context: CallbackContext):
     """Обработчик для кнопки start."""
     query = update.callback_query
@@ -69,7 +69,7 @@ async def restart_callback(update: Update, context: CallbackContext):
     return await start(update, context)
 
 
-@log_handler
+@log_function
 async def role_choice(update: Update, context: CallbackContext):
     """Обработчик для выбора роли."""
     query = update.callback_query
@@ -78,7 +78,7 @@ async def role_choice(update: Update, context: CallbackContext):
     return States.SET_NAME
 
 
-@log_handler
+@log_function
 async def change_name(update: Update, context: CallbackContext):
     """Обработчик для кнопки "Изменить имя"."""
     query = update.callback_query
@@ -87,7 +87,7 @@ async def change_name(update: Update, context: CallbackContext):
     return States.SET_NEW_NAME
 
 
-@log_handler
+@log_function
 async def set_new_name(update: Update, context: CallbackContext):
     """Обработчик для ввода нового имени."""
     new_name = update.message.text
@@ -96,7 +96,7 @@ async def set_new_name(update: Update, context: CallbackContext):
     return States.SET_NAME
 
 
-@log_handler
+@log_function
 async def continue_name(update: Update, context: CallbackContext):
     """Обработчик для кнопки 'Продолжить'."""
     query = update.callback_query
@@ -111,7 +111,7 @@ async def continue_name(update: Update, context: CallbackContext):
         return await check_username(update, context)
 
 
-@log_handler
+@log_function
 async def profession_choice(update: Update, context: CallbackContext):
     """Обработчик для выбора профессии."""
     query = update.callback_query
@@ -119,7 +119,7 @@ async def profession_choice(update: Update, context: CallbackContext):
     return await check_username(update, context)
 
 
-@log_handler
+@log_function
 async def set_phone_number(update: Update, context: CallbackContext):
     """Обработчик для ввода номера телефона."""
     phone_number = update.message.text
@@ -128,7 +128,7 @@ async def set_phone_number(update: Update, context: CallbackContext):
     return States.PROFILE
 
 
-@log_handler
+@log_function
 async def profile(update: Update, context: CallbackContext):
     """Обработчик для профиля."""
     query = update.callback_query
