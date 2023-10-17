@@ -2,6 +2,8 @@ from unittest.mock import AsyncMock, Mock
 
 import pytest
 
+from bot.models import Student, Profession
+
 
 @pytest.fixture
 def update():
@@ -43,3 +45,20 @@ def mocked_message(mocked_message_text):
 def async_mocked_reply_markup():
     """Message object mock."""
     return AsyncMock(return_value=[])
+
+
+@pytest.fixture
+async def profession(db):
+    """Profession object."""
+    return await Profession.objects.acreate(name="prof-1")
+
+
+@pytest.fixture
+async def student(db, profession):
+    """Student object."""
+    return await Student.objects.acreate(
+        telegram_id=1,
+        name="student-1",
+        telegram_username="student-username-1",
+        profession=await profession,
+    )
