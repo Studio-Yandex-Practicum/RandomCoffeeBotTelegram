@@ -102,9 +102,7 @@ async def continue_name(update: Update, context: CallbackContext):
     """Обработчик для кнопки 'Продолжить'."""
     query = update.callback_query
     if context.user_data["role"] == "student":
-        page_number = parse_callback_data(
-            query.data,
-        )
+        page_number = parse_callback_data(query.data)
         await query.answer()
         keyboard = await build_profession_keyboard(page_number)
         if query.message.reply_markup.to_json() != keyboard.markup:

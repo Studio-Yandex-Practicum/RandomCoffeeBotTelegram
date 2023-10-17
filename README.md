@@ -266,10 +266,19 @@ make deletedb
 
 наполнение PostgreSQL тестовыми данными:
 ```shell
-# Not ready yet
-make filldb
+# Создание тестовых профилей студентов
+make create-student amount=3
 ```
 
+```shell
+# Создание тестовых профилей рекрутеров
+make create-recruit amount=3
+```
+
+```shell
+# Создание тестовых пар студент-рекрутер *временами ругается на уникальность ID
+make create-pair amount=3
+```
 
 ## 4.2. Запуск проекта в Docker <a id="run-docker"></a>
 

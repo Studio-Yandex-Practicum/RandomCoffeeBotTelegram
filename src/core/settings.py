@@ -70,7 +70,7 @@ DATABASES = {
         "NAME": env.str("POSTGRES_NAME", default='postgres'),
         "USER": env.str("POSTGRES_USER", default='postgres'),
         "PASSWORD": env.str("POSTGRES_PASSWORD", default='postgres'),
-        "HOST": env.str("POSTGRES_HOST", default='db'),
+        "HOST": env.str("POSTGRES_HOST", default='localhost'),
         "PORT": env.str("POSTGRES_PORT", default='5432'),
     }
 }
@@ -100,11 +100,17 @@ USE_I18N = True
 
 USE_TZ = True
 
+REDIS = {
+    'host': env.str('REDIS_HOST', default='localhost'),
+    'port': env.str('REDIS_PORT', default='6379')
+}
+
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 
 TELEGRAM_TOKEN = env.str('TELEGRAM_TOKEN', default=DEFAULT)
+USE_REDIS_PERSISTENCE = env.bool('REDIS', default=False)
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
@@ -112,7 +118,15 @@ WEBHOOK_MODE = False
 WEBHOOK_URL = ""
 WEBHOOK_SECRET_KEY = ""
 
-PERSISTANCE_DIR = BASE_DIR / "persistance_data"
-PERSISTANCE_PATH = PERSISTANCE_DIR / "persistance_file"
+PERSISTENCE_DIR = BASE_DIR / "persistence_data"
+PERSISTENCE_PATH = PERSISTENCE_DIR / "persistence_file"
 
-Path.mkdir(PERSISTANCE_DIR, exist_ok=True)
+Path.mkdir(PERSISTENCE_DIR, exist_ok=True)
+
+# Настройки пагинации
+
+DEFAULT_PAGE_NUMBER = 5 # Количество страниц в панели пагинации по умолчанию
+KEYBOARD_PAGE_OFFSET = 3 # Сдвиг страниц, если количество превышает DEFAULT_PAGE_NUMBER
+PROFESSION_PER_PAGE = 5 # Количество профессий на странице
+PAGE_SEP_SYMBOL = "#" # Символ, отделяющий номер страницы
+DEFAULT_PAGE = 1 # Номер страницы по умолчанию

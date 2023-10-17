@@ -3,12 +3,8 @@ import re
 from collections import namedtuple
 
 from asgiref.sync import sync_to_async
+from django.conf import settings
 
-from bot.constants.pagination import (
-    DEFAULT_PAGE,
-    DEFAULT_PAGE_NUMBER,
-    KEYBOARD_PAGE_OFFSET,
-)
 from bot.models import Profession
 
 InlineKeyboardButton = namedtuple(
@@ -51,7 +47,7 @@ class InlineKeyboardPaginator:
             self._keyboard = list()
             return
 
-        elif self.page_count <= DEFAULT_PAGE_NUMBER:
+        elif self.page_count <= settings.DEFAULT_PAGE_NUMBER:
             for page in range(1, self.page_count + 1):
                 keyboard_dict[page] = page
 
@@ -65,10 +61,11 @@ class InlineKeyboardPaginator:
         self._keyboard = self._to_button_array(keyboard_dict)
 
     def _build_for_multi_pages(self):
-        if self.current_page <= KEYBOARD_PAGE_OFFSET:
+        if self.current_page <= settings.KEYBOARD_PAGE_OFFSET:
             return self._build_start_keyboard()
-
-        elif self.current_page > self.page_count - KEYBOARD_PAGE_OFFSET:
+        elif (
+            self.current_page > self.page_count - settings.KEYBOARD_PAGE_OFFSET
+        ):
             return self._build_finish_keyboard()
 
         else:
@@ -76,7 +73,7 @@ class InlineKeyboardPaginator:
 
     def _build_start_keyboard(self):
         keyboard_dict = dict()
-        page_index = KEYBOARD_PAGE_OFFSET + 1
+        page_index = settings.KEYBOARD_PAGE_OFFSET + 1
         for page in range(1, page_index):
             keyboard_dict[page] = page
 
@@ -89,7 +86,7 @@ class InlineKeyboardPaginator:
 
     def _build_finish_keyboard(self):
         keyboard_dict = dict()
-        page_index = self.page_count - KEYBOARD_PAGE_OFFSET
+        page_index = self.page_count - settings.KEYBOARD_PAGE_OFFSET
 
         keyboard_dict[1] = self.first_page_label.format(1)
         keyboard_dict[page_index] = self.previous_page_label.format(
@@ -184,9 +181,9 @@ def parse_callback_data(callback_data: str) -> int:
     """Получает номер страницы при пагинации."""
     match = re.search(r".*#(?P<page_number>\d+)", callback_data)
     if not match:
-        return DEFAULT_PAGE
+        return settings.DEFAULT_PAGE
     number = match.group("page_number")
-    number = int(number) if number is not None else DEFAULT_PAGE
+    number = int(number) if number is not None else settings.DEFAULT_PAGE
     return number
 
 

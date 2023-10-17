@@ -1,4 +1,5 @@
 from asgiref.sync import sync_to_async
+from django.conf import settings
 from django.core.paginator import Paginator
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 
@@ -17,7 +18,6 @@ from bot.constants.buttons import (
     STUDENT_ROLE_BUTTON,
     YES_BUTTON,
 )
-from bot.constants.pagination import PAGE_SEP_SYMBOL, PROFESSION_PER_PAGE
 from bot.models import Profession
 from bot.utils.pagination import InlineKeyboardPaginator
 
@@ -99,11 +99,13 @@ async def build_profession_keyboard(page: int) -> InlineKeyboardPaginator:
     professions = await sync_to_async(list)(
         Profession.objects.all().values("name", "professional_key")
     )
-    data_paginator = Paginator(professions, PROFESSION_PER_PAGE)
+    data_paginator = Paginator(professions, settings.PROFESSION_PER_PAGE)
     telegram_paginator = InlineKeyboardPaginator(
         data_paginator.num_pages,
         current_page=page,
-        data_pattern="".join(["continue_name", PAGE_SEP_SYMBOL, "{page}"]),
+        data_pattern="".join(
+            ["continue_name", settings.PAGE_SEP_SYMBOL, "{page}"]
+        ),
     )
     for profession in data_paginator.page(page):
         telegram_paginator.add_before(
