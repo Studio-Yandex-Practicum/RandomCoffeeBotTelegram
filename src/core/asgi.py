@@ -2,7 +2,7 @@ import os
 
 from django_asgi_lifespan.asgi import get_asgi_application
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "core.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "core.config.settings_base")
 
 django_application = get_asgi_application()
 
