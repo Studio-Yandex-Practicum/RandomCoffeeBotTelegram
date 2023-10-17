@@ -6,10 +6,6 @@ from bot.constants.buttons import (
     CONTINUE_BUTTON,
     FILL_AGAIN_BUTTON,
     NO_BUTTON,
-    PROFESSION_ANALIST_BUTTON,
-    PROFESSION_BACKEND_DEVELOPER_BUTTON,
-    PROFESSION_FRONTEND_DEVELOPER_BUTTON,
-    PROFESSION_TESTER_BUTTON,
     RECRUITER_ROLE_BUTTON,
     START_BUTTON,
     STUDENT_ROLE_BUTTON,
@@ -48,33 +44,6 @@ guess_name_keyboard_markup = InlineKeyboardMarkup(
     ]
 )
 
-profession_choice_keyboard_markup = InlineKeyboardMarkup(
-    [
-        [
-            InlineKeyboardButton(
-                text=PROFESSION_ANALIST_BUTTON, callback_data="analyst"
-            )
-        ],
-        [
-            InlineKeyboardButton(
-                text=PROFESSION_BACKEND_DEVELOPER_BUTTON,
-                callback_data="backend-developer",
-            )
-        ],
-        [
-            InlineKeyboardButton(
-                text=PROFESSION_FRONTEND_DEVELOPER_BUTTON,
-                callback_data="frontend-developer",
-            )
-        ],
-        [
-            InlineKeyboardButton(
-                text=PROFESSION_TESTER_BUTTON, callback_data="tester"
-            )
-        ],
-    ]
-)
-
 profile_keyboard_markup = InlineKeyboardMarkup(
     [
         [
@@ -96,3 +65,18 @@ is_pair_successful_keyboard_markup = InlineKeyboardMarkup(
         ],
     ]
 )
+
+
+def profession(data) -> InlineKeyboardMarkup:
+    """Получение inline кнопок для профессий."""
+    return InlineKeyboardMarkup(
+        [
+            [
+                InlineKeyboardButton(
+                    text=profession.name,
+                    callback_data=profession.professional_key,
+                )
+            ]
+            for profession in data
+        ]
+    )

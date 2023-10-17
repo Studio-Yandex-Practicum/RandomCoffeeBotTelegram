@@ -5,7 +5,7 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("bot", "0003_add_profession"),
+        ("bot", "0002_recruiter_search_start_time_and_more"),
     ]
 
     operations = [

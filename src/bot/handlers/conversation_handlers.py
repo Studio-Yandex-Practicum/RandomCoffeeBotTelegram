@@ -1,3 +1,4 @@
+from asgiref.sync import sync_to_async
 from loguru import logger
 from telegram import Update
 from telegram.ext import CallbackContext, ConversationHandler
@@ -20,7 +21,7 @@ from bot.keyboards.command_keyboards import start_keyboard_markup
 from bot.keyboards.conversation_keyboards import (
     guess_name_keyboard_markup,
     is_pair_successful_keyboard_markup,
-    profession_choice_keyboard_markup,
+    profession,
     profile_keyboard_markup,
     restart_keyboard_markup,
     role_choice_keyboard_markup,
@@ -103,7 +104,7 @@ async def continue_name(update: Update, context: CallbackContext):
     if context.user_data["role"] == "student":
         await query.edit_message_text(CHOOSE_PROFESSION_MESSAGE)
         await query.edit_message_reply_markup(
-            profession_choice_keyboard_markup
+            profession(await sync_to_async(list)(Profession.objects.all()))
         )
         return States.PROFESSION_CHOICE
     else:
@@ -115,7 +116,7 @@ async def continue_name(update: Update, context: CallbackContext):
 async def profession_choice(update: Update, context: CallbackContext):
     """Обработчик для выбора профессии."""
     query = update.callback_query
-    context.user_data["profession"] = query.data.title()
+    context.user_data["profession"] = query.data.split("_")[1]
     return await check_username(update, context)
 
 
@@ -219,9 +220,7 @@ async def to_create_user_in_db(update: Update, context: CallbackContext):
         "surname": query.from_user.last_name,
         "telegram_username": context.user_data["contact"],
     }
-    profession, created = await Profession.objects.aget_or_create(
-        name=profession
-    )
+    profession = await Profession.objects.aget(name=profession)
     try:
         if context.user_data["role"] == "recruiter":
             await Recruiter.objects.acreate(**user_data)

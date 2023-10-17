@@ -8,6 +8,7 @@ def create_profession_analyst(apps, schema_editor):
     Profession = apps.get_model("bot", "Profession")
     Profession.objects.create(
         name="Аналитик",
+        professional_key="profession_Аналитик"
     )
 
 
@@ -23,6 +24,7 @@ def create_profession_backend_developer(apps, schema_editor):
     Profession = apps.get_model("bot", "Profession")
     Profession.objects.create(
         name="Бэкенд-разработчик",
+        professional_key="profession_Бэкенд-разработчик"
     )
 
 
@@ -38,6 +40,7 @@ def create_profession_frontend_developer(apps, schema_editor):
     Profession = apps.get_model("bot", "Profession")
     Profession.objects.create(
         name="Фронтенд-разработчик",
+        professional_key="profession_Фронтенд-разработчик"
     )
 
 
@@ -53,6 +56,7 @@ def create_profession_tester(apps, schema_editor):
     Profession = apps.get_model("bot", "Profession")
     Profession.objects.create(
         name="Тестировщик",
+        professional_key="profession_Тестировщик"
     )
 
 
@@ -66,7 +70,7 @@ def remove_profession_tester(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('bot', '0002_recruiter_search_start_time_and_more'),
+        ('bot', '0007_add_formurl_data'),
     ]
 
     operations = [

@@ -12,7 +12,7 @@ class Profession(models.Model):
         max_length=128, unique=True, verbose_name="Название профессии"
     )
     professional_key = models.CharField(
-        max_length=128, unique=True, blank=True, null=True
+        max_length=128, unique=True, blank=True, null=True, editable=False
     )
 
     class Meta:
