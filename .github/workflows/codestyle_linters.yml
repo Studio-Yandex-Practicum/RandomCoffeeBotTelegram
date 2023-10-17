@@ -27,7 +27,7 @@ jobs:
           pip install black ruff
 
       - name: Check with ruff
-        run: ruff check . --ignore=F405
+        run: ruff check .
 
       - name: Check with black
         run: black . --check --line-length 79 --exclude 'migrations/|.*settings(\.py|/)?'

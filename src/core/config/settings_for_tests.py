@@ -1,8 +1,7 @@
 """With these settings, tests run faster."""
-from core.settings import * # noqa
+from core.config.settings_base import *  # noqa
 
 DEBUG = False
-
 
 DATABASES = {
     "default": {
