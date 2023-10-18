@@ -1,14 +1,20 @@
-from unittest.mock import AsyncMock
+from unittest.mock import AsyncMock, Mock, patch
 
 import pytest
+from django.conf import settings
 
 from bot.constants.messages import CHOOSE_PROFESSION_MESSAGE
 from bot.handlers.conversation_handlers import continue_name
-from bot.keyboards.conversation_keyboards import profession
+
+
+# @pytest.mark.asyncio
+# async def test_continue_name_student_role(update, context, db):
 
 
 @pytest.mark.asyncio
-async def test_continue_name_student_role(update, context, db):
+async def test_continue_name_student_role(
+    update, context, pagination_keyboard, mocked_pagination_reply_markup
+):
     """
     Проверяем, что continue_name handler
     возвращает нужное сообщение и клавиатуру
@@ -16,12 +22,24 @@ async def test_continue_name_student_role(update, context, db):
     """
     update.callback_query = AsyncMock()
     context.user_data = {"role": "student"}
-    await continue_name(update, context)
+
+    with (
+        patch(
+            "bot.handlers.conversation_handlers.build_profession_keyboard",
+            Mock(return_value=pagination_keyboard),
+        ),
+        patch(
+            "bot.handlers.conversation_handlers.parse_callback_data",
+            Mock(return_value=settings.DEFAULT_PAGE),
+        ),
+    ):
+        await continue_name(update, context)
+
     update.callback_query.edit_message_text.assert_awaited_with(
-        CHOOSE_PROFESSION_MESSAGE
+        CHOOSE_PROFESSION_MESSAGE,
     )
     update.callback_query.edit_message_reply_markup.assert_awaited_with(
-        reply_markup=await profession()
+        reply_markup=mocked_pagination_reply_markup
     )
 
 
