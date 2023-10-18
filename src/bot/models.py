@@ -12,7 +12,7 @@ class Profession(models.Model):
         max_length=128, unique=True, verbose_name="Название профессии"
     )
     professional_key = models.CharField(
-        max_length=128, unique=True, blank=True, null=True, editable=False
+        max_length=128, unique=True, blank=True, null=True
     )
 
     class Meta:
@@ -23,10 +23,11 @@ class Profession(models.Model):
         return self.name
 
 
-@receiver(pre_save, sender=Profession)
+@receiver(pre_save)
 def create_key(sender, instance, *args, **kwargs) -> None:
     """Save transliterate field from 'name' into 'professional_key'."""
-    instance.professional_key = transliteration(instance.name)
+    if hasattr(sender, "professional_key"):
+        instance.professional_key = transliteration(instance.name)
 
 
 class PracticumUser(models.Model):

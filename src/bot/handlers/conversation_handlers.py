@@ -113,7 +113,8 @@ async def continue_name(update: Update, context: CallbackContext):
 async def profession_choice(update: Update, context: CallbackContext):
     """Обработчик для выбора профессии."""
     query = update.callback_query
-    context.user_data["profession"] = query.data.split("_")[1]
+    profession = await Profession.objects.aget(professional_key=query.data)
+    context.user_data["profession"] = profession.name
     return await check_username(update, context)
 
 
