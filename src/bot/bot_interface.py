@@ -72,8 +72,7 @@ class Bot:
         """Инициализация бота."""
         self._app: Application | None = None
         self._stop_event = asyncio.Event()
-        if settings.LOGGER_LEVEL == "DEBUG":
-            logger.debug("Bot instance created.")
+        logger.debug("Bot instance created.")
 
     def start(self) -> None:
         """Запускает бота."""

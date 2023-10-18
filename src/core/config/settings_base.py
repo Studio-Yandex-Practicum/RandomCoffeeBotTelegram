@@ -120,4 +120,7 @@ PERSISTENCE_PATH = PERSISTENCE_DIR / "persistence_file"
 
 Path.mkdir(PERSISTENCE_DIR, exist_ok=True)
 
-LOGGER_LEVEL = env.str('LOGGER_LEVEL', default='DEBUG')
+LOGGER_LEVEL = 'PROD'
+
+if DEBUG:
+    LOGGER_LEVEL = 'DEV'
