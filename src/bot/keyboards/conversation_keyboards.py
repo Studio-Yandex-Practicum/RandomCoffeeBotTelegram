@@ -111,7 +111,7 @@ async def build_profession_keyboard(page: int) -> InlineKeyboardPaginator:
         telegram_paginator.add_before(
             InlineKeyboardButton(
                 text=profession.get("name"),
-                callback_data=profession.get("name"),
+                callback_data=profession.get("professional_key"),
             )
         )
     return telegram_paginator

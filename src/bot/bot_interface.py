@@ -29,6 +29,7 @@ from bot.constants.patterns import (
     GO_PATTERN,
     NEXT_TIME_PATTERN,
     PARTICIPATE_PATTERN,
+    PROFESSION_CHOICE_PATTERN,
     PROFILE_PATTERN,
     RESTART_PATTERN,
     ROLE_CHOICE_PATTERN,
@@ -54,7 +55,6 @@ from bot.handlers.conversation_handlers import (
     set_phone_number,
 )
 from bot.persistence import RedisPersistence
-from bot.utils.pagination import create_pattern_profession_choice
 
 logger = logging.getLogger(__name__)
 
@@ -186,8 +186,7 @@ async def build_main_handler():
             ]
             + [
                 CallbackQueryHandler(
-                    profession_choice,
-                    pattern=await create_pattern_profession_choice(),
+                    profession_choice, pattern=PROFESSION_CHOICE_PATTERN
                 ),
             ],
             States.PROFILE: [
