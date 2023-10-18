@@ -1,3 +1,4 @@
+from asgiref.sync import sync_to_async
 from loguru import logger
 from telegram import Update
 from telegram.ext import CallbackContext, ConversationHandler
@@ -42,13 +43,34 @@ async def go(update: Update, context: CallbackContext):
         return States.ROLE_CHOICE
     else:
         await query.message.reply_text(PAIR_SEARCH_MESSAGE)
+        await search_pair(update, context)
         TIME_IN_SECONDS = 10  # для теста сделал задержку в 10 секунд
         context.job_queue.run_once(
             callback=send_is_pair_successful_message,
             when=TIME_IN_SECONDS,
             user_id=user.id,
         )
-        return ConversationHandler.END  # Тут будет States.PAIR_SEARCH
+        return States.PAIR_SEARCH
+
+
+async def search_pair(update: Update, context: CallbackContext):
+    """Поиск пары."""
+    telegram_id = update.callback_query.from_user["id"]
+    recruiters = await sync_to_async(list)(
+        Recruiter.objects.filter(has_pair=False).exclude(
+            passedpair__student=telegram_id
+        )
+    )
+
+    return recruiters
+
+
+@log_handler
+async def found_pair(update: Update, context: CallbackContext):
+    """Обработчик для найденой пары."""
+    query = update.callback_query
+    await query.message.reply_text("hello")
+    return ConversationHandler.END
 
 
 @log_handler

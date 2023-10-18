@@ -11,3 +11,4 @@ PROFESSION_CHOICE_PATTERN = (
     "^(analyst|backend-developer|frontend-developer|tester)$"
 )
 PROFILE_PATTERN = "^(all_right|fill_again)*$"
+FOUND_PAIR = "^search_pair$"
