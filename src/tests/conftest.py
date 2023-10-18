@@ -74,7 +74,7 @@ async def pagination_keyboard():
     telegram_paginator.add_before(
         InlineKeyboardButton(
             text="prof-1",
-            callback_data="prof-1",
+            callback_data="profession_prof-1",
         )
     )
     return telegram_paginator
@@ -83,4 +83,4 @@ async def pagination_keyboard():
 @pytest.fixture
 def mocked_pagination_reply_markup():
     """Reply markup pagination."""
-    return '{"inline_keyboard": [[{"callback_data": "prof-1", "text": "prof-1"}]]}'
+    return '{"inline_keyboard": [[{"callback_data": "profession_prof-1", "text": "prof-1"}]]}'
