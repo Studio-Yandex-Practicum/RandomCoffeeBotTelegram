@@ -1,5 +1,6 @@
 import sys
 
+from django.conf import settings
 from loguru import logger
 
 
@@ -7,19 +8,23 @@ def setup_logger():
     """Функция для настройки логгера."""
     logger.remove(0)
     logger.add(
-        sys.stdout, level="DEBUG", enqueue=True, backtrace=True, diagnose=True
+        sys.stdout,
+        level=settings.LOGGER_LEVEL,
+        enqueue=True,
+        backtrace=True,
+        diagnose=True,
     )
     logger.add(
         "../logs/{time:YYYY-MM-DD}.log",
         rotation="1 month",
-        level="INFO",
+        level=settings.LOGGER_LEVEL,
         enqueue=True,
         backtrace=True,
         diagnose=True,
     )
 
 
-def log_function(func):
+def log_info(func):
     """Декоратор для логирования обработчиков и шедулеров."""
     schedulers_data = [
         "send_is_pair_successful_message",
