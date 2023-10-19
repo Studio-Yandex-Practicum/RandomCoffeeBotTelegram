@@ -72,3 +72,6 @@ create-pair: # Команда для создания пары студент-р
 
 create-passedpair: # Команда для создания пары студент-рекрутер
 	poetry run python src/manage.py create_passedpair --amount ${amount}
+
+change-interface: # Команда для изменения темы админ панели
+	@cd src && poetry run python manage.py loaddata core/fixture/admin_interface_theme_random_cofe_bot.json && cd ..
