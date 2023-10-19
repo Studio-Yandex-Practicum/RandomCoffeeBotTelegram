@@ -40,10 +40,11 @@ async def test_go_user_is_exist(update, context, student):
     """
     update.callback_query = AsyncMock()
     student = await student
+    context.user_data = {"role": "student"}
     update.callback_query.from_user.id = student.telegram_id
-
     result = await go(update, context)
     update.callback_query.message.reply_text.assert_awaited_with(
         PAIR_SEARCH_MESSAGE
     )
+
     assert ConversationHandler.END == result

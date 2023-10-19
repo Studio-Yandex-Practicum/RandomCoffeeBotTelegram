@@ -48,19 +48,20 @@ async def go(update: Update, context: CallbackContext):
         await query.edit_message_reply_markup(role_choice_keyboard_markup)
         return States.ROLE_CHOICE
     else:
-        TIME_IN_SECONDS = 50  # для теста сделал задержку в 10 секунд
+        TIME_IN_SECONDS = 50  # для теста сделал задержку в 50 секунд
         context.job_queue.run_once(
             callback=send_is_pair_successful_message,
             when=TIME_IN_SECONDS,
             user_id=user.id,
         )
-        return await search_pair(update, context)
+        await search_pair(update, context)
+        return ConversationHandler.END
 
 
-async def search_pair(update: Update, context: CallbackContext):
+async def search_pair(update: Update, context: CallbackContext, i=0):
     """Поиск пары."""
     query = update.callback_query
-    telegram_id = query.from_user["id"]
+    telegram_id = query.from_user.id
     if context.user_data["role"] == "student":
         users_has_no_pair = await sync_to_async(list)(
             Recruiter.objects.filter(has_pair=False).exclude(
@@ -73,7 +74,6 @@ async def search_pair(update: Update, context: CallbackContext):
                 passedpair__recruiter=telegram_id
             )
         )
-
     if users_has_no_pair:
         user_has_no_pair = users_has_no_pair[0]
         if context.user_data["role"] == "student":
@@ -98,10 +98,14 @@ async def search_pair(update: Update, context: CallbackContext):
             )
         )
         return ConversationHandler.END
-    TIME_WAIT_BEFORE_REQUESTS = 5
+    TIME_WAIT_BEFORE_REQUESTS = 2  # поставил пока 2 секундs
     await query.message.reply_text(PAIR_SEARCH_MESSAGE)
     await asyncio.sleep(TIME_WAIT_BEFORE_REQUESTS)
-    return await search_pair(update, context)
+    ITERATION_TIME = 5
+    if i == ITERATION_TIME:
+        return ConversationHandler.END
+    i += 1
+    await search_pair(update, context, i)
 
 
 @log_handler
