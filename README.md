@@ -244,24 +244,29 @@ cd src/
 poetry run uvicorn config.asgi:application --reload
 ```
 
-запуск бота с контейнером PostgreSQL:
+Базовая команда для запуска БД, миграций, бота и джанго:
 ```shell
-make runbot-db
+make bot-init
+```
+
+запуск бота с сущуствующими данными в БД:
+```shell
+make runbot-existing-db
 ```
 
 запуск контейнера с PostgreSQL:
 ```shell
-make rundb
+make start-db
 ```
 
 остановка контейнера с PostgreSQL:
 ```shell
-make stopdb
+make stop-db
 ```
 
 остановка контейнера с PostgreSQL и удаление базы данных:
 ```shell
-make deletedb
+make clear-db
 ```
 
 наполнение PostgreSQL тестовыми данными:
