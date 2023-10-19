@@ -72,17 +72,17 @@ class Bot:
         """Инициализация бота."""
         self._app: Application | None = None
         self._stop_event = asyncio.Event()
-        logger.debug("Bot instance created.")
+        logger.info("Bot instance created.")
 
     def start(self) -> None:
         """Запускает бота."""
-        logger.debug("Bot starting...")
+        logger.info("Bot starting...")
         self._stop_event.clear()
         asyncio.ensure_future(self._run(), loop=asyncio.get_event_loop())
 
     def stop(self) -> None:
         """Останавливает бота."""
-        logger.debug("Bot stopping...")
+        logger.info("Bot stopping...")
         self._stop_event.set()
 
     async def _run(self) -> None:
@@ -124,11 +124,11 @@ class Bot:
                 secret_token=settings.WEBHOOK_SECRET_KEY,
                 allowed_updates=["message", "callback_query"],
             )
-            logger.debug(f"Webhook set up at {settings.WEBHOOK_URL}")
+            logger.info(f"Webhook set up at {settings.WEBHOOK_URL}")
         else:
             await self._app.bot.delete_webhook()
             await self._app.updater.start_polling()
-            logger.debug("Polling started")
+            logger.info("Polling started")
 
     async def _start_bot(self) -> None:
         """Запускает основное ASGI-приложение."""

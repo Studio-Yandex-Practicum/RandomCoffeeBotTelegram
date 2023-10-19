@@ -119,8 +119,3 @@ PERSISTENCE_DIR = BASE_DIR / "persistence_data"
 PERSISTENCE_PATH = PERSISTENCE_DIR / "persistence_file"
 
 Path.mkdir(PERSISTENCE_DIR, exist_ok=True)
-
-LOGGER_LEVEL = 'PROD'
-
-if DEBUG:
-    LOGGER_LEVEL = 'DEV'

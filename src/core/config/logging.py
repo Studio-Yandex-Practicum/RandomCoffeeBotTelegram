@@ -7,11 +7,13 @@ from loguru import logger
 def setup_logger():
     """Функция для настройки логгера."""
     logger.remove(0)
-    logger.level(name="DEV", no=6, color="<yellow>")
-    logger.level(name="PROD", no=11)
+    logger.level("DEBUG", color="<yellow>")
+    logger_level = "INFO"
+    if settings.DEBUG:
+        logger_level = "DEBUG"
     logger.add(
         sys.stdout,
-        level=settings.LOGGER_LEVEL,
+        level=logger_level,
         enqueue=True,
         backtrace=True,
         diagnose=True,
@@ -19,14 +21,14 @@ def setup_logger():
     logger.add(
         "../logs/{time:YYYY-MM-DD}.log",
         rotation="1 month",
-        level="DEV",
+        level=logger_level,
         enqueue=True,
         backtrace=True,
         diagnose=True,
     )
 
 
-def log_in_dev(func):
+def debug_logger(func):
     """Декоратор для логирования обработчиков и шедулеров."""
     schedulers_data = [
         "send_is_pair_successful_message",
@@ -46,12 +48,9 @@ def log_in_dev(func):
         username = user.username if user else "Unknown"
         try:
             result = await func(*args, **kwargs)
-            logger.log(
-                "DEV",
-                (
-                    f"User: {username} (ID: {user_id}) | "
-                    f"{func_type}: {func.__name__}"
-                ),
+            logger.debug(
+                f"User: {username} (ID: {user_id}) | "
+                f"{func_type}: {func.__name__}"
             )
             return result
         except Exception as e:
