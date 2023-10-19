@@ -11,7 +11,7 @@ COLOR_WHITE = \033[00m
 .PHONY: help
 help:  # Вызвать help
 	@echo -e "$(COLOR_GREEN)Makefile help:"
-	@grep -E '^[a-zA-Z0-9 -]+:.*#'  Makefile | sort | while read -r l; do printf "$(COLOR_GREEN)-$$(echo $$l | cut -f 1 -d':'):$(COLOR_WHITE)$(echo $l | cut -f 2- -d'#')\n"; done
+	@grep -E '^[a-zA-Z0-9 -]+:.*#'  Makefile | sort | while read -r l; do printf "$(COLOR_GREEN)-$$(echo $$l | cut -f 1 -d':'):$(COLOR_WHITE)$$(echo $$l | cut -f 2- -d'#')\n"; done
 
 
 .PHONY: runbot
