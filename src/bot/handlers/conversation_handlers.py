@@ -3,10 +3,12 @@ from loguru import logger
 from telegram import Update
 from telegram.ext import CallbackContext, ConversationHandler
 
+from bot.constants.links import COMMUNICATE_URL
 from bot.constants.messages import (
     CHANGE_NAME_MESSAGE,
     CHOOSE_PROFESSION_MESSAGE,
     CHOOSE_ROLE_MESSAGE,
+    FOUND_PAIR,
     GUESS_NAME_MESSAGE,
     IS_PAIR_SUCCESSFUL_MESSAGE,
     NEXT_TIME_MESSAGE,
@@ -27,6 +29,7 @@ from bot.keyboards.conversation_keyboards import (
     role_choice_keyboard_markup,
 )
 from bot.models import Profession, Recruiter, Student
+from bot.utils.pair import make_pair
 from core.config.logging import log_handler
 
 
@@ -42,35 +45,47 @@ async def go(update: Update, context: CallbackContext):
         await query.edit_message_reply_markup(role_choice_keyboard_markup)
         return States.ROLE_CHOICE
     else:
-        await query.message.reply_text(PAIR_SEARCH_MESSAGE)
-        await search_pair(update, context)
         TIME_IN_SECONDS = 10  # для теста сделал задержку в 10 секунд
         context.job_queue.run_once(
             callback=send_is_pair_successful_message,
             when=TIME_IN_SECONDS,
             user_id=user.id,
         )
-        return States.PAIR_SEARCH
+        return await search_pair(update, context)
 
 
 async def search_pair(update: Update, context: CallbackContext):
     """Поиск пары."""
-    telegram_id = update.callback_query.from_user["id"]
-    recruiters = await sync_to_async(list)(
-        Recruiter.objects.filter(has_pair=False).exclude(
-            passedpair__student=telegram_id
-        )
-    )
-
-    return recruiters
-
-
-@log_handler
-async def found_pair(update: Update, context: CallbackContext):
-    """Обработчик для найденой пары."""
     query = update.callback_query
-    await query.message.reply_text("hello")
-    return ConversationHandler.END
+    telegram_id = query.from_user["id"]
+    if context.user_data["role"] == "student":
+        users_has_no_pair = await sync_to_async(list)(
+            Recruiter.objects.filter(has_pair=False).exclude(
+                passedpair__student=telegram_id
+            )
+        )
+    else:
+        users_has_no_pair = await sync_to_async(list)(
+            Student.objects.filter(has_pair=False).exclude(
+                passedpair__recruiter=telegram_id
+            )
+        )
+    user_has_no_pair = users_has_no_pair[0]
+    if user_has_no_pair:
+        await make_pair()
+        name = user_has_no_pair.name
+        telegram = user_has_no_pair.telegram_username
+        await query.message.reply_text(
+            FOUND_PAIR.format(
+                name,
+                context.user_data["profession"],
+                telegram,
+                COMMUNICATE_URL,
+            )
+        )
+        return ConversationHandler.END
+    await query.message.reply_text(PAIR_SEARCH_MESSAGE)
+    return await search_pair(update, context)
 
 
 @log_handler
