@@ -11,7 +11,7 @@ COLOR_WHITE = \033[00m
 .PHONY: help
 help:  # Вызвать help
 	@echo -e "$(COLOR_GREEN)Makefile help:"
-	@grep -E '^[a-zA-Z0-9 -]+:.*#'  Makefile | sort | while read -r l; do printf "$(COLOR_GREEN)-$(echo $l | cut -f 1 -d':'):$(COLOR_WHITE)$(echo $l | cut -f 2- -d'#')\n"; done
+	@grep -E '^[a-zA-Z0-9 -]+:.*#'  Makefile | sort | while read -r l; do printf "$(COLOR_GREEN)-$$(echo $$l | cut -f 1 -d':'):$(COLOR_WHITE)$(echo $l | cut -f 2- -d'#')\n"; done
 
 
 .PHONY: runbot
@@ -29,7 +29,7 @@ runbot-existing-db:  # Запуск Telegram Bot с существующей Б�
 
 start-db: # Запуск контейнера Postgres
 	docker-compose -f infra/dev/docker-compose.local.yaml up -d; \
-	if [ $? -ne 0 ]; \
+	if [ $$? -ne 0 ]; \
     then \
         docker compose -f infra/dev/docker-compose.local.yaml up -d; \
 		docker compose version; \
@@ -37,14 +37,14 @@ start-db: # Запуск контейнера Postgres
 
 stop-db: # Остановка контейнера Postgres
 	docker-compose -f infra/dev/docker-compose.local.yaml down; \
-	if [ $? -ne 0 ]; \
+	if [ $$? -ne 0 ]; \
     then \
 		docker compose -f infra/dev/docker-compose.local.yaml down; \
 	fi
 
 clear-db: # Очистка БД Postgres
 	docker-compose -f infra/dev/docker-compose.local.yaml down --volumes; \
-	if [ $? -ne 0 ]; \
+	if [ $$? -ne 0 ]; \
     then \
 		docker compose -f infra/dev/docker-compose.local.yaml down --volumes; \
 	fi
