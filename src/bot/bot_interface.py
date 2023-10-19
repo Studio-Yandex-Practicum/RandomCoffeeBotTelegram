@@ -181,8 +181,13 @@ async def build_main_handler():
             ],
             States.PROFESSION_CHOICE: [
                 CallbackQueryHandler(
-                    profession_choice, pattern=PROFESSION_CHOICE_PATTERN
+                    continue_name, pattern=CONTINUE_NAME_PATTERN
                 )
+            ]
+            + [
+                CallbackQueryHandler(
+                    profession_choice, pattern=PROFESSION_CHOICE_PATTERN
+                ),
             ],
             States.PROFILE: [
                 CallbackQueryHandler(profile, pattern=PROFILE_PATTERN)
