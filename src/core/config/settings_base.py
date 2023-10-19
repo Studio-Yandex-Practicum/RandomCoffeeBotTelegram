@@ -119,3 +119,11 @@ PERSISTENCE_DIR = BASE_DIR / "persistence_data"
 PERSISTENCE_PATH = PERSISTENCE_DIR / "persistence_file"
 
 Path.mkdir(PERSISTENCE_DIR, exist_ok=True)
+
+# Настройки пагинации
+
+DEFAULT_PAGE_NUMBER = 5 # Количество страниц в панели пагинации по умолчанию
+KEYBOARD_PAGE_OFFSET = 3 # Сдвиг страниц, если количество превышает DEFAULT_PAGE_NUMBER
+PROFESSION_PER_PAGE = 5 # Количество профессий на странице
+PAGE_SEP_SYMBOL = "#" # Символ, отделяющий номер страницы
+DEFAULT_PAGE = 1 # Номер страницы по умолчанию

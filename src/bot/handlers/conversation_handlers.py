@@ -18,6 +18,7 @@ from bot.handlers.command_handlers import start
 from bot.handlers.schedulers import send_is_pair_successful_message
 from bot.keyboards.command_keyboards import start_keyboard_markup
 from bot.keyboards.conversation_keyboards import (
+    build_profession_keyboard,
     guess_name_keyboard_markup,
     profession_choice_keyboard_markup,
     profile_keyboard_markup,
@@ -26,6 +27,7 @@ from bot.keyboards.conversation_keyboards import (
 )
 from bot.models import Profession, Recruiter, Student
 from core.config.logging import debug_logger
+from bot.utils.pagination import parse_callback_data
 
 
 @debug_logger
@@ -101,10 +103,12 @@ async def continue_name(update: Update, context: CallbackContext):
     """Обработчик для кнопки 'Продолжить'."""
     query = update.callback_query
     if context.user_data["role"] == "student":
-        await query.edit_message_text(CHOOSE_PROFESSION_MESSAGE)
-        await query.edit_message_reply_markup(
-            profession_choice_keyboard_markup
-        )
+        page_number = parse_callback_data(query.data)
+        await query.answer()
+        keyboard = await build_profession_keyboard(page_number)
+        if query.message.reply_markup.to_json() != keyboard.markup:
+            await query.edit_message_text(CHOOSE_PROFESSION_MESSAGE)
+            await query.edit_message_reply_markup(reply_markup=keyboard.markup)
         return States.PROFESSION_CHOICE
     else:
         context.user_data["profession"] = "It-рекрутер"
@@ -115,7 +119,7 @@ async def continue_name(update: Update, context: CallbackContext):
 async def profession_choice(update: Update, context: CallbackContext):
     """Обработчик для выбора профессии."""
     query = update.callback_query
-    context.user_data["profession"] = query.data.title()
+    context.user_data["profession"] = query.data
     return await check_username(update, context)
 
 
