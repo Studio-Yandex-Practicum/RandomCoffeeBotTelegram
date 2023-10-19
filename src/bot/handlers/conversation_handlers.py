@@ -1,3 +1,5 @@
+import asyncio
+
 from asgiref.sync import sync_to_async
 from loguru import logger
 from telegram import Update
@@ -45,7 +47,7 @@ async def go(update: Update, context: CallbackContext):
         await query.edit_message_reply_markup(role_choice_keyboard_markup)
         return States.ROLE_CHOICE
     else:
-        TIME_IN_SECONDS = 10  # для теста сделал задержку в 10 секунд
+        TIME_IN_SECONDS = 50  # для теста сделал задержку в 10 секунд
         context.job_queue.run_once(
             callback=send_is_pair_successful_message,
             when=TIME_IN_SECONDS,
@@ -70,21 +72,34 @@ async def search_pair(update: Update, context: CallbackContext):
                 passedpair__recruiter=telegram_id
             )
         )
-    user_has_no_pair = users_has_no_pair[0]
-    if user_has_no_pair:
-        await make_pair()
-        name = user_has_no_pair.name
-        telegram = user_has_no_pair.telegram_username
+
+    if users_has_no_pair:
+        user_has_no_pair = users_has_no_pair[0]
+        if context.user_data["role"] == "student":
+            profession = "It-рекрутер"
+            await make_pair(
+                await Student.objects.aget(telegram_id=telegram_id),
+                user_has_no_pair,
+            )
+        else:
+            profession = user_has_no_pair.profession
+            await make_pair(
+                user_has_no_pair,
+                await Recruiter.objects.aget(telegram_id=telegram_id),
+            )
         await query.message.reply_text(
             FOUND_PAIR.format(
-                name,
+                user_has_no_pair.name,
+                profession,
                 context.user_data["profession"],
-                telegram,
+                user_has_no_pair.telegram_username,
                 COMMUNICATE_URL,
             )
         )
         return ConversationHandler.END
+    TIME_WAIT_BEFORE_REQUESTS = 5
     await query.message.reply_text(PAIR_SEARCH_MESSAGE)
+    await asyncio.sleep(TIME_WAIT_BEFORE_REQUESTS)
     return await search_pair(update, context)
 
 
