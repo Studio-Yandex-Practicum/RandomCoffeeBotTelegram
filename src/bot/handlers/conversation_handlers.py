@@ -20,14 +20,13 @@ from bot.keyboards.command_keyboards import start_keyboard_markup
 from bot.keyboards.conversation_keyboards import (
     build_profession_keyboard,
     guess_name_keyboard_markup,
-    profession_choice_keyboard_markup,
     profile_keyboard_markup,
     restart_keyboard_markup,
     role_choice_keyboard_markup,
 )
 from bot.models import Profession, Recruiter, Student
-from core.config.logging import debug_logger
 from bot.utils.pagination import parse_callback_data
+from core.config.logging import debug_logger
 
 
 @debug_logger
