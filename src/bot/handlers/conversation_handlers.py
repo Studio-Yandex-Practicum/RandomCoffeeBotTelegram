@@ -216,14 +216,15 @@ async def send_profile_form(update: Update, context: CallbackContext):
 async def to_create_user_in_db(update: Update, context: CallbackContext):
     """Сохраняет пользователя в базе данных."""
     query = update.callback_query
-    profession = context.user_data["profession"]
     user_data = {
         "telegram_id": query.from_user.id,
         "name": context.user_data["name"],
         "surname": query.from_user.last_name,
         "telegram_username": context.user_data["contact"],
     }
-    profession = await Profession.objects.aget(name=profession)
+    profession = await Profession.objects.aget(
+        name=context.user_data["profession"]
+    )
     try:
         if context.user_data["role"] == "recruiter":
             await Recruiter.objects.acreate(**user_data)
