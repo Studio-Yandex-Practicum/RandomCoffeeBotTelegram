@@ -5,7 +5,7 @@ import environ
 from dotenv import find_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
-PARENT_DIR = BASE_DIR.parent
+ROOT_DIR = BASE_DIR.parent
 
 env = environ.Env()
 
@@ -105,7 +105,7 @@ REDIS = {
 }
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(PARENT_DIR, 'static/')
+STATIC_ROOT = os.path.join(ROOT_DIR, 'static/')
 
 TELEGRAM_TOKEN = env.str('TELEGRAM_TOKEN', default=DEFAULT)
 USE_REDIS_PERSISTENCE = env.bool('REDIS', default=False)
@@ -116,7 +116,7 @@ WEBHOOK_MODE = False
 WEBHOOK_URL = ""
 WEBHOOK_SECRET_KEY = ""
 
-PERSISTENCE_DIR = PARENT_DIR / "persistence_data"
+PERSISTENCE_DIR = ROOT_DIR / "persistence_data"
 PERSISTENCE_PATH = PERSISTENCE_DIR / "persistence_file"
 
 Path.mkdir(PERSISTENCE_DIR, exist_ok=True)
