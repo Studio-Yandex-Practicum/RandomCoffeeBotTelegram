@@ -10,7 +10,6 @@ async def make_pair(student: Student, recruiter: Recruiter) -> bool:
     try:
         student.has_pair = True
         recruiter.has_pair = True
-        print(student, recruiter)
         created_pair = await CreatedPair.objects.acreate(
             student=student, recruiter=recruiter
         )
