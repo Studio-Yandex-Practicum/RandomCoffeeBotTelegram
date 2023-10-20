@@ -66,7 +66,7 @@ def remove_profession_tester(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('bot', '0002_recruiter_search_start_time_and_more'),
+        ('bot', '0007_add_formurl_data'),
     ]
 
     operations = [

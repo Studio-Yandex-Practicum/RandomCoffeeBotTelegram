@@ -4,9 +4,10 @@ from pathlib import Path
 import environ
 from dotenv import find_dotenv
 
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 env = environ.Env()
+
 if DEBUG := env.bool("DEBUG", default=True):
     environ.Env.read_env(find_dotenv(".env"))
 
@@ -66,7 +67,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "core.wsgi.application"
 
-
 DATABASES = {
     "default": {
         "ENGINE": env.str("POSTGRES_ENGINE", default='django.db.backends.postgresql'),
@@ -77,7 +77,6 @@ DATABASES = {
         "PORT": env.str("POSTGRES_PORT", default='5432'),
     }
 }
-
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -94,7 +93,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 LANGUAGE_CODE = "ru-RU"
 
 TIME_ZONE = "UTC"
@@ -107,7 +105,6 @@ REDIS = {
     'host': env.str('REDIS_HOST', default='localhost'),
     'port': env.str('REDIS_PORT', default='6379')
 }
-
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static/')

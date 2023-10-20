@@ -7,7 +7,6 @@ from bot.constants.messages import (
     CHOOSE_PROFESSION_MESSAGE,
     CHOOSE_ROLE_MESSAGE,
     GUESS_NAME_MESSAGE,
-    IS_PAIR_SUCCESSFUL_MESSAGE,
     NEXT_TIME_MESSAGE,
     PAIR_SEARCH_MESSAGE,
     PROFILE_MESSAGE,
@@ -16,21 +15,21 @@ from bot.constants.messages import (
 )
 from bot.constants.states import States
 from bot.handlers.command_handlers import start
+from bot.handlers.schedulers import send_is_pair_successful_message
 from bot.keyboards.command_keyboards import start_keyboard_markup
 from bot.keyboards.conversation_keyboards import (
     build_profession_keyboard,
     guess_name_keyboard_markup,
-    is_pair_successful_keyboard_markup,
     profile_keyboard_markup,
     restart_keyboard_markup,
     role_choice_keyboard_markup,
 )
 from bot.models import Profession, Recruiter, Student
 from bot.utils.pagination import parse_callback_data
-from core.config.logging import log_handler
+from core.config.logging import debug_logger
 
 
-@log_handler
+@debug_logger
 async def go(update: Update, context: CallbackContext):
     """Обработчик кнопки "GO"."""
     user = update.callback_query.from_user
@@ -48,11 +47,12 @@ async def go(update: Update, context: CallbackContext):
             callback=send_is_pair_successful_message,
             when=TIME_IN_SECONDS,
             user_id=user.id,
+            data=user,
         )
         return ConversationHandler.END  # Тут будет States.PAIR_SEARCH
 
 
-@log_handler
+@debug_logger
 async def next_time(update: Update, context: CallbackContext):
     """Обработчик кнопки "В следующий раз"."""
     query = update.callback_query
@@ -62,7 +62,7 @@ async def next_time(update: Update, context: CallbackContext):
     return States.NEXT_TIME
 
 
-@log_handler
+@debug_logger
 async def restart_callback(update: Update, context: CallbackContext):
     """Обработчик для кнопки start."""
     query = update.callback_query
@@ -70,7 +70,7 @@ async def restart_callback(update: Update, context: CallbackContext):
     return await start(update, context)
 
 
-@log_handler
+@debug_logger
 async def role_choice(update: Update, context: CallbackContext):
     """Обработчик для выбора роли."""
     query = update.callback_query
@@ -79,7 +79,7 @@ async def role_choice(update: Update, context: CallbackContext):
     return States.SET_NAME
 
 
-@log_handler
+@debug_logger
 async def change_name(update: Update, context: CallbackContext):
     """Обработчик для кнопки "Изменить имя"."""
     query = update.callback_query
@@ -88,7 +88,7 @@ async def change_name(update: Update, context: CallbackContext):
     return States.SET_NEW_NAME
 
 
-@log_handler
+@debug_logger
 async def set_new_name(update: Update, context: CallbackContext):
     """Обработчик для ввода нового имени."""
     new_name = update.message.text
@@ -97,7 +97,7 @@ async def set_new_name(update: Update, context: CallbackContext):
     return States.SET_NAME
 
 
-@log_handler
+@debug_logger
 async def continue_name(update: Update, context: CallbackContext):
     """Обработчик для кнопки 'Продолжить'."""
     query = update.callback_query
@@ -114,15 +114,16 @@ async def continue_name(update: Update, context: CallbackContext):
         return await check_username(update, context)
 
 
-@log_handler
+@debug_logger
 async def profession_choice(update: Update, context: CallbackContext):
     """Обработчик для выбора профессии."""
     query = update.callback_query
-    context.user_data["profession"] = query.data
+    profession = await Profession.objects.aget(professional_key=query.data)
+    context.user_data["profession"] = profession.name
     return await check_username(update, context)
 
 
-@log_handler
+@debug_logger
 async def set_phone_number(update: Update, context: CallbackContext):
     """Обработчик для ввода номера телефона."""
     phone_number = update.message.text
@@ -131,7 +132,7 @@ async def set_phone_number(update: Update, context: CallbackContext):
     return States.PROFILE
 
 
-@log_handler
+@debug_logger
 async def profile(update: Update, context: CallbackContext):
     """Обработчик для профиля."""
     query = update.callback_query
@@ -150,15 +151,6 @@ async def profile(update: Update, context: CallbackContext):
         logger.error(
             f"Пользователь {query.from_user} не сохранен в базе данных."
         )
-
-
-async def send_is_pair_successful_message(context: CallbackContext):
-    """Отправляет сообщение состоялся ли звонок."""
-    await context.bot.send_message(
-        chat_id=context.job.user_id,
-        text=IS_PAIR_SUCCESSFUL_MESSAGE,
-        reply_markup=is_pair_successful_keyboard_markup,
-    )
 
 
 async def send_name_message(update: Update, context: CallbackContext):
@@ -215,15 +207,14 @@ async def send_profile_form(update: Update, context: CallbackContext):
 async def to_create_user_in_db(update: Update, context: CallbackContext):
     """Сохраняет пользователя в базе данных."""
     query = update.callback_query
-    profession = context.user_data["profession"]
     user_data = {
         "telegram_id": query.from_user.id,
         "name": context.user_data["name"],
         "surname": query.from_user.last_name,
         "telegram_username": context.user_data["contact"],
     }
-    profession, created = await Profession.objects.aget_or_create(
-        name=profession
+    profession = await Profession.objects.aget(
+        name=context.user_data["profession"]
     )
     try:
         if context.user_data["role"] == "recruiter":

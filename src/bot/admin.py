@@ -15,6 +15,7 @@ class ProfessionAdmin(admin.ModelAdmin):
     """Управление профессиями."""
 
     list_display = ("name",)
+    exclude = ("professional_key",)
 
 
 @admin.register(CreatedPair)

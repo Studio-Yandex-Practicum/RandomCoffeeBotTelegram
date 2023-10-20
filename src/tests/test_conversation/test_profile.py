@@ -47,7 +47,7 @@ async def test_profile_create_user(update, context):
     query.from_user.id = 321
     query.from_user.last_name = "test_surname"
     context.user_data = {
-        "profession": "test_prof",
+        "profession": "prof-1",
         "name": "test_name",
         "contact": "test_contact",
         "role": "student",
