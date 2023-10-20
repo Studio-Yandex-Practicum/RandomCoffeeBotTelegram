@@ -7,10 +7,6 @@ from bot.constants.messages import CHOOSE_PROFESSION_MESSAGE
 from bot.handlers.conversation_handlers import continue_name
 
 
-# @pytest.mark.asyncio
-# async def test_continue_name_student_role(update, context, db):
-
-
 @pytest.mark.asyncio
 async def test_continue_name_student_role(
     update, context, pagination_keyboard, mocked_pagination_reply_markup
