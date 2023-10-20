@@ -249,9 +249,9 @@ poetry run uvicorn config.asgi:application --reload
 make bot-init
 ```
 
-запуск бота с сущуствующими данными в БД:
+запуск бота и контейнера PostgreSQL с существующими данными в БД:
 ```shell
-make runbot-existing-db
+make bot-existing-db
 ```
 
 запуск контейнера с PostgreSQL:
