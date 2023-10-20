@@ -23,10 +23,13 @@ class Profession(models.Model):
         return self.name
 
 
-@receiver(pre_save, sender=Profession)
+@receiver(pre_save)
 def create_key(sender, instance, *args, **kwargs) -> None:
     """Save transliterate field from 'name' into 'professional_key'."""
-    instance.professional_key = transliteration(instance.name)
+    if hasattr(sender, "professional_key"):
+        instance.professional_key = transliteration(
+            instance.name, prefix="profession_"
+        )
 
 
 class PracticumUser(models.Model):

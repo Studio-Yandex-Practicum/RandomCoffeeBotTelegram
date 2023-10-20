@@ -118,7 +118,8 @@ async def continue_name(update: Update, context: CallbackContext):
 async def profession_choice(update: Update, context: CallbackContext):
     """Обработчик для выбора профессии."""
     query = update.callback_query
-    context.user_data["profession"] = query.data
+    profession = await Profession.objects.aget(professional_key=query.data)
+    context.user_data["profession"] = profession.name
     return await check_username(update, context)
 
 
@@ -206,15 +207,14 @@ async def send_profile_form(update: Update, context: CallbackContext):
 async def to_create_user_in_db(update: Update, context: CallbackContext):
     """Сохраняет пользователя в базе данных."""
     query = update.callback_query
-    profession = context.user_data["profession"]
     user_data = {
         "telegram_id": query.from_user.id,
         "name": context.user_data["name"],
         "surname": query.from_user.last_name,
         "telegram_username": context.user_data["contact"],
     }
-    profession, created = await Profession.objects.aget_or_create(
-        name=profession
+    profession = await Profession.objects.aget(
+        name=context.user_data["profession"]
     )
     try:
         if context.user_data["role"] == "recruiter":

@@ -18,6 +18,7 @@ async def test_continue_name_student_role(
     """
     update.callback_query = AsyncMock()
     context.user_data = {"role": "student"}
+
     with (
         patch(
             "bot.handlers.conversation_handlers.build_profession_keyboard",

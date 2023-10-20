@@ -2,10 +2,7 @@ import json
 import re
 from collections import namedtuple
 
-from asgiref.sync import sync_to_async
 from django.conf import settings
-
-from bot.models import Profession
 
 InlineKeyboardButton = namedtuple(
     "InlineKeyboardButton", ["callback_data", "text"]
@@ -185,14 +182,3 @@ def parse_callback_data(callback_data: str) -> int:
     number = match.group("page_number")
     number = int(number) if number is not None else settings.DEFAULT_PAGE
     return number
-
-
-async def create_pattern_profession_choice() -> str:
-    """Создает паттерн для профессий."""
-    professions = await sync_to_async(list)(
-        Profession.objects.all().values("name")
-    )
-    prof_list = []
-    for profession in professions:
-        prof_list.append(profession.get("name"))
-    return "^(" + "|".join(prof_list) + ").*"
