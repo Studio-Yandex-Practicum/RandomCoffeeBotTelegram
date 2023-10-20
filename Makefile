@@ -45,7 +45,6 @@ collectstatic: # Собрать статику Django
 createsuperuser: # Создать супер пользователя
 	poetry run python src/manage.py createsuperuser --noinput
 
-
 run-app:  # Запуск Django и Telegram бота
 	@echo -e "$(COLOR_YELLOW)Starting bot...$(COLOR_RESET)"
 	@cd src && poetry run uvicorn core.asgi:application --reload && cd .. && \
