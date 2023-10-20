@@ -12,10 +12,10 @@ from bot.keyboards.command_keyboards import (
     start_keyboard_markup,
     support_keyboard_markup,
 )
-from core.config.logging import log_handler
+from core.config.logging import debug_logger
 
 
-@log_handler
+@debug_logger
 async def start(update: Update, context: CallbackContext):
     """Функция-обработчик команды start."""
     if update.message:
@@ -33,7 +33,7 @@ async def start(update: Update, context: CallbackContext):
     return States.START
 
 
-@log_handler
+@debug_logger
 async def support_bot(update: Update, context: CallbackContext):
     """Функция-обработчик для команды /support."""
     await update.message.reply_text(
@@ -41,7 +41,7 @@ async def support_bot(update: Update, context: CallbackContext):
     )
 
 
-@log_handler
+@debug_logger
 async def help(update: Update, context: CallbackContext):
     """Функция-обработчик для команды /help."""
     await update.message.reply_html(
@@ -50,7 +50,7 @@ async def help(update: Update, context: CallbackContext):
     return States.HELP
 
 
-@log_handler
+@debug_logger
 async def redirection_to_support(
     update: Update, context: CallbackContext
 ) -> None:
