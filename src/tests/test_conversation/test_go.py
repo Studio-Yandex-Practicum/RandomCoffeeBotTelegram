@@ -8,7 +8,6 @@ from bot.constants.messages import (
     PAIR_SEARCH_MESSAGE,
     FOUND_PAIR,
 )
-from bot.constants.links import COMMUNICATE_URL
 from bot.constants.states import States
 from bot.handlers.conversation_handlers import go
 from bot.keyboards.conversation_keyboards import role_choice_keyboard_markup
@@ -37,24 +36,18 @@ async def test_go_user_is_no_exist(update, context):
 
 @pytest.mark.django_db
 @pytest.mark.asyncio
-async def test_go_user_is_exist(update, context, student, recruiter):
+async def test_go_user_is_exist(update, context, student):
     """
     Проверяем, что go handler возвращает
     нужное состояние, сообщение и клавиатуру
-    если пользователь существует.
+    если пользователь существует и пара отсутствует.
     """
     update.callback_query = AsyncMock()
     student = await student
-    recruiter = await recruiter
     context.user_data = {"role": "student"}
     update.callback_query.from_user.id = student.telegram_id
     result = await go(update, context)
     update.callback_query.message.reply_text.assert_awaited_with(
-        FOUND_PAIR.format(
-            recruiter.name,
-            "It-рекрутер",
-            recruiter.telegram_username,
-            COMMUNICATE_URL,
-        )
+        PAIR_SEARCH_MESSAGE
     )
     assert ConversationHandler.END == result

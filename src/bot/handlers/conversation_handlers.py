@@ -51,7 +51,6 @@ async def go(update: Update, context: CallbackContext):
             user_id=user.id,
             data=user,
         )
-        await query.message.reply_text(PAIR_SEARCH_MESSAGE)
         return await search_pair(update, context)
 
 
@@ -70,6 +69,7 @@ async def search_pair(update: Update, context: CallbackContext):
     )
     if user_has_no_pair:
         return await found_pair(update, context, model, user_has_no_pair)
+    await query.message.reply_text(PAIR_SEARCH_MESSAGE)
     return ConversationHandler.END
 
 
@@ -81,20 +81,30 @@ async def found_pair(
     query = update.callback_query
     telegram_id = query.from_user.id
     user = await model.objects.aget(telegram_id=telegram_id)
-    profession, student, recruiter = (
-        ("It-рекрутер", user, user_has_no_pair)
+    student, recruiter = (
+        (user, user_has_no_pair)
         if context.user_data["role"] == "student"
-        else (user_has_no_pair.profession, user_has_no_pair, user)
+        else (user_has_no_pair, user)
     )
     await make_pair(student, recruiter)
-    await query.message.reply_text(
-        FOUND_PAIR.format(
-            user_has_no_pair.name,
-            profession,
-            user_has_no_pair.telegram_username,
-            COMMUNICATE_URL,
+    for user in (student, recruiter):
+        profession, opposite = (
+            ("It-рекрутер", student)
+            if user == student
+            else (
+                await Profession.objects.aget(pk=student.profession_id),
+                recruiter,
+            )
         )
-    )
+        await context.bot.send_message(
+            chat_id=opposite.telegram_id,
+            text=FOUND_PAIR.format(
+                user.name,
+                profession,
+                user.telegram_username,
+                COMMUNICATE_URL,
+            ),
+        )
     return ConversationHandler.END
 
 
