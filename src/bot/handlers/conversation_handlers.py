@@ -59,12 +59,9 @@ async def search_pair(update: Update, context: CallbackContext):
     """Поиск пары."""
     query = update.callback_query
     role = context.user_data["role"]
-    if role == "student":
-        model = Student
-        opposite_model = Recruiter
-    else:
-        model = Recruiter
-        opposite_model = Student
+    model, opposite_model = (
+        (Student, Recruiter) if role == "student" else (Recruiter, Student)
+    )
     user_has_no_pair = (
         await opposite_model.objects.filter(has_pair=False)
         .exclude(**{f"passedpair__{role}": query.from_user.id})
@@ -83,14 +80,12 @@ async def found_pair(
     """Обработчик найденной пары found_pair."""
     query = update.callback_query
     telegram_id = query.from_user.id
-    if context.user_data["role"] == "student":
-        profession = "It-рекрутер"
-        student = await model.objects.aget(telegram_id=telegram_id)
-        recruiter = user_has_no_pair
-    else:
-        profession = user_has_no_pair.profession
-        student = user_has_no_pair
-        recruiter = await model.objects.aget(telegram_id=telegram_id)
+    user = await model.objects.aget(telegram_id=telegram_id)
+    profession, student, recruiter = (
+        ("It-рекрутер", user, user_has_no_pair)
+        if context.user_data["role"] == "student"
+        else (user_has_no_pair.profession, user_has_no_pair, user)
+    )
     await make_pair(student, recruiter)
     await query.message.reply_text(
         FOUND_PAIR.format(
