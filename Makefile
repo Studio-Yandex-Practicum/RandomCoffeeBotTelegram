@@ -59,7 +59,7 @@ run-app: # Запуск Django и Telegram бота
 	echo -e "$(COLOR_GREEN)Bot stopped$(COLOR_RESET)"
 
 bot-init: # Базовая команда для запуска БД, миграций, бота и джанго
-	make clear-db start-db migrate collectstatic createsuperuser run-app
+	make clear-db start-db migrate change-interface createsuperuser run-app
 
 create-student: # Команда для создания тестового профиля студента
 	poetry run python src/manage.py create_student --amount ${amount}
