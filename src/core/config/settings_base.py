@@ -4,9 +4,10 @@ from pathlib import Path
 import environ
 from dotenv import find_dotenv
 
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 env = environ.Env()
+
 if DEBUG := env.bool("DEBUG", default=True):
     environ.Env.read_env(find_dotenv(".env"))
 
@@ -63,7 +64,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "core.wsgi.application"
 
-
 DATABASES = {
     "default": {
         "ENGINE": env.str("POSTGRES_ENGINE", default='django.db.backends.postgresql'),
@@ -74,7 +74,6 @@ DATABASES = {
         "PORT": env.str("POSTGRES_PORT", default='5432'),
     }
 }
-
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -91,7 +90,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 LANGUAGE_CODE = "ru-RU"
 
 TIME_ZONE = "UTC"
@@ -104,7 +102,6 @@ REDIS = {
     'host': env.str('REDIS_HOST', default='localhost'),
     'port': env.str('REDIS_PORT', default='6379')
 }
-
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
@@ -122,3 +119,11 @@ PERSISTENCE_DIR = BASE_DIR / "persistence_data"
 PERSISTENCE_PATH = PERSISTENCE_DIR / "persistence_file"
 
 Path.mkdir(PERSISTENCE_DIR, exist_ok=True)
+
+# Настройки пагинации
+
+DEFAULT_PAGE_NUMBER = 5 # Количество страниц в панели пагинации по умолчанию
+KEYBOARD_PAGE_OFFSET = 3 # Сдвиг страниц, если количество превышает DEFAULT_PAGE_NUMBER
+PROFESSION_PER_PAGE = 5 # Количество профессий на странице
+PAGE_SEP_SYMBOL = "#" # Символ, отделяющий номер страницы
+DEFAULT_PAGE = 1 # Номер страницы по умолчанию

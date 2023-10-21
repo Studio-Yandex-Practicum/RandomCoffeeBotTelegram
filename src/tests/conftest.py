@@ -1,8 +1,11 @@
 from unittest.mock import AsyncMock, Mock
 
 import pytest
+from django.conf import settings
+from telegram import InlineKeyboardButton
 
 from bot.models import Student, Profession
+from bot.utils.pagination import InlineKeyboardPaginator
 
 
 @pytest.fixture
@@ -62,3 +65,22 @@ async def student(db, profession):
         telegram_username="student-username-1",
         profession=await profession,
     )
+
+
+@pytest.fixture
+async def pagination_keyboard():
+    """InlineKeyboardPaginator object."""
+    telegram_paginator = InlineKeyboardPaginator(settings.DEFAULT_PAGE)
+    telegram_paginator.add_before(
+        InlineKeyboardButton(
+            text="prof-1",
+            callback_data="profession_prof-1",
+        )
+    )
+    return telegram_paginator
+
+
+@pytest.fixture
+def mocked_pagination_reply_markup():
+    """Reply markup pagination."""
+    return '{"inline_keyboard": [[{"callback_data": "profession_prof-1", "text": "prof-1"}]]}'
