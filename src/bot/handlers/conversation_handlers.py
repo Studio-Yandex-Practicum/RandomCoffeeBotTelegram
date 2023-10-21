@@ -1,6 +1,3 @@
-import asyncio
-
-from asgiref.sync import sync_to_async
 from loguru import logger
 from telegram import Update
 from telegram.ext import CallbackContext, ConversationHandler
@@ -29,7 +26,7 @@ from bot.keyboards.conversation_keyboards import (
     restart_keyboard_markup,
     role_choice_keyboard_markup,
 )
-from bot.models import CreatedPair, Profession, Recruiter, Student
+from bot.models import Profession, Recruiter, Student
 from bot.utils.pagination import parse_callback_data
 from bot.utils.pair import make_pair
 from core.config.logging import debug_logger
@@ -54,46 +51,56 @@ async def go(update: Update, context: CallbackContext):
             user_id=user.id,
             data=user,
         )
-        await search_pair(update, context)
-        return ConversationHandler.END
+        await query.message.reply_text(PAIR_SEARCH_MESSAGE)
+        return await search_pair(update, context)
 
 
 async def search_pair(update: Update, context: CallbackContext):
     """Поиск пары."""
-    ITERATION_TIME = 5
-    TIME_WAIT_BEFORE_REQUESTS = 2  # поставил пока 2 секундs
-    for iter in range(ITERATION_TIME):
-        models = [Recruiter, Student]
-        query = update.callback_query
-        telegram_id = query.from_user.id
-        role = context.user_data["role"]
-        model = models.pop(
-            models.index(CreatedPair._meta.get_field(role).target_field.model)
+    query = update.callback_query
+    role = context.user_data["role"]
+    if role == "student":
+        model = Student
+        opposite_model = Recruiter
+    else:
+        model = Recruiter
+        opposite_model = Student
+    user_has_no_pair = (
+        await opposite_model.objects.filter(has_pair=False)
+        .exclude(**{f"passedpair__{role}": query.from_user.id})
+        .order_by("search_start_time")
+        .afirst()
+    )
+    if user_has_no_pair:
+        return await found_pair(update, context, model, user_has_no_pair)
+    return ConversationHandler.END
+
+
+@debug_logger
+async def found_pair(
+    update: Update, context: CallbackContext, model, user_has_no_pair
+):
+    """Обработчик найденной пары found_pair."""
+    query = update.callback_query
+    telegram_id = query.from_user.id
+    if context.user_data["role"] == "student":
+        profession = "It-рекрутер"
+        student = await model.objects.aget(telegram_id=telegram_id)
+        recruiter = user_has_no_pair
+    else:
+        profession = user_has_no_pair.profession
+        student = user_has_no_pair
+        recruiter = await model.objects.aget(telegram_id=telegram_id)
+    await make_pair(student, recruiter)
+    await query.message.reply_text(
+        FOUND_PAIR.format(
+            user_has_no_pair.name,
+            profession,
+            user_has_no_pair.telegram_username,
+            COMMUNICATE_URL,
         )
-        opposite_model = models[0]
-        users_has_no_pair = await sync_to_async(list)(
-            opposite_model.objects.filter(has_pair=False).exclude(
-                **{f"passedpair__{role}": telegram_id}
-            )
-        )
-        if users_has_no_pair:
-            user_has_no_pair = users_has_no_pair[0]
-            await make_pair(
-                user_has_no_pair,
-                await model.objects.aget(telegram_id=telegram_id),
-            )
-            await query.message.reply_text(
-                FOUND_PAIR.format(
-                    user_has_no_pair.name,
-                    context.user_data["profession"],
-                    user_has_no_pair.telegram_username,
-                    COMMUNICATE_URL,
-                )
-            )
-            return ConversationHandler.END
-        if iter == 0:
-            await query.message.reply_text(PAIR_SEARCH_MESSAGE)
-        await asyncio.sleep(TIME_WAIT_BEFORE_REQUESTS)
+    )
+    return ConversationHandler.END
 
 
 @debug_logger
