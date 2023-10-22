@@ -15,7 +15,6 @@ from bot.constants.messages import (
 )
 from bot.constants.states import States
 from bot.handlers.command_handlers import start
-from bot.handlers.schedulers import send_is_pair_successful_message
 from bot.keyboards.command_keyboards import start_keyboard_markup
 from bot.keyboards.conversation_keyboards import (
     build_profession_keyboard,
@@ -25,6 +24,7 @@ from bot.keyboards.conversation_keyboards import (
     role_choice_keyboard_markup,
 )
 from bot.models import Profession, Recruiter, Student
+from bot.utils.message_senders import send_is_pair_successful_message
 from bot.utils.pagination import parse_callback_data
 from core.config.logging import debug_logger
 
@@ -47,7 +47,7 @@ async def go(update: Update, context: CallbackContext):
             callback=send_is_pair_successful_message,
             when=TIME_IN_SECONDS,
             user_id=user.id,
-            data=user,
+            name=user.username,
         )
         return ConversationHandler.END  # Тут будет States.PAIR_SEARCH
 
@@ -213,13 +213,13 @@ async def to_create_user_in_db(update: Update, context: CallbackContext):
         "surname": query.from_user.last_name,
         "telegram_username": context.user_data["contact"],
     }
-    profession = await Profession.objects.aget(
-        name=context.user_data["profession"]
-    )
     try:
         if context.user_data["role"] == "recruiter":
             await Recruiter.objects.acreate(**user_data)
         else:
+            profession = await Profession.objects.aget(
+                name=context.user_data["profession"]
+            )
             await Student.objects.acreate(profession=profession, **user_data)
     except Exception as error:
         logger.error(f"Не удалось сохранить данные в таблицу: {error}")

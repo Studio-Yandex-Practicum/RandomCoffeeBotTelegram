@@ -37,3 +37,7 @@ PROFILE_MESSAGE = (
 )
 START_PAIR_SEARCH_MESSAGE = "Начать поиск пары?"
 IS_PAIR_SUCCESSFUL_MESSAGE = "Удалось ли созвониться? Спасибо :)"
+USER_DELETE_MESSAGE = (
+    "Вас исключили из базы данных как {}, "
+    "теперь Вы можете зарегистрироваться заново."
+)
