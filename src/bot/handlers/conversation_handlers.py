@@ -257,8 +257,6 @@ async def send_both_users_message(
     update: Update, context: CallbackContext, student, recruiter
 ):
     """Возвращает обоим пользователям информацию об их найденой паре."""
-    # no blank line allowed here
-
     student_profession = await Profession.objects.aget(
         pk=student.profession_id
     )
