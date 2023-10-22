@@ -285,13 +285,13 @@ async def to_create_user_in_db(update: Update, context: CallbackContext):
         "surname": query.from_user.last_name,
         "telegram_username": context.user_data["contact"],
     }
-    profession = await Profession.objects.aget(
-        name=context.user_data["profession"]
-    )
     try:
         if context.user_data["role"] == "recruiter":
             await Recruiter.objects.acreate(**user_data)
         else:
+            profession = await Profession.objects.aget(
+                name=context.user_data["profession"]
+            )
             await Student.objects.acreate(profession=profession, **user_data)
     except Exception as error:
         logger.error(f"Не удалось сохранить данные в таблицу: {error}")
