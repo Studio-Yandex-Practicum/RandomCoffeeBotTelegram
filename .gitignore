@@ -161,3 +161,4 @@ cython_debug/
 static/
 persistence_data/
 /src/bot/server.py
+logs/
