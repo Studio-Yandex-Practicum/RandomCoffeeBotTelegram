@@ -56,6 +56,9 @@ async def search_pair(update: Update, context: CallbackContext):
     model, opposite_model = (
         (Student, Recruiter) if role == "student" else (Recruiter, Student)
     )
+    current_user = await model.objects.aget(telegram_id=telegram_id)
+    current_user.search_start_time = timezone.now()
+    await current_user.asave(update_fields=("search_start_time",))
     found_user = (
         await opposite_model.objects.filter(has_pair=False)
         .exclude(**{f"passedpair__{role}": telegram_id})
@@ -63,9 +66,6 @@ async def search_pair(update: Update, context: CallbackContext):
         .afirst()
     )
     if found_user:
-        current_user = await model.objects.aget(telegram_id=telegram_id)
-        current_user.search_start_time = timezone.now()
-        await current_user.asave(update_fields=("search_start_time",))
         return await found_pair(update, context, current_user, found_user)
     await query.message.reply_text(PAIR_SEARCH_MESSAGE)
     return ConversationHandler.END
@@ -76,28 +76,24 @@ async def found_pair(
     update: Update, context: CallbackContext, current_user, found_user
 ):
     """Обработчик найденной пары found_pair."""
-    user = update.callback_query.from_user
     student, recruiter = (
         (current_user, found_user)
         if context.user_data["role"] == "student"
         else (found_user, current_user)
     )
-
-    TIME_IN_SECONDS = 5  # для теста сделал задержку в 50 секунд
-    context.job_queue.run_once(
-        callback=send_is_pair_successful_message,
-        when=TIME_IN_SECONDS,
-        user_id=student.telegram_id,
-        data=user,
-    )
-    context.job_queue.run_once(
-        callback=send_is_pair_successful_message,
-        when=TIME_IN_SECONDS,
-        user_id=recruiter.telegram_id,
-        data=user,
-    )
-    await make_pair(student, recruiter)
-    await send_both_users_message(update, context, student, recruiter)
+    if await make_pair(student, recruiter):
+        TIME_IN_SECONDS = 5  # для теста сделал задержку в 50 секунд
+        context.job_queue.run_once(
+            callback=send_is_pair_successful_message,
+            when=TIME_IN_SECONDS,
+            user_id=student.telegram_id,
+        )
+        context.job_queue.run_once(
+            callback=send_is_pair_successful_message,
+            when=TIME_IN_SECONDS,
+            user_id=recruiter.telegram_id,
+        )
+        await send_both_users_message(update, context, student, recruiter)
     return ConversationHandler.END
 
 
@@ -270,7 +266,7 @@ async def send_both_users_message(
         ),
     )
     await context.bot.send_message(
-        chat_id=student.telegram_id,
+        chat_id=recruiter.telegram_id,
         text=FOUND_PAIR.format(
             student.name,
             student_profession,
