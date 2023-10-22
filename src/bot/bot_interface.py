@@ -149,7 +149,7 @@ class Bot:
         await self._app.bot.set_my_commands(commands)
 
     async def get_job_queue(self) -> None:
-        """Функция отправки сообщения пользователю."""
+        """Функция получения job_queue."""
         return self._app.job_queue
 
 
