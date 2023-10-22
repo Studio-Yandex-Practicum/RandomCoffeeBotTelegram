@@ -45,6 +45,7 @@ from bot.handlers.command_handlers import (
 from bot.handlers.conversation_handlers import (
     change_name,
     continue_name,
+    found_pair,
     go,
     next_time,
     profession_choice,
@@ -193,6 +194,9 @@ async def build_main_handler():
             ],
             States.PROFILE: [
                 CallbackQueryHandler(profile, pattern=PROFILE_PATTERN)
+            ],
+            States.FOUND_PAIR: [
+                CallbackQueryHandler(found_pair, pattern=PROFILE_PATTERN)
             ],
             States.SET_NAME: [
                 CallbackQueryHandler(

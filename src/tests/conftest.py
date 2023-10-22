@@ -4,7 +4,7 @@ import pytest
 from django.conf import settings
 from telegram import InlineKeyboardButton
 
-from bot.models import Student, Profession
+from bot.models import Student, Profession, Recruiter
 from bot.utils.pagination import InlineKeyboardPaginator
 
 
@@ -64,6 +64,16 @@ async def student(db, profession):
         name="student-1",
         telegram_username="student-username-1",
         profession=await profession,
+    )
+
+
+@pytest.fixture
+async def recruiter(db):
+    """Student object."""
+    return await Recruiter.objects.acreate(
+        telegram_id=1,
+        name="recruiter-1",
+        telegram_username="recruiter-username-1",
     )
 
 
