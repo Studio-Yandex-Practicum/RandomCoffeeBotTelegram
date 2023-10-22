@@ -21,6 +21,7 @@ asyncmock = "^0.4.2"
 psycopg2-binary = "^2.9"
 pytils = "^0.4.1"
 redis = "^5.0.1"
+django-admin-interface = "^0.26.1"
 
 
 [tool.poetry.group.dev.dependencies]

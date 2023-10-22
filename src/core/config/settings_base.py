@@ -29,11 +29,14 @@ DEFAULT_APPS = [
     "django.contrib.staticfiles",
 ]
 
-LOCAL_APPS = ["bot", "admin_user"]
+LOCAL_APPS = ["bot", "admin_user", ]
 
-EXTERNAL_APPS = []
+EXTERNAL_APPS = ["admin_interface", "colorfield"]
 
-INSTALLED_APPS = DEFAULT_APPS + LOCAL_APPS + EXTERNAL_APPS
+INSTALLED_APPS = EXTERNAL_APPS + DEFAULT_APPS + LOCAL_APPS
+
+X_FRAME_OPTIONS = "SAMEORIGIN"
+SILENCED_SYSTEM_CHECKS = ["security.W019"]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -50,7 +53,7 @@ ROOT_URLCONF = "core.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [os.path.join(BASE_DIR, 'templates')],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
