@@ -1,3 +1,4 @@
+from django.utils import timezone
 from loguru import logger
 from telegram import Update
 from telegram.ext import CallbackContext, ConversationHandler
@@ -44,13 +45,6 @@ async def go(update: Update, context: CallbackContext):
         await query.edit_message_reply_markup(role_choice_keyboard_markup)
         return States.ROLE_CHOICE
     else:
-        TIME_IN_SECONDS = 50  # для теста сделал задержку в 50 секунд
-        context.job_queue.run_once(
-            callback=send_is_pair_successful_message,
-            when=TIME_IN_SECONDS,
-            user_id=user.id,
-            data=user,
-        )
         return await search_pair(update, context)
 
 
@@ -58,53 +52,52 @@ async def search_pair(update: Update, context: CallbackContext):
     """Поиск пары."""
     query = update.callback_query
     role = context.user_data["role"]
+    telegram_id = query.from_user.id
     model, opposite_model = (
         (Student, Recruiter) if role == "student" else (Recruiter, Student)
     )
-    user_has_no_pair = (
+    found_user = (
         await opposite_model.objects.filter(has_pair=False)
-        .exclude(**{f"passedpair__{role}": query.from_user.id})
+        .exclude(**{f"passedpair__{role}": telegram_id})
         .order_by("search_start_time")
         .afirst()
     )
-    if user_has_no_pair:
-        return await found_pair(update, context, model, user_has_no_pair)
+    if found_user:
+        current_user = await model.objects.aget(telegram_id=telegram_id)
+        current_user.search_start_time = timezone.now()
+        await current_user.asave(update_fields=("search_start_time",))
+        return await found_pair(update, context, current_user, found_user)
     await query.message.reply_text(PAIR_SEARCH_MESSAGE)
     return ConversationHandler.END
 
 
 @debug_logger
 async def found_pair(
-    update: Update, context: CallbackContext, model, user_has_no_pair
+    update: Update, context: CallbackContext, current_user, found_user
 ):
     """Обработчик найденной пары found_pair."""
-    query = update.callback_query
-    telegram_id = query.from_user.id
-    user = await model.objects.aget(telegram_id=telegram_id)
+    user = update.callback_query.from_user
     student, recruiter = (
-        (user, user_has_no_pair)
+        (current_user, found_user)
         if context.user_data["role"] == "student"
-        else (user_has_no_pair, user)
+        else (found_user, current_user)
+    )
+
+    TIME_IN_SECONDS = 5  # для теста сделал задержку в 50 секунд
+    context.job_queue.run_once(
+        callback=send_is_pair_successful_message,
+        when=TIME_IN_SECONDS,
+        user_id=student.telegram_id,
+        data=user,
+    )
+    context.job_queue.run_once(
+        callback=send_is_pair_successful_message,
+        when=TIME_IN_SECONDS,
+        user_id=recruiter.telegram_id,
+        data=user,
     )
     await make_pair(student, recruiter)
-    for user in (student, recruiter):
-        profession, opposite = (
-            ("It-рекрутер", student)
-            if user == student
-            else (
-                await Profession.objects.aget(pk=student.profession_id),
-                recruiter,
-            )
-        )
-        await context.bot.send_message(
-            chat_id=opposite.telegram_id,
-            text=FOUND_PAIR.format(
-                user.name,
-                profession,
-                user.telegram_username,
-                COMMUNICATE_URL,
-            ),
-        )
+    await send_both_users_message(update, context, student, recruiter)
     return ConversationHandler.END
 
 
@@ -258,6 +251,35 @@ async def send_profile_form(update: Update, context: CallbackContext):
             ),
             reply_markup=profile_keyboard_markup,
         )
+
+
+async def send_both_users_message(
+    update: Update, context: CallbackContext, student, recruiter
+):
+    """Возвращает обоим пользователям информацию об их найденой паре."""
+    # no blank line allowed here
+
+    student_profession = await Profession.objects.aget(
+        pk=student.profession_id
+    )
+    await context.bot.send_message(
+        chat_id=student.telegram_id,
+        text=FOUND_PAIR.format(
+            recruiter.name,
+            "It-рекрутер",
+            recruiter.telegram_username,
+            COMMUNICATE_URL,
+        ),
+    )
+    await context.bot.send_message(
+        chat_id=student.telegram_id,
+        text=FOUND_PAIR.format(
+            student.name,
+            student_profession,
+            student.telegram_username,
+            COMMUNICATE_URL,
+        ),
+    )
 
 
 async def to_create_user_in_db(update: Update, context: CallbackContext):
