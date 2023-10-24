@@ -33,7 +33,6 @@ async def delete_pair(
     student: Student, recruiter: Recruiter, interview_successful: bool
 ) -> bool:
     """Функция для удаления пары студент-рекрутер."""
-    status = False
     try:
         student.has_pair = False
         recruiter.has_pair = False
@@ -47,8 +46,8 @@ async def delete_pair(
         )
         await student.asave(update_fields=["has_pair"])
         await recruiter.asave(update_fields=["has_pair"])
-        logger.info(f"The passed  pair was made with {passed_pair}")
-        status = True
+        logger.debug(f"The passed  pair was made with {passed_pair}")
+        return True
     except IntegrityError as error:
         logger.error(f"Error in creating objects in database: {error}")
     except Exception as error:
@@ -58,4 +57,4 @@ async def delete_pair(
                 f"and {recruiter.name}: {error}"
             )
         )
-    return status
+    return False
