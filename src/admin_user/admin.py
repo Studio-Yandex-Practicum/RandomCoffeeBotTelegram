@@ -16,5 +16,3 @@ admin.site.index_title = ADMIN_TITLE
 @admin.register(AdminUser)
 class AdminUserAdmin(UserAdmin):
     """Управление админкой."""
-
-    pass
