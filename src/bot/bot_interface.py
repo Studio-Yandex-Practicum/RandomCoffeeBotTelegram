@@ -153,10 +153,6 @@ class Bot:
         """Функция получения job_queue."""
         return self._app.job_queue
 
-    async def get_bot(self):
-        """Функция получения бота."""
-        return self._app.bot
-
 
 async def build_main_handler():
     """Функция создания главного обработчика."""
