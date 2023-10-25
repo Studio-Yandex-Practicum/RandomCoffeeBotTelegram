@@ -1,7 +1,7 @@
 from django.db import IntegrityError
 from loguru import logger
 
-from bot.models import CreatedPair, Recruiter, Student
+from bot.models import CreatedPair, PassedPair, Recruiter, Student
 
 
 async def make_pair(student: Student, recruiter: Recruiter) -> bool:
@@ -27,3 +27,34 @@ async def make_pair(student: Student, recruiter: Recruiter) -> bool:
             )
         )
     return status
+
+
+async def delete_pair(
+    student: Student, recruiter: Recruiter, interview_successful: bool
+) -> bool:
+    """Функция для удаления пары студент-рекрутер."""
+    try:
+        student.has_pair = False
+        recruiter.has_pair = False
+        await CreatedPair.objects.filter(
+            student=student, recruiter=recruiter
+        ).adelete()
+        passed_pair = await PassedPair.objects.acreate(
+            student=student,
+            recruiter=recruiter,
+            interview_successful=interview_successful,
+        )
+        await student.asave(update_fields=["has_pair"])
+        await recruiter.asave(update_fields=["has_pair"])
+        logger.debug(f"The passed  pair was made with {passed_pair}")
+        return True
+    except IntegrityError as error:
+        logger.error(f"Error in creating objects in database: {error}")
+    except Exception as error:
+        logger.error(
+            (
+                f"Error in delete pair with {student.name} "
+                f"and {recruiter.name}: {error}"
+            )
+        )
+    return False
