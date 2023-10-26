@@ -1,7 +1,7 @@
 import pytest
 
-from bot.handlers.conversation_handlers import set_new_name
 from bot.constants.states import States
+from bot.handlers.conversation_handlers import set_new_name
 
 
 @pytest.mark.asyncio

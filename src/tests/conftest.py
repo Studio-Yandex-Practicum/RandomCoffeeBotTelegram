@@ -4,7 +4,7 @@ import pytest
 from django.conf import settings
 from telegram import InlineKeyboardButton
 
-from bot.models import Student, Profession, Recruiter
+from bot.models import Profession, Recruiter, Student
 from bot.utils.pagination import InlineKeyboardPaginator
 
 

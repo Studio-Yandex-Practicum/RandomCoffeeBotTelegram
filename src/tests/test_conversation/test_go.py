@@ -5,8 +5,8 @@ from telegram.ext import ConversationHandler
 
 from bot.constants.messages import (
     CHOOSE_ROLE_MESSAGE,
-    PAIR_SEARCH_MESSAGE,
     FOUND_PAIR,
+    PAIR_SEARCH_MESSAGE,
 )
 from bot.constants.states import States
 from bot.handlers.conversation_handlers import go

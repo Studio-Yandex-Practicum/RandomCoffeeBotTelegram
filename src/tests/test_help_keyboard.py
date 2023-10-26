@@ -2,7 +2,6 @@ import pytest
 
 from bot.keyboards.command_keyboards import help_keyboard_markup
 
-
 LENGHT_START_KEYBOARD = 2
 INDEX_TEXT = 0
 INDEX_CALLBACK = 1

@@ -132,17 +132,17 @@ PROFESSION_PER_PAGE = 5 # Количество профессий на стра�
 PAGE_SEP_SYMBOL = "#" # Символ, отделяющий номер страницы
 DEFAULT_PAGE = 1 # Номер страницы по умолчанию
 
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
-EMAIL_HOST = env.str("EMAIL_HOST", default="smtp.yandex.ru")
+EMAIL_BACKEND = env.str(
+    "EMAIL_BACKEND", default="django.core.mail.backends.console.EmailBackend"
+)
+EMAIL_TEMPLATE_NAME = "emailing/email.html"
+EMAIL_HOST = env.str("EMAIL_HOST")
 try:
-    EMAIL_PORT = env.int("EMAIL_PORT", default=465)
+    EMAIL_PORT = env.int("EMAIL_PORT")
 except ValueError:
     EMAIL_PORT = 465
-EMAIL_HOST_USER = env.str("EMAIL_ACCOUNT", default="example@yandex.ru")
-EMAIL_HOST_PASSWORD = env.str("EMAIL_PASSWORD", default="password")
+EMAIL_HOST_USER = env.str("EMAIL_ACCOUNT")
+EMAIL_HOST_PASSWORD = env.str("EMAIL_PASSWORD")
 EMAIL_TIMEOUT = 5
-EMAIL_USE_TLS = False
 EMAIL_USE_SSL = True
-DEFAULT_RECEIVER = env.str("DEFAULT_EMAIL_ADDRESS", default="NOT_SET")
-SERVER_EMAIL = EMAIL_HOST_USER
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+DEFAULT_RECEIVER = env.str("DEFAULT_EMAIL_ADDRESS")

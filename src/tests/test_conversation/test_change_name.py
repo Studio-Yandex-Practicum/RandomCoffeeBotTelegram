@@ -2,9 +2,9 @@ from unittest.mock import AsyncMock
 
 import pytest
 
-from bot.handlers.conversation_handlers import change_name
-from bot.constants.states import States
 from bot.constants.messages import CHANGE_NAME_MESSAGE
+from bot.constants.states import States
+from bot.handlers.conversation_handlers import change_name
 
 
 @pytest.mark.asyncio

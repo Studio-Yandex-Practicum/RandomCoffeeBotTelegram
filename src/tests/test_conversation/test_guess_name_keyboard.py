@@ -2,7 +2,6 @@ import pytest
 
 from bot.keyboards.conversation_keyboards import guess_name_keyboard_markup
 
-
 LENGTH_START_KEYBOARD = 2
 INDEX_TEXT = 0
 INDEX_CALLBACK = 1

@@ -2,7 +2,6 @@ import pytest
 
 from bot.keyboards.command_keyboards import support_keyboard_markup
 
-
 FIRTS_KEYBOARD = 0
 
 

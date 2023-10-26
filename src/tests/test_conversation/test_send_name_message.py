@@ -2,8 +2,8 @@ from unittest.mock import AsyncMock
 
 import pytest
 
-from bot.handlers.conversation_handlers import send_name_message
 from bot.constants.messages import GUESS_NAME_MESSAGE
+from bot.handlers.conversation_handlers import send_name_message
 from bot.keyboards.conversation_keyboards import guess_name_keyboard_markup
 
 
