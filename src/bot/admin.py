@@ -1,3 +1,4 @@
+from admin_user.actions import delete_users_and_send_message
 from django.contrib import admin
 
 from bot.models import (
@@ -67,6 +68,7 @@ class StudentAdmin(admin.ModelAdmin):
     )
     list_filter = ("registration_date", "last_login_date", "has_pair")
     search_fields = ("telegram_id", "telegram_username")
+    actions = [delete_users_and_send_message]
 
 
 @admin.register(Recruiter)
@@ -84,6 +86,7 @@ class RecruiterAdmin(admin.ModelAdmin):
     )
     list_filter = ("registration_date", "last_login_date", "has_pair")
     search_fields = ("telegram_id", "telegram_username")
+    actions = [delete_users_and_send_message]
 
 
 @admin.register(FormUrl)
