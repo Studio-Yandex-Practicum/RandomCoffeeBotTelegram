@@ -32,20 +32,22 @@ def debug_logger(func):
     """Декоратор для логирования обработчиков и шедулеров."""
     schedulers_data = [
         "send_is_pair_successful_message",
+        "send_deleting_from_db_message",
     ]
 
     async def wrapper(*args, **kwargs):
         if func.__name__ in schedulers_data:
             context = args[0] if args else kwargs.get("context")
             job = context.job if context else None
-            user = job.data if job else None
+            user_id = job.user_id if job else "Unknown"
+            username = job.name if job.name else "Unknown"
             func_type = "Scheduler"
         else:
             update = args[0] if args else kwargs.get("update")
             user = update.effective_user if update else None
             func_type = "Handler"
-        user_id = user.id if user else "Unknown"
-        username = user.username if user else "Unknown"
+            user_id = user.id if user else "Unknown"
+            username = user.username if user else "Unknown"
         try:
             result = await func(*args, **kwargs)
             logger.debug(

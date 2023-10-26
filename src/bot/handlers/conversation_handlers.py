@@ -20,7 +20,6 @@ from bot.constants.messages import (
 )
 from bot.constants.states import States
 from bot.handlers.command_handlers import start
-from bot.handlers.schedulers import send_is_pair_successful_message
 from bot.keyboards.command_keyboards import start_keyboard_markup
 from bot.keyboards.conversation_keyboards import (
     build_profession_keyboard,
@@ -31,6 +30,7 @@ from bot.keyboards.conversation_keyboards import (
     search_pair_again_keyboard_markup,
 )
 from bot.models import CreatedPair, Profession, Recruiter, Student
+from bot.utils.message_senders import send_is_pair_successful_message
 from bot.utils.pagination import parse_callback_data
 from bot.utils.pair import delete_pair, make_pair
 from core.config.logging import debug_logger

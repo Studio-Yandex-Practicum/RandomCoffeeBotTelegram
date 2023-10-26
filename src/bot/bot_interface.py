@@ -151,6 +151,10 @@ class Bot:
 
         await self._app.bot.set_my_commands(commands)
 
+    async def get_job_queue(self):
+        """Функция получения job_queue."""
+        return self._app.job_queue
+
 
 async def build_main_handler():
     """Функция создания главного обработчика."""
