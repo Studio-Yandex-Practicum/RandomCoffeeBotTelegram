@@ -1,7 +1,7 @@
 from django.utils import timezone
 from loguru import logger
 from telegram import Update
-from telegram.ext import CallbackContext, ConversationHandler
+from telegram.ext import CallbackContext
 
 from bot.constants.links import COMMUNICATE_URL
 from bot.constants.messages import (
@@ -71,7 +71,7 @@ async def search_pair(update: Update, context: CallbackContext):
     if found_user:
         return await found_pair(update, context, current_user, found_user)
     await query.message.reply_text(PAIR_SEARCH_MESSAGE)
-    return ConversationHandler.END
+    return States.CALLING_IS_SUCCESSFUL
 
 
 @debug_logger
@@ -97,7 +97,6 @@ async def found_pair(
             user_id=recruiter.telegram_id,
         )
         await send_both_users_message(update, context, student, recruiter)
-    # return ConversationHandler.END
     return States.CALLING_IS_SUCCESSFUL
 
 
@@ -320,12 +319,13 @@ async def calling_is_successful(update: Update, context: CallbackContext):
         await CreatedPair.objects.filter(student=current_user.id)
         .select_related("student", "recruiter")
         .afirst()
-        or await CreatedPair.objects.filter(recruiter=current_user.telegram_id)
+        or await CreatedPair.objects.filter(recruiter=current_user.id)
         .select_related("student", "recruiter")
         .afirst()
     )
     await query.answer()
-    await delete_pair(pair.student, pair.recruiter, True)
+    if pair:
+        await delete_pair(pair.student, pair.recruiter, True)
     if context.user_data["role"] == "recruiter":
         await query.edit_message_text(
             POST_CALL_MESSAGE_FOR_RECRUITER.format(COMMUNICATE_URL)
