@@ -50,4 +50,4 @@ async def test_go_user_is_exist(update, context, student):
     update.callback_query.message.reply_text.assert_awaited_with(
         PAIR_SEARCH_MESSAGE
     )
-    assert ConversationHandler.END == result
+    assert States.CALLING_IS_SUCCESSFUL == result
