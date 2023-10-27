@@ -26,7 +26,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Recruiter',
             fields=[
-                ('telegram_id', models.IntegerField(primary_key=True, serialize=False, verbose_name='Telegram User ID')),
+                ('telegram_id', models.BigIntegerField(primary_key=True, serialize=False, verbose_name='Telegram User ID')),
                 ('name', models.CharField(max_length=255, verbose_name='Имя')),
                 ('surname', models.CharField(max_length=255, verbose_name='Фамилия')),
                 ('telegram_username', models.CharField(max_length=255, unique=True, verbose_name='Ник в телеграмме')),
@@ -42,7 +42,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Student',
             fields=[
-                ('telegram_id', models.IntegerField(primary_key=True, serialize=False, verbose_name='Telegram User ID')),
+                ('telegram_id', models.BigIntegerField(primary_key=True, serialize=False, verbose_name='Telegram User ID')),
                 ('name', models.CharField(max_length=255, verbose_name='Имя')),
                 ('surname', models.CharField(max_length=255, verbose_name='Фамилия')),
                 ('telegram_username', models.CharField(max_length=255, unique=True, verbose_name='Ник в телеграмме')),
