@@ -45,6 +45,7 @@ from bot.handlers.command_handlers import (
 from bot.handlers.conversation_handlers import (
     change_name,
     continue_name,
+    found_pair,
     go,
     next_time,
     profession_choice,
@@ -148,6 +149,10 @@ class Bot:
 
         await self._app.bot.set_my_commands(commands)
 
+    async def get_job_queue(self):
+        """Функция получения job_queue."""
+        return self._app.job_queue
+
 
 async def build_main_handler():
     """Функция создания главного обработчика."""
@@ -189,6 +194,9 @@ async def build_main_handler():
             ],
             States.PROFILE: [
                 CallbackQueryHandler(profile, pattern=PROFILE_PATTERN)
+            ],
+            States.FOUND_PAIR: [
+                CallbackQueryHandler(found_pair, pattern=PROFILE_PATTERN)
             ],
             States.SET_NAME: [
                 CallbackQueryHandler(

@@ -11,6 +11,7 @@ class States(str, enum.Enum):
     PROFILE = "profile"
     NEXT_TIME = "next_time"
     HELP = "help"
+    FOUND_PAIR = "found_pair"
     SET_NAME = "set_name"
     SET_NEW_NAME = "set_new_name"
     SET_PHONE_NUMBER = "set_phone_number"
