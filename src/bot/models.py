@@ -35,7 +35,7 @@ def create_key(sender, instance, *args, **kwargs) -> None:
 class PracticumUser(models.Model):
     """Базовая модель для пользователей."""
 
-    telegram_id = models.IntegerField(
+    telegram_id = models.BigIntegerField(
         primary_key=True, verbose_name="Telegram User ID"
     )
     name = models.CharField(max_length=255, verbose_name="Имя")
