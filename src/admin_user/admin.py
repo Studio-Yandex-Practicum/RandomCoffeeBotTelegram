@@ -76,5 +76,4 @@ class AdminUserAdmin(UserAdmin):
     def reset_password(self, request, queryset):
         """Send emails with password reset link to users."""
         for user in queryset:
-            print(user)
             send_password_reset_email(user)

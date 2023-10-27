@@ -30,7 +30,6 @@ def send_password_reset_email(
         ],
         template=template,
     )
-    print(reset_link)
     email.send(fail_silently=False)
 
 
