@@ -137,8 +137,8 @@ EMAIL_BACKEND = env.str(
     "EMAIL_BACKEND", default="django.core.mail.backends.console.EmailBackend"
 )
 EMAIL_TEMPLATE_NAME = "emailing/email.html"
-EMAIL_HOST = env.str("EMAIL_HOST")
-EMAIL_PORT = env.int("EMAIL_PORT")
-EMAIL_HOST_USER = env.str("EMAIL_ACCOUNT")
-EMAIL_HOST_PASSWORD = env.str("EMAIL_PASSWORD")
-DEFAULT_RECEIVER = env.str("DEFAULT_EMAIL_ADDRESS")
+EMAIL_HOST = env.str("EMAIL_HOST", default="smtp.yandex.ru")
+EMAIL_PORT = env.int("EMAIL_PORT", default=456)
+EMAIL_HOST_USER = env.str("EMAIL_ACCOUNT", default="example@gmail.com")
+EMAIL_HOST_PASSWORD = env.str("EMAIL_PASSWORD", default="password")
+DEFAULT_RECEIVER = env.str("DEFAULT_EMAIL_ADDRESS", default="NOT_SET")
