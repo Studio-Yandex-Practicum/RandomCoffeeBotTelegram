@@ -103,5 +103,6 @@ jobs:
             echo DJANGO_SUPERUSER_PASSWORD=${{ secrets.DJANGO_SUPERUSER_PASSWORD }} >> .env
 
             cd /infra/stage/
-            docker compose down
-            docker compose up --build -d
+            docker compose -f docker_compose_stage.yaml down
+            docker container prune
+            docker compose -f docker_compose_stage.yaml up --build -d
