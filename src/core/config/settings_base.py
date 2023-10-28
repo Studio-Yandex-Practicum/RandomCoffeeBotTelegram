@@ -5,6 +5,7 @@ import environ
 from dotenv import find_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
+ROOT_DIR = BASE_DIR.parent
 
 env = environ.Env()
 
@@ -29,11 +30,14 @@ DEFAULT_APPS = [
     "django.contrib.staticfiles",
 ]
 
-LOCAL_APPS = ["bot", "admin_user"]
+LOCAL_APPS = ["bot", "admin_user", ]
 
-EXTERNAL_APPS = []
+EXTERNAL_APPS = ["admin_interface", "colorfield"]
 
-INSTALLED_APPS = DEFAULT_APPS + LOCAL_APPS + EXTERNAL_APPS
+INSTALLED_APPS = EXTERNAL_APPS + DEFAULT_APPS + LOCAL_APPS
+
+X_FRAME_OPTIONS = "SAMEORIGIN"
+SILENCED_SYSTEM_CHECKS = ["security.W019"]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -50,7 +54,7 @@ ROOT_URLCONF = "core.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [os.path.join(BASE_DIR, 'templates')],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -105,7 +109,7 @@ REDIS = {
 }
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+STATIC_ROOT = os.path.join(ROOT_DIR, 'static/')
 
 TELEGRAM_TOKEN = env.str('TELEGRAM_TOKEN', default=DEFAULT)
 USE_REDIS_PERSISTENCE = env.bool('REDIS', default=False)
@@ -116,7 +120,7 @@ WEBHOOK_MODE = False
 WEBHOOK_URL = ""
 WEBHOOK_SECRET_KEY = ""
 
-PERSISTENCE_DIR = BASE_DIR / "persistence_data"
+PERSISTENCE_DIR = ROOT_DIR / "persistence_data"
 PERSISTENCE_PATH = PERSISTENCE_DIR / "persistence_file"
 
 Path.mkdir(PERSISTENCE_DIR, exist_ok=True)
