@@ -20,9 +20,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
 
   bot:
-    build:
-      context: ../../
-      dockerfile: dev.Dockerfile
+    image: "ghcr.io/studio-yandex-practicum/randomcoffeebottelegram:develop"
     container_name: random-coffee-bot
     restart: always
     volumes:

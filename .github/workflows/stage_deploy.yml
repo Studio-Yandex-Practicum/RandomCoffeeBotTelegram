@@ -1,0 +1,107 @@
+name: Bot stage deploy
+
+on:
+  workflow_run:
+    workflows:
+      - Build and push Docker image
+    types:
+      - completed
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: randomcoffeebottelegram
+  DEPLOY_PATH: /random-coffee
+
+defaults:
+  run:
+    working-directory: .
+
+jobs:
+  tests:
+    name: Run tests
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    steps:
+    -
+      name: Check out the repo
+      uses: actions/checkout@v2
+    -
+      name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.11
+    -
+      name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements/develop.txt
+    -
+      name: Test with pytest
+      run: pytest
+
+  deploy:
+    name: Deploy changes on server
+    runs-on: ubuntu-latest
+    environment:
+      name: stage_deploy
+    needs: tests
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          ref: develop
+
+      - name: Set up SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/known_hosts
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+
+      - name: Create folder for deploy
+        run: ssh ${{ secrets.USERNAME }}@${{ secrets.HOST }} mkdir -p ${{ env.DEPLOY_PATH }}/infra/
+
+      - name: Copy dev folder to VPS
+        run: scp -r $GITHUB_WORKSPACE/infra/stage/ ${{ secrets.USER }}@${{ secrets.HOST }}:${{ env.DEPLOY_PATH }}/infra/
+
+      - name: Execute commands on VPS
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          passphrase: ${{ secrets.PASSPHRASE }}
+          script: |
+            cd ${{ env.DEPLOY_PATH }}
+
+            echo TELEGRAM_TOKEN=${{ secrets.TELEGRAM_TOKEN }} > .env
+
+            echo WEBHOOK_ENABLED=${{ secrets.WEBHOOK_ENABLED }} >> .env
+            echo WEBHOOK_URL=${{ secrets.WEBHOOK_URL }} >> .env
+            echo WEBHOOK_SECRET_KEY=${{ secrets.WEBHOOK_SECRET_KEY }} >> .env
+
+            echo REDIS=${{ secrets.REDIS }} >> .env
+            echo REDIS_HOST=${{ secrets.REDIS_HOST }} >> .env
+            echo REDIS_PORT=${{ secrets.REDIS_PORT }} >> .env
+
+            echo SECRET_KEY=${{ secrets.SECRET_KEY }} >> .env
+            echo DEBUG=${{ secrets.DEBUG }} >> .env
+            echo ALLOWED_HOSTS=${{ secrets.ALLOWED_HOSTS }} >> .env
+            echo CSRF_TRUSTED_ORIGINS=${{ secrets.CSRF_TRUSTED_ORIGINS }} >> .env
+
+            echo POSTGRES_ENGINE=${{ secrets.POSTGRES_ENGINE }} >> .env
+            echo POSTGRES_HOST=${{ secrets.POSTGRES_HOST }} >> .env
+            echo POSTGRES_PORT=${{ secrets.POSTGRES_PORT }} >> .env
+            echo POSTGRES_DB=${{ secrets.POSTGRES_DB }} >> .env
+            echo POSTGRES_NAME=${{ secrets.POSTGRES_NAME }} >> .env
+            echo POSTGRES_USER=${{ secrets.POSTGRES_USER }} >> .env
+            echo POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} >> .env
+
+            echo DJANGO_SUPERUSER_USERNAME=${{ secrets.DJANGO_SUPERUSER_USERNAME }} >> .env
+            echo DJANGO_SUPERUSER_EMAIL=${{ secrets.DJANGO_SUPERUSER_EMAIL }} >> .env
+            echo DJANGO_SUPERUSER_PASSWORD=${{ secrets.DJANGO_SUPERUSER_PASSWORD }} >> .env
+
+            cd /infra/stage/
+            docker compose down
+            docker compose up --build -d
