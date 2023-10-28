@@ -21,6 +21,7 @@ start-db: # Запуск контейнера Postgres
         docker compose -f infra/dev/docker-compose.local.yaml up -d; \
 		docker compose version; \
     fi
+	@sleep 3 ;
 
 stop-db: # Остановка контейнера Postgres
 	docker-compose -f infra/dev/docker-compose.local.yaml down; \
