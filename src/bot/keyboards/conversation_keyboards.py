@@ -8,6 +8,7 @@ from bot.constants.buttons import (
     CHANGE_NAME_BUTTON,
     CONTINUE_BUTTON,
     FILL_AGAIN_BUTTON,
+    GO_BUTTON,
     NO_BUTTON,
     RECRUITER_ROLE_BUTTON,
     START_BUTTON,
@@ -91,6 +92,14 @@ is_pair_successful_keyboard_markup = InlineKeyboardMarkup(
         [
             InlineKeyboardButton(text=YES_BUTTON, callback_data="yes"),
             InlineKeyboardButton(text=NO_BUTTON, callback_data="no"),
+        ],
+    ]
+)
+
+search_pair_again_keyboard_markup = InlineKeyboardMarkup(
+    [
+        [
+            InlineKeyboardButton(text=GO_BUTTON, callback_data="go"),
         ],
     ]
 )

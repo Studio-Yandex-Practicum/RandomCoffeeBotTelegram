@@ -1,7 +1,7 @@
 from django.utils import timezone
 from loguru import logger
 from telegram import Update
-from telegram.ext import CallbackContext, ConversationHandler
+from telegram.ext import CallbackContext
 
 from bot.constants.links import COMMUNICATE_URL
 from bot.constants.messages import (
@@ -12,6 +12,8 @@ from bot.constants.messages import (
     GUESS_NAME_MESSAGE,
     NEXT_TIME_MESSAGE,
     PAIR_SEARCH_MESSAGE,
+    POST_CALL_MESSAGE_FOR_RECRUITER,
+    POST_CALL_MESSAGE_FOR_STUDENT,
     PROFILE_MESSAGE,
     START_PAIR_SEARCH_MESSAGE,
     USERNAME_NOT_FOUND_MESSAGE,
@@ -25,11 +27,12 @@ from bot.keyboards.conversation_keyboards import (
     profile_keyboard_markup,
     restart_keyboard_markup,
     role_choice_keyboard_markup,
+    search_pair_again_keyboard_markup,
 )
-from bot.models import Profession, Recruiter, Student
+from bot.models import CreatedPair, Profession, Recruiter, Student
 from bot.utils.message_senders import send_is_pair_successful_message
 from bot.utils.pagination import parse_callback_data
-from bot.utils.pair import make_pair
+from bot.utils.pair import delete_pair, make_pair
 from core.config.logging import debug_logger
 
 
@@ -68,7 +71,7 @@ async def search_pair(update: Update, context: CallbackContext):
     if found_user:
         return await found_pair(update, context, current_user, found_user)
     await query.message.reply_text(PAIR_SEARCH_MESSAGE)
-    return ConversationHandler.END
+    return States.CALLING_IS_SUCCESSFUL
 
 
 @debug_logger
@@ -94,7 +97,7 @@ async def found_pair(
             user_id=recruiter.telegram_id,
         )
         await send_both_users_message(update, context, student, recruiter)
-    return ConversationHandler.END
+    return States.CALLING_IS_SUCCESSFUL
 
 
 @debug_logger
@@ -303,6 +306,40 @@ async def user_is_exist(user_id: int) -> bool:
         await Recruiter.objects.filter(telegram_id=user_id).aexists()
         or await Student.objects.filter(telegram_id=user_id).aexists()
     ):
-        # Может быть будет иметь смысл возвращать не bool, а объект из БД.
         return True
     return False
+
+
+@debug_logger
+async def calling_is_successful(update: Update, context: CallbackContext):
+    """Возвращает пользователям сообщение об обратной связи."""
+    query = update.callback_query
+    current_user = query.from_user
+    if context.user_data["role"] == "student":
+        pair = (
+            await CreatedPair.objects.filter(student=current_user.id)
+            .select_related("student", "recruiter")
+            .afirst()
+        )
+    else:
+        pair = (
+            await CreatedPair.objects.filter(recruiter=current_user.id)
+            .select_related("student", "recruiter")
+            .afirst()
+        )
+    await query.answer()
+    if pair:
+        await delete_pair(pair.student, pair.recruiter, True)
+    if context.user_data["role"] == "recruiter":
+        await query.edit_message_text(
+            POST_CALL_MESSAGE_FOR_RECRUITER.format(COMMUNICATE_URL)
+        )
+        await query.edit_message_reply_markup(
+            reply_markup=start_keyboard_markup
+        )
+    else:
+        await query.edit_message_text(POST_CALL_MESSAGE_FOR_STUDENT)
+        await query.edit_message_reply_markup(
+            reply_markup=search_pair_again_keyboard_markup
+        )
+    return States.START
