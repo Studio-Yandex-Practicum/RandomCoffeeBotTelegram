@@ -1,11 +1,10 @@
+from admin_user.forms import UserChangeForm, UserCreationForm
+from admin_user.utils.reset_password import send_password_reset_email
 from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import Group
 from django.utils.translation import gettext_lazy as _
-
-from admin_user.forms import UserChangeForm, UserCreationForm
-from admin_user.utils.reset_password import send_password_reset_email
 
 ADMIN_HEADER = "Администрирование RandomCoffeeBot"
 ADMIN_TITLE = "Панель администратора бота"
@@ -36,8 +35,6 @@ class AdminUserAdmin(UserAdmin):
             {
                 "fields": (
                     "is_active",
-                    "is_staff",
-                    "is_superuser",
                     "user_permissions",
                 ),
             },
