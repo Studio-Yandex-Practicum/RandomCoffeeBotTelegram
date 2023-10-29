@@ -315,14 +315,18 @@ async def calling_is_successful(update: Update, context: CallbackContext):
     """Возвращает пользователям сообщение об обратной связи."""
     query = update.callback_query
     current_user = query.from_user
-    pair = (
-        await CreatedPair.objects.filter(student=current_user.id)
-        .select_related("student", "recruiter")
-        .afirst()
-        or await CreatedPair.objects.filter(recruiter=current_user.id)
-        .select_related("student", "recruiter")
-        .afirst()
-    )
+    if context.user_data["role"] == "student":
+        pair = (
+            await CreatedPair.objects.filter(student=current_user.id)
+            .select_related("student", "recruiter")
+            .afirst()
+        )
+    else:
+        pair = (
+            await CreatedPair.objects.filter(recruiter=current_user.id)
+            .select_related("student", "recruiter")
+            .afirst()
+        )
     await query.answer()
     if pair:
         await delete_pair(pair.student, pair.recruiter, True)
