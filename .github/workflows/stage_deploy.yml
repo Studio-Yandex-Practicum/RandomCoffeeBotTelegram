@@ -106,3 +106,6 @@ jobs:
             docker compose -f docker_compose_stage.yaml down
             docker container prune
             docker compose -f docker_compose_stage.yaml up --build -d
+
+            docker exec bot python manage.py migrate
+            docker exec bot python manage.py collectstatic --noinput
