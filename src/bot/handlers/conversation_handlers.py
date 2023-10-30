@@ -317,7 +317,7 @@ async def calling_is_successful(update: Update, context: CallbackContext):
     """Возвращает пользователям сообщение об обратной связи."""
     query = update.callback_query
     current_user = query.from_user
-    feedback_url = get_form_url(FORM_KEYS["FEEDBACK"])
+    feedback_url = await get_form_url(FORM_KEYS["FEEDBACK"])
     if context.user_data["role"] == "student":
         pair = (
             await CreatedPair.objects.filter(student=current_user.id)
