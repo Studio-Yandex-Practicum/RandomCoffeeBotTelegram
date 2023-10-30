@@ -12,7 +12,7 @@ async def test_redirection_to_support_handler(
     update,
     context,
     mocked_reply_markup,
-    db
+    db,
 ):
     """
     Проверяем, что redirection_to_support handler

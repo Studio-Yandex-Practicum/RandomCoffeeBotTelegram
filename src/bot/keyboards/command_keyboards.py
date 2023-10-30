@@ -37,6 +37,7 @@ async def create_support_keyboard():
     )
     return support_keyboard_markup
 
+
 help_keyboard_markup = InlineKeyboardMarkup(
     [
         [
