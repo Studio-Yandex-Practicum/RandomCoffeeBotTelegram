@@ -8,9 +8,9 @@ from bot.constants.messages import (
 )
 from bot.constants.states import States
 from bot.keyboards.command_keyboards import (
-    create_support_keyboard,
     help_keyboard_markup,
     start_keyboard_markup,
+    support_keyboard_markup,
 )
 from core.config.logging import debug_logger
 
@@ -36,7 +36,6 @@ async def start(update: Update, context: CallbackContext):
 @debug_logger
 async def support_bot(update: Update, context: CallbackContext):
     """Функция-обработчик для команды /support."""
-    support_keyboard_markup = await create_support_keyboard()
     await update.message.reply_text(
         text=ASSISTANCE_MESSAGE, reply_markup=support_keyboard_markup
     )
@@ -57,7 +56,6 @@ async def redirection_to_support(
 ) -> None:
     """Перенаправление на команду /support."""
     query = update.callback_query
-    support_keyboard_markup = await create_support_keyboard()
     await query.edit_message_text(
         text=ASSISTANCE_MESSAGE, reply_markup=support_keyboard_markup
     )

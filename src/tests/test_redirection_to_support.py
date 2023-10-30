@@ -4,12 +4,14 @@ import pytest
 
 from bot.constants.messages import ASSISTANCE_MESSAGE
 from bot.handlers import command_handlers
-from bot.keyboards.command_keyboards import create_support_keyboard
+from bot.keyboards.command_keyboards import support_keyboard_markup
 
 
 @pytest.mark.asyncio
 async def test_redirection_to_support_handler(
-    update, context, mocked_reply_markup, db
+    update,
+    context,
+    mocked_reply_markup,
 ):
     """
     Проверяем, что redirection_to_support handler
@@ -22,5 +24,5 @@ async def test_redirection_to_support_handler(
     await command_handlers.redirection_to_support(update, context)
     update.callback_query.edit_message_text.assert_called_with(
         text=ASSISTANCE_MESSAGE,
-        reply_markup=await create_support_keyboard(),
+        reply_markup=support_keyboard_markup,
     )

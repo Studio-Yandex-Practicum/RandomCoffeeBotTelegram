@@ -4,11 +4,15 @@ import pytest
 
 from bot.constants.messages import ASSISTANCE_MESSAGE
 from bot.handlers import command_handlers
-from bot.keyboards.command_keyboards import create_support_keyboard
+from bot.keyboards.command_keyboards import support_keyboard_markup
 
 
 @pytest.mark.asyncio
-async def test_support_handler(update, context, mocked_reply_markup, db):
+async def test_support_handler(
+    update,
+    context,
+    mocked_reply_markup,
+):
     """
     Проверяем, что support handler
     возвращает нужное сообщение и нужную клавиатуру.
@@ -20,5 +24,5 @@ async def test_support_handler(update, context, mocked_reply_markup, db):
 
     update.message.reply_text.assert_called_with(
         text=ASSISTANCE_MESSAGE,
-        reply_markup=await create_support_keyboard(),
+        reply_markup=support_keyboard_markup,
     )

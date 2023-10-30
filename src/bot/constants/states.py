@@ -15,3 +15,4 @@ class States(str, enum.Enum):
     SET_NAME = "set_name"
     SET_NEW_NAME = "set_new_name"
     SET_PHONE_NUMBER = "set_phone_number"
+    CALLING_IS_SUCCESSFUL = "calling_is_successful"
