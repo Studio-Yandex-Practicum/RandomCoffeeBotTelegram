@@ -6,7 +6,8 @@ from bot.constants.buttons import (
     PARTICIPATE_BUTTON,
     SUPPORT_BUTTON,
 )
-from bot.constants.links import SUPPORT_FORM
+from bot.constants.links import FORM_KEYS
+from bot.utils.form_url import get_form_url
 
 start_keyboard_markup = InlineKeyboardMarkup(
     [
@@ -19,17 +20,22 @@ start_keyboard_markup = InlineKeyboardMarkup(
     ]
 )
 
-support_keyboard_markup = InlineKeyboardMarkup(
-    [
+
+async def create_support_keyboard():
+    """Создание кнопки со ссылкой на форму поддержки."""
+    support_url = await get_form_url(FORM_KEYS["SUPPORT"])
+    support_keyboard_markup = InlineKeyboardMarkup(
         [
-            InlineKeyboardButton(
-                text=SUPPORT_BUTTON,
-                callback_data="Get support",
-                url=SUPPORT_FORM,
-            )
+            [
+                InlineKeyboardButton(
+                    text=SUPPORT_BUTTON,
+                    callback_data="Get support",
+                    url=support_url,
+                )
+            ]
         ]
-    ]
-)
+    )
+    return support_keyboard_markup
 
 help_keyboard_markup = InlineKeyboardMarkup(
     [
