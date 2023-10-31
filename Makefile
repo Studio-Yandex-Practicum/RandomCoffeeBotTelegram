@@ -15,26 +15,26 @@ help:  # Вызвать help
 
 
 start-db: # Запуск контейнера Postgres
-	docker-compose -f infra/dev/docker-compose.local.yaml up -d; \
+	docker-compose -f infra/dev/docker-compose_local.yaml up -d; \
 	if [ $$? -ne 0 ]; \
     then \
-        docker compose -f infra/dev/docker-compose.local.yaml up -d; \
+        docker compose -f infra/dev/docker-compose_local.yaml up -d; \
 		docker compose version; \
     fi
 	@sleep 3 ;
 
 stop-db: # Остановка контейнера Postgres
-	docker-compose -f infra/dev/docker-compose.local.yaml down; \
+	docker-compose -f infra/dev/docker-compose_local.yaml down; \
 	if [ $$? -ne 0 ]; \
     then \
-		docker compose -f infra/dev/docker-compose.local.yaml down; \
+		docker compose -f infra/dev/docker-compose_local.yaml down; \
 	fi
 
 clear-db: # Очистка БД Postgres
-	docker-compose -f infra/dev/docker-compose.local.yaml down --volumes; \
+	docker-compose -f infra/dev/docker-compose_local.yaml down --volumes; \
 	if [ $$? -ne 0 ]; \
     then \
-		docker compose -f infra/dev/docker-compose.local.yaml down --volumes; \
+		docker compose -f infra/dev/docker-compose_local.yaml down --volumes; \
 	fi
 
 migrate: # Выполнение миграций Django

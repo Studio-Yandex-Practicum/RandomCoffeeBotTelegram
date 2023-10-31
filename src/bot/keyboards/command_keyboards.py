@@ -21,7 +21,7 @@ start_keyboard_markup = InlineKeyboardMarkup(
 )
 
 
-async def create_support_keyboard():
+async def create_support_keyboard() -> InlineKeyboardMarkup:
     """Создание кнопки со ссылкой на форму поддержки."""
     support_url = await get_form_url(FORM_KEYS["SUPPORT"])
     support_keyboard_markup = InlineKeyboardMarkup(
