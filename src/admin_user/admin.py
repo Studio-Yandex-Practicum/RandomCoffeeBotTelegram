@@ -34,9 +34,7 @@ class AdminUserAdmin(UserAdmin):
         (
             _("Permissions"),
             {
-                "fields": (
-                    "is_active",
-                ),
+                "fields": ("is_active",),
             },
         ),
         (_("Important dates"), {"fields": ("last_login", "date_joined")}),
