@@ -37,6 +37,10 @@ from bot.utils.pagination import parse_callback_data
 from bot.utils.pair import delete_pair, make_pair
 from core.config.logging import debug_logger
 
+TIME_IN_SECONDS = (
+    5  # Время, через которое происходит оповещение о состоявщемся интервью
+)
+
 
 @debug_logger
 async def go(update: Update, context: CallbackContext):
@@ -87,7 +91,6 @@ async def found_pair(
         else (found_user, current_user)
     )
     if await make_pair(student, recruiter):
-        TIME_IN_SECONDS = 5  # для теста сделал задержку в 50 секунд
         context.job_queue.run_once(
             callback=send_is_pair_successful_message,
             when=TIME_IN_SECONDS,
