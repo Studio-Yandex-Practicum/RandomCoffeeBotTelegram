@@ -36,7 +36,6 @@ class AdminUserAdmin(UserAdmin):
             {
                 "fields": (
                     "is_active",
-                    "user_permissions",
                 ),
             },
         ),
