@@ -60,7 +60,7 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
 
       - name: Create folder for deploy
-        run: ssh ${{ secrets.USERNAME }}@${{ secrets.HOST }} mkdir -p ${{ env.DEPLOY_PATH }}/infra/
+        run: ssh ${{ secrets.USERNAME }}@${{ secrets.HOST }} mkdir -p ${{ env.DEPLOY_PATH }}/infra
 
       - name: Copy dev folder to VPS
         run: scp -r $GITHUB_WORKSPACE/infra/stage/ ${{ secrets.USER }}@${{ secrets.HOST }}:${{ env.DEPLOY_PATH }}/infra/
