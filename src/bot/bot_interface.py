@@ -24,6 +24,7 @@ from bot.constants.commands import (
     SUPPORT_DESCRIPTION,
 )
 from bot.constants.patterns import (
+    CALLING_IS_SUCCESSFUL,
     CHANGE_NAME_PATTERN,
     CONTINUE_NAME_PATTERN,
     GO_PATTERN,
@@ -43,6 +44,7 @@ from bot.handlers.command_handlers import (
     support_bot_handler,
 )
 from bot.handlers.conversation_handlers import (
+    calling_is_successful,
     change_name,
     continue_name,
     found_pair,
@@ -211,6 +213,11 @@ async def build_main_handler():
                 MessageHandler(
                     filters.TEXT & ~filters.COMMAND, set_phone_number
                 )
+            ],
+            States.CALLING_IS_SUCCESSFUL: [
+                CallbackQueryHandler(
+                    calling_is_successful, pattern=CALLING_IS_SUCCESSFUL
+                ),
             ],
         },
         fallbacks=[help_handler, start_handler],
