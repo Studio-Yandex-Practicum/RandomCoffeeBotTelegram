@@ -3,7 +3,7 @@ from loguru import logger
 from telegram import Update
 from telegram.ext import CallbackContext
 
-from bot.constants.links import COMMUNICATE_URL
+from bot.constants.links import FORM_KEYS
 from bot.constants.messages import (
     CHANGE_NAME_MESSAGE,
     CHOOSE_PROFESSION_MESSAGE,
@@ -31,6 +31,7 @@ from bot.keyboards.conversation_keyboards import (
     search_pair_again_keyboard_markup,
 )
 from bot.models import CreatedPair, Profession, Recruiter, Student
+from bot.utils.form_url import get_form_url
 from bot.utils.message_senders import send_is_pair_successful_message
 from bot.utils.pagination import parse_callback_data
 from bot.utils.pair import delete_pair, make_pair
@@ -257,6 +258,7 @@ async def send_both_users_message(
     update: Update, context: CallbackContext, student, recruiter
 ):
     """Возвращает обоим пользователям информацию об их найденой паре."""
+    guide_url = await get_form_url(FORM_KEYS["GUIDE"])
     student_profession = await Profession.objects.aget(
         pk=student.profession_id
     )
@@ -266,7 +268,7 @@ async def send_both_users_message(
             recruiter.name,
             "It-рекрутер",
             recruiter.telegram_username,
-            COMMUNICATE_URL,
+            guide_url,
         ),
     )
     await context.bot.send_message(
@@ -275,7 +277,7 @@ async def send_both_users_message(
             student.name,
             student_profession,
             student.telegram_username,
-            COMMUNICATE_URL,
+            guide_url,
         ),
     )
 
@@ -316,6 +318,7 @@ async def calling_is_successful(update: Update, context: CallbackContext):
     """Возвращает пользователям сообщение об обратной связи."""
     query = update.callback_query
     current_user = query.from_user
+    feedback_url = await get_form_url(FORM_KEYS["FEEDBACK"])
     if context.user_data["role"] == "student":
         pair = (
             await CreatedPair.objects.filter(student=current_user.id)
@@ -340,7 +343,7 @@ async def calling_is_successful(update: Update, context: CallbackContext):
         )
     elif context.user_data["role"] == "recruiter":
         await query.edit_message_text(
-            POST_CALL_MESSAGE_FOR_RECRUITER.format(COMMUNICATE_URL)
+            POST_CALL_MESSAGE_FOR_RECRUITER.format(feedback_url)
         )
         await query.edit_message_reply_markup(
             reply_markup=start_keyboard_markup
