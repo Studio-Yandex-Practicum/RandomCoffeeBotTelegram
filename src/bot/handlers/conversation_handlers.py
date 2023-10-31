@@ -12,6 +12,7 @@ from bot.constants.messages import (
     GUESS_NAME_MESSAGE,
     NEXT_TIME_MESSAGE,
     PAIR_SEARCH_MESSAGE,
+    POST_CALL_MESSAGE,
     POST_CALL_MESSAGE_FOR_RECRUITER,
     POST_CALL_MESSAGE_FOR_STUDENT,
     PROFILE_MESSAGE,
@@ -329,8 +330,15 @@ async def calling_is_successful(update: Update, context: CallbackContext):
         )
     await query.answer()
     if pair:
-        await delete_pair(pair.student, pair.recruiter, True)
-    if context.user_data["role"] == "recruiter":
+        await delete_pair(pair.student, pair.recruiter, query.data == "yes")
+    if query.data == "no":
+        await query.edit_message_text(
+            POST_CALL_MESSAGE.format(COMMUNICATE_URL)
+        )
+        await query.edit_message_reply_markup(
+            reply_markup=search_pair_again_keyboard_markup
+        )
+    elif context.user_data["role"] == "recruiter":
         await query.edit_message_text(
             POST_CALL_MESSAGE_FOR_RECRUITER.format(COMMUNICATE_URL)
         )
