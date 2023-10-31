@@ -102,10 +102,10 @@ jobs:
             echo DJANGO_SUPERUSER_EMAIL=${{ secrets.DJANGO_SUPERUSER_EMAIL }} >> .env
             echo DJANGO_SUPERUSER_PASSWORD=${{ secrets.DJANGO_SUPERUSER_PASSWORD }} >> .env
 
-            cd /infra/stage/
+            cd infra/stage/
             docker compose -f docker_compose_stage.yaml down
-            docker container prune
+            docker container prune --force
             docker compose -f docker_compose_stage.yaml up --build -d
 
-            docker exec bot python manage.py migrate
+            docker exec random-coffee-bot python manage.py migrate
             docker exec bot python manage.py collectstatic --noinput
