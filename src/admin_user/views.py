@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.contrib.auth.models import Permission
 from django.contrib.auth.views import PasswordResetConfirmView
 from django.urls import reverse_lazy
 
@@ -13,5 +14,8 @@ class PasswordSetView(PasswordResetConfirmView):
         response = super().form_valid(form)
         messages.success(self.request, "Пароль был успешно изменен.")
         self.user.is_staff = True
+        permissions = Permission.objects.all()
+        for permission in permissions:
+            self.user.user_permissions.add(permission)
         self.user.save()
         return response
