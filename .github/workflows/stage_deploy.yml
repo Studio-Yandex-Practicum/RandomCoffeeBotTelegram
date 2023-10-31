@@ -10,7 +10,7 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: randomcoffeebottelegram
-  DEPLOY_PATH: /random-coffee
+  DEPLOY_PATH: random-coffee
 
 defaults:
   run:
