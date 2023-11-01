@@ -10,7 +10,7 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: randomcoffeebottelegram
-  DEPLOY_PATH: /random-coffee
+  DEPLOY_PATH: random-coffee
 
 defaults:
   run:
@@ -60,10 +60,10 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
 
       - name: Create folder for deploy
-        run: ssh ${{ secrets.USERNAME }}@${{ secrets.HOST }} mkdir -p ${{ env.DEPLOY_PATH }}/infra/
+        run: ssh ${{ secrets.USERNAME }}@${{ secrets.HOST }} mkdir -p ${{ env.DEPLOY_PATH }}/infra
 
       - name: Copy dev folder to VPS
-        run: scp -r $GITHUB_WORKSPACE/infra/stage/ ${{ secrets.USER }}@${{ secrets.HOST }}:${{ env.DEPLOY_PATH }}/infra/
+        run: scp -r $GITHUB_WORKSPACE/infra/stage/ ${{ secrets.USERNAME }}@${{ secrets.HOST }}:${{ env.DEPLOY_PATH }}/infra/
 
       - name: Execute commands on VPS
         uses: appleboy/ssh-action@master
@@ -102,10 +102,10 @@ jobs:
             echo DJANGO_SUPERUSER_EMAIL=${{ secrets.DJANGO_SUPERUSER_EMAIL }} >> .env
             echo DJANGO_SUPERUSER_PASSWORD=${{ secrets.DJANGO_SUPERUSER_PASSWORD }} >> .env
 
-            cd /infra/stage/
+            cd infra/stage/
             docker compose -f docker_compose_stage.yaml down
-            docker container prune
+            docker container prune --force
             docker compose -f docker_compose_stage.yaml up --build -d
 
-            docker exec bot python manage.py migrate
-            docker exec bot python manage.py collectstatic --noinput
+            docker exec random-coffee-bot python manage.py migrate
+            docker exec random-coffee-bot python manage.py collectstatic --noinput
