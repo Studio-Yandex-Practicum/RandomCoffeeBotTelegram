@@ -1,3 +1,5 @@
+from typing import Union
+
 from django.utils import timezone
 from loguru import logger
 from telegram import Update
@@ -28,7 +30,6 @@ from bot.keyboards.conversation_keyboards import (
     profile_keyboard_markup,
     restart_keyboard_markup,
     role_choice_keyboard_markup,
-    search_pair_again_keyboard_markup,
 )
 from bot.models import CreatedPair, Profession, Recruiter, Student
 from bot.utils.form_url import get_form_url
@@ -316,24 +317,29 @@ async def user_is_exist(user_id: int) -> bool:
     return False
 
 
+async def get_active_pair(role: str, user_id: int) -> Union[CreatedPair, None]:
+    """Возвращает активную пару, с участием пользователя."""
+    if role == "student":
+        return (
+            await CreatedPair.objects.filter(student=user_id)
+            .select_related("student", "recruiter")
+            .afirst()
+        )
+    else:
+        return (
+            await CreatedPair.objects.filter(recruiter=user_id)
+            .select_related("student", "recruiter")
+            .afirst()
+        )
+
+
 @debug_logger
 async def calling_is_successful(update: Update, context: CallbackContext):
     """Возвращает пользователям сообщение об обратной связи."""
     query = update.callback_query
     current_user = query.from_user
     feedback_url = await get_form_url(FORM_KEYS["FEEDBACK"])
-    if context.user_data["role"] == "student":
-        pair = (
-            await CreatedPair.objects.filter(student=current_user.id)
-            .select_related("student", "recruiter")
-            .afirst()
-        )
-    else:
-        pair = (
-            await CreatedPair.objects.filter(recruiter=current_user.id)
-            .select_related("student", "recruiter")
-            .afirst()
-        )
+    pair = await get_active_pair(context.user_data["role"], current_user.id)
     await query.answer()
     if pair:
         await delete_pair(pair.student, pair.recruiter, query.data == "yes")
@@ -342,19 +348,11 @@ async def calling_is_successful(update: Update, context: CallbackContext):
         await query.edit_message_text(
             POST_CALL_MESSAGE.format(communicate_url)
         )
-        await query.edit_message_reply_markup(
-            reply_markup=search_pair_again_keyboard_markup
-        )
     elif context.user_data["role"] == "recruiter":
         await query.edit_message_text(
             POST_CALL_MESSAGE_FOR_RECRUITER.format(feedback_url)
         )
-        await query.edit_message_reply_markup(
-            reply_markup=start_keyboard_markup
-        )
     else:
         await query.edit_message_text(POST_CALL_MESSAGE_FOR_STUDENT)
-        await query.edit_message_reply_markup(
-            reply_markup=search_pair_again_keyboard_markup
-        )
+    await query.edit_message_reply_markup(reply_markup=start_keyboard_markup)
     return States.START
