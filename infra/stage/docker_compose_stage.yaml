@@ -24,7 +24,7 @@ services:
     container_name: random-coffee-bot
     restart: always
     volumes:
-      - static_value:/app/src/static/
+      - static_value:/app/static/
       - bot_logs:/app/logs/
     env_file:
       - ../../.env
