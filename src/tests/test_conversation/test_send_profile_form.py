@@ -2,7 +2,7 @@ from unittest.mock import AsyncMock
 
 import pytest
 
-from bot.constants.messages import PROFILE_MESSAGE
+from bot.constants.messages import PROFILE_MESSAGE, PROFILE_MESSAGE_NO_USERNAME
 from bot.handlers.conversation_handlers import send_profile_form
 from bot.keyboards.conversation_keyboards import profile_keyboard_markup
 
@@ -51,7 +51,7 @@ async def test_send_profile_form_without_callback_query(update, context):
     await send_profile_form(update, context)
 
     update.message.reply_text.assert_awaited_with(
-        PROFILE_MESSAGE.format(
+        PROFILE_MESSAGE_NO_USERNAME.format(
             context.user_data["name"],
             context.user_data["profession"],
             context.user_data["contact"],
