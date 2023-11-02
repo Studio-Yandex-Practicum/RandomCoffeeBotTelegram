@@ -96,10 +96,9 @@ class FormUrlAdmin(admin.ModelAdmin):
     list_display = (
         "title",
         "url",
-        "url_key",
     )
-    list_filter = ("title", "url_key")
-    search_fields = ("title", "url_key")
+    list_filter = ("title",)
+    search_fields = ("title",)
 
     def has_delete_permission(self, request, obj=None):
         """Запрещает удалять ссылки."""
