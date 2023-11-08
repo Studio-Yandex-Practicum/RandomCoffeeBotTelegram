@@ -49,7 +49,15 @@ Random Coffee bot for the Telegram
 | infrastructure | Docker-compose файлы для запуска проекта с помощью Docker |
 | src | к описанию этой папки стоит вернутся когда рефакторинг закончим |
 
-## 2.2 Используемых технологий в проекте <a id="technologies-project"></a>
+## 2.2 Используемые технологии в проекте <a id="technologies-project"></a>:
+1. Python 3.11;
+2. Poetry;
+3. Pre-commit;
+4. Python-telegram-bot 20.6;
+5. Django 4.2.6;
+6. Docker;
+6. PostgteSQL;
+7. Redis.
 
 # 3. Подготовка к запуску <a id="start"></a>
 
@@ -344,4 +352,4 @@ make create-pair amount=3
 
 #### Рекомендации к написанию кода [Codestyle](https://github.com/Studio-Yandex-Practicum/RandomCoffeeBotTelegram/tree/develop/docs/codestyle.md)
 
-#### Диаграмма логики работы бота [Diagram](https://github.com/Studio-Yandex-Practicum/RandomCoffeeBotTelegram/tree/develop/docs/Diagramm_of_bot_logic.drawio)
+#### Диаграмма логики работы бота [Diagram](https://github.com/Studio-Yandex-Practicum/RandomCoffeeBotTelegram/tree/develop/docs/Diagramm_of_bot_logic.lpg)
