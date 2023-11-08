@@ -51,14 +51,14 @@ Random Coffee bot for the Telegram
 
 ## 2.2 Используемые технологии в проекте<a id="technologies-project"></a>:
 <details>
- - Python 3.11;
- - Poetry;
- - Pre-commit;
- - Python-telegram-bot 20.6;
- - Django 4.2.6;
- - Docker;
- - PostgteSQL;
- - Redis.
+ 1. Python 3.11;
+ 2. Poetry;
+ 3. Pre-commit;
+ 4. Python-telegram-bot 20.6;
+ 5. Django 4.2.6;
+ 6. Docker;
+ 7. PostgteSQL;
+ 8. Redis.
 </details>
 
 # 3. Подготовка к запуску <a id="start"></a>
