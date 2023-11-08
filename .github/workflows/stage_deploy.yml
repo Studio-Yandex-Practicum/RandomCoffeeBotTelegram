@@ -97,6 +97,7 @@ jobs:
             echo POSTGRES_NAME=${{ secrets.POSTGRES_NAME }} >> .env
             echo POSTGRES_USER=${{ secrets.POSTGRES_USER }} >> .env
             echo POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} >> .env
+            echo POSTGRES_INITDB_ARGS=${{ secrets.POSTGRES_INITDB_ARGS }} >> .env
 
             echo DJANGO_SUPERUSER_USERNAME=${{ secrets.DJANGO_SUPERUSER_USERNAME }} >> .env
             echo DJANGO_SUPERUSER_EMAIL=${{ secrets.DJANGO_SUPERUSER_EMAIL }} >> .env
@@ -109,3 +110,4 @@ jobs:
 
             docker exec random-coffee-bot python manage.py migrate
             docker exec random-coffee-bot python manage.py collectstatic --noinput
+            docker exec random-coffee-bot python manage.py loaddata core/fixture/admin_interface_theme_random_cofe_bot.json
