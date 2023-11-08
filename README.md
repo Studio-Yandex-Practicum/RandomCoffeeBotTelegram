@@ -52,6 +52,7 @@ Random Coffee bot for the Telegram
 ## 2.2 Используемые технологии в проекте<a id="technologies-project"></a>:
 
 <details>
+ <br>
 
  - Python 3.11;
  - Poetry;
