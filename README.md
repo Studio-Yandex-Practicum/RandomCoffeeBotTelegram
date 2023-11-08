@@ -10,11 +10,16 @@ Random Coffee bot for the Telegram
 
    1.1 [Инструкции и ритуалы на проекте](docs/materials/instructions.md)
 
-   1.2 [ER - диаграмма сущностей](docs/RandomCoffeeER.jpg)
+   1.2 [ER - диаграмма сущностей](docs/RandomCoffeeModelsER.jpg)
 
    1.3 [Feature list проекта](docs/materials/featch_list.md)
 
-2. [Структура проекта](#structure)
+2. [О проекте](#project)
+
+    2.1 [Структура проекта](#structure)
+
+    2.2. [Используемых технологий в проекте](#technologies-project)
+
 3. [Подготовка к запуску](#start)
 
     3.1. [Правила работы с git](#git)
@@ -35,12 +40,16 @@ Random Coffee bot for the Telegram
 
 <br><br>
 
-# 2. Структура проекта <a id="structure"></a>
+# 2. О проекте <a id="project"></a>
+
+## 2.1 Структура проекта <a id="structure"></a>
 
 | Имя  | Описание |
 | ------------- | ------------- |
 | infrastructure | Docker-compose файлы для запуска проекта с помощью Docker |
 | src | к описанию этой папки стоит вернутся когда рефакторинг закончим |
+
+## 2.2 Используемых технологий в проекте <a id="technologies-project"></a>
 
 # 3. Подготовка к запуску <a id="start"></a>
 
@@ -241,7 +250,7 @@ poetry update
 cd src/
 
 # Запустить веб-сервер командой
-poetry run uvicorn config.asgi:application --reload
+poetry run uvicorn core.asgi:application --reload
 ```
 
 Базовая команда для запуска БД, миграций, бота и джанго:
@@ -277,7 +286,7 @@ make create-student amount=3
 
 ```shell
 # Создание тестовых профилей рекрутеров
-make create-recruit amount=3
+make create-recruiter amount=3
 ```
 
 ```shell
