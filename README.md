@@ -359,7 +359,7 @@ make create-pair amount=3
 <!-- MARKDOWN LINKS & BADGES -->
 
 [Python-url]: https://www.python.org/downloads/release/python-3110/
-[Python-badge]: https://img.shields.io/badge/python-v20.6-yellow?style=for-the-badge&logo=python
+[Python-badge]: https://img.shields.io/badge/python-v3.11-yellow?style=for-the-badge&logo=python
 
 [Poetry-url]: https://python-poetry.org/
 [Poetry-badge]: https://img.shields.io/badge/poetry-blue?style=for-the-badge&logo=poetry
@@ -377,7 +377,7 @@ make create-pair amount=3
 [Docker-badge]: https://img.shields.io/badge/docker-red?style=for-the-badge&logo=docker
 
 [Postgres-url]: https://www.postgresql.org/
-[Postgres-badge]: https://img.shields.io/badge/postgresql-green?style=for-the-badge&logo=postgresql
+[Postgres-badge]: https://img.shields.io/badge/postgresql-gray?style=for-the-badge&logo=postgresql
 
 [Redis-url]: https://redis.io/
-[Redis-badge]: https://img.shields.io/badge/redis-yellow?style=for-the-badge&logo=redis
+[Redis-badge]: https://img.shields.io/badge/redis-black?style=for-the-badge&logo=redis
