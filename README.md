@@ -370,7 +370,7 @@ make create-pair amount=3
 [Python-telegram-bot-url]: https://docs.python-telegram-bot.org/en/v20.6/
 [Python-telegram-bot-badge]: https://img.shields.io/badge/python--telegram--bot-v20.6-red?style=for-the-badge
 
-[Django-url]: https://docs.python-telegram-bot.org/en/v20.6/
+[Django-url]: https://docs.djangoproject.com/en/4.2/releases/4.2.6/
 [Django-badge]: https://img.shields.io/badge/Django-v4.2.6-008000?logo=django&style=for-the-badge
 
 [Docker-url]: https://www.docker.com/
