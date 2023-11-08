@@ -60,7 +60,7 @@ Random Coffee bot for the Telegram
  - Python-telegram-bot 20.6;
  - Django 4.2.6;
  - Docker;
- - PostgteSQL;
+ - PostgreSQL;
  - Redis.
 
 </details>
