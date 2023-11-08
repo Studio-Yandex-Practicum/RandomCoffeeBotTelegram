@@ -14,6 +14,8 @@ Random Coffee bot for the Telegram
 
    1.3. [Feature list проекта](docs/materials/featch_list.md)
 
+   1.4. [Диаграмма логики работы бота](docs/Diagramm%20of%20bot%20logic.jpg)
+
 2. [О проекте](#project)
 
     2.1. [Структура проекта](#structure)
@@ -51,19 +53,14 @@ Random Coffee bot for the Telegram
 
 ## 2.2 Используемые технологии в проекте<a id="technologies-project"></a>:
 
-<details>
- <br>
-
- - Python 3.11;
- - Poetry;
- - Pre-commit;
- - Python-telegram-bot 20.6;
- - Django 4.2.6;
- - Docker;
- - PostgreSQL;
- - Redis.
-
-</details>
+[![Python][Python-badge]][Python-url]
+[![Poetry][Poetry-badge]][Poetry-url]
+[![Pre-commit][Pre-commit-badge]][Pre-commit-url]
+[![Python-telegram-bot][Python-telegram-bot-badge]][Python-telegram-bot-url]
+[![Django][Django-badge]][Django-url]
+[![Docker][Docker-badge]][Docker-url]
+[![Postgres][Postgres-badge]][Postgres-url]
+[![Redis][Redis-badge]][Redis-url]
 
 # 3. Подготовка к запуску <a id="start"></a>
 
@@ -356,6 +353,31 @@ make create-pair amount=3
 самостоятельно основные функции бота, функции отправки и получения сообщений,
 функции перенаправления на сторонние или внутренние ресурсы.
 
-#### Рекомендации к написанию кода [Codestyle](https://github.com/Studio-Yandex-Practicum/RandomCoffeeBotTelegram/tree/develop/docs/codestyle.md)
+#### Рекомендации к написанию кода [Codestyle](docs/codestyle.md)
 
-#### Диаграмма логики работы бота [Diagram](https://github.com/Studio-Yandex-Practicum/RandomCoffeeBotTelegram/tree/develop/docs/Diagramm%20of%20bot%20logic.jpg)
+
+<!-- MARKDOWN LINKS & BADGES -->
+
+[Python-url]: https://www.python.org/downloads/release/python-3110/
+[Python-badge]: https://img.shields.io/badge/python-v20.6-yellow?style=for-the-badge&logo=python
+
+[Poetry-url]: https://python-poetry.org/
+[Poetry-badge]: https://img.shields.io/badge/poetry-blue?style=for-the-badge&logo=poetry
+
+[Pre-commit-url]: https://pre-commit.com/
+[Pre-commit-badge]: https://img.shields.io/badge/Pre--commit-teal?style=for-the-badge&logo=precommit
+
+[Python-telegram-bot-url]: https://docs.python-telegram-bot.org/en/v20.6/
+[Python-telegram-bot-badge]: https://img.shields.io/badge/python--telegram--bot-v20.6-red?style=for-the-badge
+
+[Django-url]: https://docs.python-telegram-bot.org/en/v20.6/
+[Django-badge]: https://img.shields.io/badge/Django-v4.2.6-008000?logo=django&style=for-the-badge
+
+[Docker-url]: https://www.docker.com/
+[Docker-badge]: https://img.shields.io/badge/docker-red?style=for-the-badge&logo=docker
+
+[Postgres-url]: https://www.postgresql.org/
+[Postgres-badge]: https://img.shields.io/badge/postgresql-green?style=for-the-badge&logo=postgresql
+
+[Redis-url]: https://redis.io/
+[Redis-badge]: https://img.shields.io/badge/redis-yellow?style=for-the-badge&logo=redis
