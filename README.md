@@ -8,15 +8,15 @@ Random Coffee bot for the Telegram
 
 1. [БРИФ](docs/materials/briff.md)
 
-   1.1 [Инструкции и ритуалы на проекте](docs/materials/instructions.md)
+   1.1. [Инструкции и ритуалы на проекте](docs/materials/instructions.md)
 
-   1.2 [ER - диаграмма сущностей](docs/RandomCoffeeModelsER.jpg)
+   1.2. [ER - диаграмма сущностей](docs/RandomCoffeeModelsER.jpg)
 
-   1.3 [Feature list проекта](docs/materials/featch_list.md)
+   1.3. [Feature list проекта](docs/materials/featch_list.md)
 
 2. [О проекте](#project)
 
-    2.1 [Структура проекта](#structure)
+    2.1. [Структура проекта](#structure)
 
     2.2. [Используемых технологий в проекте](#technologies-project)
 
