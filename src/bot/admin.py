@@ -9,6 +9,7 @@ from bot.models import (
     Recruiter,
     Student,
 )
+from bot.utils.forms import RecruiterForm, StudentForm
 
 
 @admin.register(Profession)
@@ -60,6 +61,7 @@ class PassedPairAdmin(admin.ModelAdmin):
 class StudentAdmin(admin.ModelAdmin):
     """Управление моделью студента."""
 
+    form = StudentForm
     list_display = (
         "telegram_id",
         "name",
@@ -79,6 +81,7 @@ class StudentAdmin(admin.ModelAdmin):
 class RecruiterAdmin(admin.ModelAdmin):
     """Управление моделью рекрутера."""
 
+    form = RecruiterForm
     list_display = (
         "telegram_id",
         "name",
