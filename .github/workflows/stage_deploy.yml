@@ -109,3 +109,4 @@ jobs:
 
             docker exec random-coffee-bot python manage.py migrate
             docker exec random-coffee-bot python manage.py collectstatic --noinput
+            docker exec random-coffee-bot python manage.py loaddata core/fixture/admin_interface_theme_random_cofe_bot.json
