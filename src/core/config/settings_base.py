@@ -4,6 +4,8 @@ from pathlib import Path
 import environ
 from dotenv import find_dotenv
 
+# from django.utils.translation import gettext_lazy as _
+
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 ROOT_DIR = BASE_DIR.parent
 
@@ -22,6 +24,9 @@ CSRF_TRUSTED_ORIGINS = env.list('CSRF_TRUSTED_ORIGINS', default=['*'])
 AUTH_USER_MODEL = "admin_user.AdminUser"
 
 DEFAULT_APPS = [
+    "controlcenter",
+    # "material",
+    # "material.admin",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -34,6 +39,10 @@ LOCAL_APPS = ["bot", "admin_user", ]
 
 EXTERNAL_APPS = ["admin_interface", "colorfield"]
 
+CONTROLCENTER_DASHBOARDS = (
+    ('board', 'bot.dashboards.MyDashboard'),
+)
+CONTROLCENTER_CHARTIST_COLORS = 'material'
 INSTALLED_APPS = EXTERNAL_APPS + DEFAULT_APPS + LOCAL_APPS
 
 X_FRAME_OPTIONS = "SAMEORIGIN"

@@ -22,6 +22,8 @@ psycopg2-binary = "^2.9"
 pytils = "^0.4.1"
 redis = "^5.0.1"
 django-admin-interface = "^0.26.1"
+django-material-admin = "^1.8.6"
+django-controlcenter = "^0.3.2"
 
 
 [tool.poetry.group.dev.dependencies]
