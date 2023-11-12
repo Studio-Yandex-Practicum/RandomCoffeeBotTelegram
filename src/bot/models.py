@@ -162,3 +162,21 @@ class FormUrl(models.Model):
 
     def __str__(self):
         return f"Название {self.title} | Ссылка {self.url}"
+
+
+class MessageBot(models.Model):
+    """Модель сообщений бота."""
+
+    title = models.CharField(
+        max_length=255, unique=True, verbose_name="Название сообщения бота"
+    )
+    message = models.TextField(
+        unique=True, verbose_name="Текст сообщения бота"
+    )
+
+    class Meta:
+        verbose_name = "Сообщение бота"
+        verbose_name_plural = "Сообщения бота"
+
+    def __str__(self):
+        return f"Название {self.title} | Сообщение '{self.message}'"
