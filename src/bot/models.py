@@ -3,6 +3,7 @@ from django.db.models.signals import pre_save
 from django.dispatch import receiver
 
 from bot.utils.transliteration import transliteration
+from bot.utils.validators import validator_message_key
 
 
 class Profession(models.Model):
@@ -172,6 +173,12 @@ class MessageBot(models.Model):
     )
     message = models.TextField(
         unique=True, verbose_name="Текст сообщения бота"
+    )
+    message_key = models.CharField(
+        max_length=255,
+        unique=True,
+        verbose_name="Ключ сообщения бота",
+        validators=[validator_message_key()],
     )
 
     class Meta:
