@@ -68,7 +68,7 @@ class PracticumUser(models.Model):
 
 
 class Student(PracticumUser):
-    """Модель для студентов."""
+    """Модель для IT-специалистов."""
 
     profession = models.ForeignKey(
         Profession,
@@ -78,8 +78,8 @@ class Student(PracticumUser):
     )
 
     class Meta:
-        verbose_name = "Студент"
-        verbose_name_plural = "Студенты"
+        verbose_name = "IT-специалист"
+        verbose_name_plural = "IT-специалисты"
 
 
 class Recruiter(PracticumUser):
@@ -94,7 +94,7 @@ class CustomPair(models.Model):
     """Базовая модель для создания пар."""
 
     student = models.ForeignKey(
-        Student, on_delete=models.CASCADE, verbose_name="Студент"
+        Student, on_delete=models.CASCADE, verbose_name="IT-специалист"
     )
     recruiter = models.ForeignKey(
         Recruiter, on_delete=models.CASCADE, verbose_name="Рекрутер"
@@ -106,7 +106,7 @@ class CustomPair(models.Model):
 
     def __str__(self):
         return (
-            f"Студент {self.student.telegram_username} | "
+            f"IT-специалист {self.student.telegram_username} | "
             f"Рекрутер {self.recruiter.telegram_username}"
         )
 

@@ -5,7 +5,7 @@ from bot.models import CreatedPair, PassedPair, Recruiter, Student
 
 
 async def make_pair(student: Student, recruiter: Recruiter) -> bool:
-    """Функция для создания пары студент-рекрутер."""
+    """Функция для создания пары IT-специалист - рекрутер."""
     status = False
     try:
         student.has_pair = True
@@ -32,7 +32,7 @@ async def make_pair(student: Student, recruiter: Recruiter) -> bool:
 async def delete_pair(
     student: Student, recruiter: Recruiter, interview_successful: bool
 ) -> bool:
-    """Функция для удаления пары студент-рекрутер."""
+    """Функция для удаления пары IT-специалист - рекрутер."""
     try:
         student.has_pair = False
         recruiter.has_pair = False
