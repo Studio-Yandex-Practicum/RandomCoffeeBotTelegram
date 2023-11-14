@@ -104,7 +104,7 @@ jobs:
 
             cd infra/stage/
             docker compose -f docker_compose_stage.yaml down
-            docker container prune --force
+            docker system prune -a --force
             docker compose -f docker_compose_stage.yaml up --build -d
 
             docker exec random-coffee-bot python manage.py migrate
