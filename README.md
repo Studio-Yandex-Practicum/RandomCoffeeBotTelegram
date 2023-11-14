@@ -14,7 +14,7 @@ Random Coffee bot for the Telegram
 
    1.3. [Feature list проекта](docs/materials/featch_list.md)
 
-   1.4. [Диаграмма логики работы бота](docs/Diagramm%20of%20bot%20logic.jpg)
+   1.4. [Диаграмма логики работы бота](docs/Diagramm_of_bot_logic.jpg)
 
 2. [О проекте](#project)
 
