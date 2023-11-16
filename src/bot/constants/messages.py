@@ -46,7 +46,7 @@ FOUND_PAIR = (
     "время для созвона. В разговоре ты сможешь опираться на этот гайд\n"
     "{}"
 )
-POST_CALL_MESSAGE_FOR_STUDENT = (
+POST_CALL_MESSAGE_FOR_IT_SPECIALIST = (
     "Спасибо большое за участие. Оставить \n"
     "обратную связь можно в канале \n"
     "Communication в твоей когорте. Если тебе\n"

@@ -5,7 +5,9 @@ from django.utils import timezone
 from factory.django import DjangoModelFactory
 from factory.fuzzy import FuzzyInteger
 
-from bot.models import CreatedPair, PassedPair, Profession, Recruiter, Student
+from bot.models import (
+    CreatedPair, PassedPair, Profession, Recruiter, ItSpecialist
+)
 
 LOW_LIMIT_NUMBER = 900000000
 HIGH_LIMIT_NUMBER = 999999999
@@ -27,11 +29,11 @@ class RecruiterFactory(DjangoModelFactory):
     search_start_time = timezone.now()
 
 
-class StudentFactory(RecruiterFactory):
+class ItSpecialistFactory(RecruiterFactory):
     """Фабрика профиля IT-специалиста для тестирования проекта."""
 
     class Meta:
-        model = Student
+        model = ItSpecialist
 
     profession = factory.LazyFunction(lambda: choice(Profession.objects.all()))
 
@@ -42,7 +44,7 @@ class PairFactory(DjangoModelFactory):
     class Meta:
         model = CreatedPair
 
-    student = factory.SubFactory(StudentFactory, has_pair=True)
+    itspecialist = factory.SubFactory(ItSpecialistFactory, has_pair=True)
     recruiter = factory.SubFactory(RecruiterFactory, has_pair=True)
     date = timezone.now()
 
@@ -54,14 +56,14 @@ class PassedPairFactory(DjangoModelFactory):
         model = PassedPair
 
     interview_successful = True
-    student = factory.SubFactory(StudentFactory)
+    itspecialist = factory.SubFactory(ItSpecialistFactory)
     recruiter = factory.SubFactory(RecruiterFactory)
     date = timezone.now()
 
 
-def create_student(amount: int = 1):
+def create_itspecialist(amount: int = 1):
     """Создание профиля IT-специалиста для тестов программы."""
-    StudentFactory.create_batch(amount)
+    ItSpecialistFactory.create_batch(amount)
 
 
 def create_recruiter(amount: int = 1):

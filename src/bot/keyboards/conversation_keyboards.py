@@ -11,7 +11,7 @@ from bot.constants.buttons import (
     NO_BUTTON,
     RECRUITER_ROLE_BUTTON,
     START_BUTTON,
-    STUDENT_ROLE_BUTTON,
+    IT_SPECIALIST_ROLE_BUTTON,
     YES_BUTTON,
 )
 from bot.models import Profession
@@ -25,7 +25,7 @@ role_choice_keyboard_markup = InlineKeyboardMarkup(
     [
         [
             InlineKeyboardButton(
-                text=STUDENT_ROLE_BUTTON, callback_data="student"
+                text=IT_SPECIALIST_ROLE_BUTTON, callback_data="itspecialist"
             )
         ],
         [

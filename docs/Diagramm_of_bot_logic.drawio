@@ -55,7 +55,7 @@
         <mxCell id="HwW4HolEN2n57jUtP8S4-40" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.25;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="LpWc5lkLf9JbCJff_aTS-39" target="HwW4HolEN2n57jUtP8S4-37" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="LpWc5lkLf9JbCJff_aTS-39" value="Бот определяет пару Студент -рекрутер&lt;br&gt;" style="whiteSpace=wrap;html=1;fillColor=#0050ef;strokeColor=#001DBC;fontColor=#ffffff;rounded=1;glass=0;strokeWidth=1;shadow=0;labelBackgroundColor=none;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+        <mxCell id="LpWc5lkLf9JbCJff_aTS-39" value="Бот определяет пару IT-специалист -рекрутер&lt;br&gt;" style="whiteSpace=wrap;html=1;fillColor=#0050ef;strokeColor=#001DBC;fontColor=#ffffff;rounded=1;glass=0;strokeWidth=1;shadow=0;labelBackgroundColor=none;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
           <mxGeometry x="1595.5" y="441" width="125" height="60" as="geometry" />
         </mxCell>
         <mxCell id="LpWc5lkLf9JbCJff_aTS-44" value="изменить анкету&lt;br&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;rotation=-90;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
@@ -129,7 +129,7 @@
         <mxCell id="HwW4HolEN2n57jUtP8S4-15" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="HwW4HolEN2n57jUtP8S4-9" target="HwW4HolEN2n57jUtP8S4-14" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="HwW4HolEN2n57jUtP8S4-9" value="Выбор студент или рекрутер&lt;br&gt;(Профессия)" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+        <mxCell id="HwW4HolEN2n57jUtP8S4-9" value="Выбор IT-специалист или рекрутер&lt;br&gt;(Профессия)" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
           <mxGeometry x="1446" y="-647" width="158" height="108" as="geometry" />
         </mxCell>
         <mxCell id="HwW4HolEN2n57jUtP8S4-14" value="В следующий раз" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
@@ -406,7 +406,7 @@
         <mxCell id="I6eh_tVEMzdccbYS1tTU-1" value="Укажите пожалуйста свою роль:" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#b2c9ab;horizontal=1;verticalAlign=top;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
           <mxGeometry x="-930" y="-259.5" width="276" height="81" as="geometry" />
         </mxCell>
-        <mxCell id="I6eh_tVEMzdccbYS1tTU-2" value="Студент" style="rounded=1;whiteSpace=wrap;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+        <mxCell id="I6eh_tVEMzdccbYS1tTU-2" value="IT-специалист" style="rounded=1;whiteSpace=wrap;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
           <mxGeometry x="-906" y="-223.5" width="72" height="32" as="geometry" />
         </mxCell>
         <mxCell id="I6eh_tVEMzdccbYS1tTU-3" value="Рекрутер" style="rounded=1;whiteSpace=wrap;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
@@ -545,7 +545,7 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="AgE5GyJ8P8dzycC_G8Ic-20" value="&lt;span style=&quot;background-color: rgb(255, 204, 204);&quot;&gt;Если роль - Студент&lt;br&gt;&lt;/span&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="WIyWlLk6GJQsqaUBKTNV-1">
+        <mxCell id="AgE5GyJ8P8dzycC_G8Ic-20" value="&lt;span style=&quot;background-color: rgb(255, 204, 204);&quot;&gt;Если роль - IT-специалист&lt;br&gt;&lt;/span&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="WIyWlLk6GJQsqaUBKTNV-1">
           <mxGeometry x="-960" y="92" as="geometry">
             <mxPoint x="5" y="1" as="offset" />
           </mxGeometry>
@@ -776,7 +776,7 @@
             <mxPoint x="6" y="-1" as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="AgE5GyJ8P8dzycC_G8Ic-78" value="&lt;span style=&quot;background-color: rgb(151, 208, 119);&quot;&gt;Студент&lt;br&gt;&lt;/span&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="WIyWlLk6GJQsqaUBKTNV-1">
+        <mxCell id="AgE5GyJ8P8dzycC_G8Ic-78" value="&lt;span style=&quot;background-color: rgb(151, 208, 119);&quot;&gt;IT-специалист&lt;br&gt;&lt;/span&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="WIyWlLk6GJQsqaUBKTNV-1">
           <mxGeometry x="-194.99565217391347" y="405" as="geometry">
             <mxPoint x="6" y="-1" as="offset" />
           </mxGeometry>

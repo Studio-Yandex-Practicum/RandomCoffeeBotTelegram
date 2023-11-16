@@ -16,7 +16,7 @@ class Migration(migrations.Migration):
             field=models.DateTimeField(blank=True, null=True, verbose_name='Время начала поиска'),
         ),
         migrations.AddField(
-            model_name='student',
+            model_name='itspecialist',
             name='search_start_time',
             field=models.DateTimeField(blank=True, null=True, verbose_name='Время начала поиска'),
         ),

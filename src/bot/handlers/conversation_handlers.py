@@ -16,7 +16,7 @@ from bot.constants.messages import (
     PAIR_SEARCH_MESSAGE,
     POST_CALL_MESSAGE,
     POST_CALL_MESSAGE_FOR_RECRUITER,
-    POST_CALL_MESSAGE_FOR_STUDENT,
+    POST_CALL_MESSAGE_FOR_IT_SPECIALIST,
     PROFILE_MESSAGE,
     START_PAIR_SEARCH_MESSAGE,
     USERNAME_NOT_FOUND_MESSAGE,
@@ -31,7 +31,7 @@ from bot.keyboards.conversation_keyboards import (
     restart_keyboard_markup,
     role_choice_keyboard_markup,
 )
-from bot.models import CreatedPair, Profession, Recruiter, Student
+from bot.models import CreatedPair, Profession, Recruiter, ItSpecialist
 from bot.utils.form_url import get_form_url
 from bot.utils.message_senders import send_is_pair_successful_message
 from bot.utils.pagination import parse_callback_data
@@ -64,7 +64,9 @@ async def search_pair(update: Update, context: CallbackContext):
     role = context.user_data["role"]
     telegram_id = query.from_user.id
     model, opposite_model = (
-        (Student, Recruiter) if role == "student" else (Recruiter, Student)
+        (ItSpecialist, Recruiter) if role == "itspecialist" else (
+            Recruiter, ItSpecialist
+        )
     )
     current_user = await model.objects.aget(telegram_id=telegram_id)
     current_user.search_start_time = timezone.now()
@@ -86,23 +88,23 @@ async def found_pair(
     update: Update, context: CallbackContext, current_user, found_user
 ):
     """Обработчик найденной пары found_pair."""
-    student, recruiter = (
+    itspecialist, recruiter = (
         (current_user, found_user)
-        if context.user_data["role"] == "student"
+        if context.user_data["role"] == "itspecialist"
         else (found_user, current_user)
     )
-    if await make_pair(student, recruiter):
+    if await make_pair(itspecialist, recruiter):
         context.job_queue.run_once(
             callback=send_is_pair_successful_message,
             when=TIME_IN_SECONDS,
-            user_id=student.telegram_id,
+            user_id=itspecialist.telegram_id,
         )
         context.job_queue.run_once(
             callback=send_is_pair_successful_message,
             when=TIME_IN_SECONDS,
             user_id=recruiter.telegram_id,
         )
-        await send_both_users_message(update, context, student, recruiter)
+        await send_both_users_message(update, context, itspecialist, recruiter)
     return States.CALLING_IS_SUCCESSFUL
 
 
@@ -155,7 +157,7 @@ async def set_new_name(update: Update, context: CallbackContext):
 async def continue_name(update: Update, context: CallbackContext):
     """Обработчик для кнопки 'Продолжить'."""
     query = update.callback_query
-    if context.user_data["role"] == "student":
+    if context.user_data["role"] == "itspecialist":
         page_number = parse_callback_data(query.data)
         await query.answer()
         keyboard = await build_profession_keyboard(page_number)
@@ -259,15 +261,15 @@ async def send_profile_form(update: Update, context: CallbackContext):
 
 
 async def send_both_users_message(
-    update: Update, context: CallbackContext, student, recruiter
+    update: Update, context: CallbackContext, itspecialist, recruiter
 ):
     """Возвращает обоим пользователям информацию об их найденой паре."""
     guide_url = await get_form_url(FORM_KEYS["GUIDE"])
-    student_profession = await Profession.objects.aget(
-        pk=student.profession_id
+    itspecialist_profession = await Profession.objects.aget(
+        pk=itspecialist.profession_id
     )
     await context.bot.send_message(
-        chat_id=student.telegram_id,
+        chat_id=itspecialist.telegram_id,
         text=FOUND_PAIR.format(
             recruiter.name,
             "It-рекрутер",
@@ -278,9 +280,9 @@ async def send_both_users_message(
     await context.bot.send_message(
         chat_id=recruiter.telegram_id,
         text=FOUND_PAIR.format(
-            student.name,
-            student_profession,
-            student.telegram_username,
+            itspecialist.name,
+            itspecialist_profession,
+            itspecialist.telegram_username,
             guide_url,
         ),
     )
@@ -302,7 +304,9 @@ async def to_create_user_in_db(update: Update, context: CallbackContext):
             profession = await Profession.objects.aget(
                 name=context.user_data["profession"]
             )
-            await Student.objects.acreate(profession=profession, **user_data)
+            await ItSpecialist.objects.acreate(
+                profession=profession, **user_data
+            )
     except Exception as error:
         logger.error(f"Не удалось сохранить данные в таблицу: {error}")
 
@@ -311,7 +315,7 @@ async def user_is_exist(user_id: int) -> bool:
     """Проверяет наличие юзера в базе данных."""
     if (
         await Recruiter.objects.filter(telegram_id=user_id).aexists()
-        or await Student.objects.filter(telegram_id=user_id).aexists()
+        or await ItSpecialist.objects.filter(telegram_id=user_id).aexists()
     ):
         return True
     return False
@@ -319,16 +323,16 @@ async def user_is_exist(user_id: int) -> bool:
 
 async def get_active_pair(role: str, user_id: int) -> Union[CreatedPair, None]:
     """Возвращает активную пару, с участием пользователя."""
-    if role == "student":
+    if role == "itspecialist":
         return (
-            await CreatedPair.objects.filter(student=user_id)
-            .select_related("student", "recruiter")
+            await CreatedPair.objects.filter(itspecialist=user_id)
+            .select_related("itspecialist", "recruiter")
             .afirst()
         )
     else:
         return (
             await CreatedPair.objects.filter(recruiter=user_id)
-            .select_related("student", "recruiter")
+            .select_related("itspecialist", "recruiter")
             .afirst()
         )
 
@@ -342,7 +346,9 @@ async def calling_is_successful(update: Update, context: CallbackContext):
     pair = await get_active_pair(context.user_data["role"], current_user.id)
     await query.answer()
     if pair:
-        await delete_pair(pair.student, pair.recruiter, query.data == "yes")
+        await delete_pair(
+            pair.itspecialist, pair.recruiter, query.data == "yes"
+        )
     if query.data == "no":
         communicate_url = await get_form_url(FORM_KEYS["FEEDBACK"])
         await query.edit_message_text(
@@ -353,6 +359,6 @@ async def calling_is_successful(update: Update, context: CallbackContext):
             POST_CALL_MESSAGE_FOR_RECRUITER.format(feedback_url)
         )
     else:
-        await query.edit_message_text(POST_CALL_MESSAGE_FOR_STUDENT)
+        await query.edit_message_text(POST_CALL_MESSAGE_FOR_IT_SPECIALIST)
     await query.edit_message_reply_markup(reply_markup=start_keyboard_markup)
     return States.START

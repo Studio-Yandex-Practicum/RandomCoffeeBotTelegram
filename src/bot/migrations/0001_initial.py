@@ -40,7 +40,7 @@ class Migration(migrations.Migration):
             },
         ),
         migrations.CreateModel(
-            name='Student',
+            name='itspecialist',
             fields=[
                 ('telegram_id', models.BigIntegerField(primary_key=True, serialize=False, verbose_name='Telegram User ID')),
                 ('name', models.CharField(max_length=255, verbose_name='Имя')),
@@ -49,11 +49,11 @@ class Migration(migrations.Migration):
                 ('registration_date', models.DateField(auto_now_add=True, verbose_name='Дата регистрации')),
                 ('last_login_date', models.DateField(auto_now=True, verbose_name='Заходил в последний раз')),
                 ('has_pair', models.BooleanField(default=False, verbose_name='Есть пара')),
-                ('profession', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='students', to='bot.profession', verbose_name='Профессия')),
+                ('profession', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='itspecialists', to='bot.profession', verbose_name='Профессия')),
             ],
             options={
-                'verbose_name': 'Студент',
-                'verbose_name_plural': 'Студенты',
+                'verbose_name': 'IT-специалист',
+                'verbose_name_plural': 'IT-специалисты',
             },
         ),
         migrations.CreateModel(
@@ -63,7 +63,7 @@ class Migration(migrations.Migration):
                 ('date', models.DateField(auto_now_add=True)),
                 ('interview_successful', models.BooleanField(default=False, verbose_name='Встреча прошла успешно')),
                 ('recruiter', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='bot.recruiter', verbose_name='Рекрутер')),
-                ('student', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='bot.student', verbose_name='Студент')),
+                ('itspecialist', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='bot.itspecialist', verbose_name='IT-специалист')),
             ],
             options={
                 'verbose_name': 'Завершенная пара',
@@ -76,7 +76,7 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('date', models.DateField(auto_now_add=True)),
                 ('recruiter', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='bot.recruiter', verbose_name='Рекрутер')),
-                ('student', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='bot.student', verbose_name='Студент')),
+                ('itspecialist', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='bot.itspecialist', verbose_name='IT-специалист')),
             ],
             options={
                 'verbose_name': 'Активная пара',
@@ -85,11 +85,11 @@ class Migration(migrations.Migration):
         ),
         migrations.AddConstraint(
             model_name='passedpair',
-            constraint=models.UniqueConstraint(fields=('student', 'recruiter'), name='unique_passed_pair'),
+            constraint=models.UniqueConstraint(fields=('itspecialist', 'recruiter'), name='unique_passed_pair'),
         ),
         migrations.AddConstraint(
             model_name='createdpair',
-            constraint=models.UniqueConstraint(fields=('student',), name='unique_student'),
+            constraint=models.UniqueConstraint(fields=('itspecialist',), name='unique_itspecialist'),
         ),
         migrations.AddConstraint(
             model_name='createdpair',
@@ -97,6 +97,6 @@ class Migration(migrations.Migration):
         ),
         migrations.AddConstraint(
             model_name='createdpair',
-            constraint=models.UniqueConstraint(fields=('student', 'recruiter'), name='unique_created_pair'),
+            constraint=models.UniqueConstraint(fields=('itspecialist', 'recruiter'), name='unique_created_pair'),
         ),
     ]

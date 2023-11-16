@@ -271,8 +271,8 @@ make clear-db
 
 наполнение PostgreSQL тестовыми данными:
 ```shell
-# Создание тестовых профилей студентов
-make create-student amount=3
+# Создание тестовых профилей IT-специалистов
+make create-itspecialist amount=3
 ```
 
 ```shell
@@ -281,7 +281,7 @@ make create-recruit amount=3
 ```
 
 ```shell
-# Создание тестовых пар студент-рекрутер *временами ругается на уникальность ID
+# Создание тестовых пар IT-специалист-рекрутер *временами ругается на уникальность ID
 make create-pair amount=3
 ```
 

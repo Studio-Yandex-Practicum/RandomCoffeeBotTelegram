@@ -15,7 +15,7 @@ class Migration(migrations.Migration):
             field=models.CharField(max_length=255, null=True, verbose_name="Фамилия"),
         ),
         migrations.AlterField(
-            model_name="student",
+            model_name="itspecialist",
             name="surname",
             field=models.CharField(max_length=255, null=True, verbose_name="Фамилия"),
         ),
