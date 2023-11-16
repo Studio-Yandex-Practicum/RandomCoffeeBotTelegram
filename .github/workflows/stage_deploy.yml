@@ -103,9 +103,12 @@ jobs:
             echo DJANGO_SUPERUSER_PASSWORD=${{ secrets.DJANGO_SUPERUSER_PASSWORD }} >> .env
 
             cd infra/stage/
-            docker compose -f docker_compose_stage.yaml down
-            docker system prune -a --force
-            docker compose -f docker_compose_stage.yaml up --build -d
+            docker system prune --force
+
+            # Installing defend service for app
+            sudo cp -f /home/deploy/random_coffe/infra/stage/random_coffee_bot.service /etc/systemd/system/random_coffee_bot.service
+            sudo systemctl daemon-reload
+            sudo systemctl restart random_coffee_bot.service
 
             docker exec random-coffee-bot python manage.py migrate
             docker exec random-coffee-bot python manage.py collectstatic --noinput
