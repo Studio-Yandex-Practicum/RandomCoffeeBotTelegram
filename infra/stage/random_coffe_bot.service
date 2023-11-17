@@ -1,0 +1,30 @@
+[Unit]
+
+Description=random_coffee_bot
+Requires=docker.service
+After=docker.service
+
+[Service]
+
+Restart=always
+RestartSec=5
+TimeOutStartSec=1200
+User=root
+
+WorkingDirectory=/home/deploy/random_coffe/infra/stage/
+
+ExecStartPre=docker compose -f docker_compose_stage.yaml --env-file /home/deploy/random_coffe/.env pull bot
+ExecStartPre=docker compose -f docker_compose_stage.yaml --env-file /home/deploy/random_coffe/.env pull postgres-db
+ExecStartPre=docker compose -f docker_compose_stage.yaml --env-file /home/deploy/random_coffe/.env pull redis
+ExecStartPre=docker compose -f docker_compose_stage.yaml --env-file /home/deploy/random_coffe/.env pull nginx
+ExecStartPre=docker compose -f docker_compose_stage.yaml --env-file /home/deploy/random_coffe/.env down
+
+# compose up
+ExecStart=docker compose -f docker_compose_stage.yaml --env-file /home/deploy/random_coffe/.env up -d
+
+# compose down
+ExecStop=docker compose -f docker_compose_stage.yaml --env-file /home/deploy/random_coffe/.env down
+
+[Install]
+
+WantedBy=multi-user.target
