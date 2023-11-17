@@ -16,6 +16,8 @@ from telegram.ext import (
 )
 
 from bot.constants.commands import (
+    DELETE_COMMAND,
+    DELETE_DESCRIPTION,
     HELP_COMMAND,
     HELP_DESCRIPTION,
     START_COMMAND,
@@ -38,6 +40,7 @@ from bot.constants.patterns import (
 )
 from bot.constants.states import States
 from bot.handlers.command_handlers import (
+    delete_handler,
     help_handler,
     redirection_to_support,
     start_handler,
@@ -116,7 +119,9 @@ class Bot:
             .build()
         )
         main_handler = await build_main_handler()
-        app.add_handlers([main_handler, help_handler, support_bot_handler])
+        app.add_handlers(
+            [main_handler, help_handler, support_bot_handler, delete_handler]
+        )
         return app
 
     async def _manage_webhook(self) -> None:
@@ -147,6 +152,7 @@ class Bot:
             BotCommand(START_COMMAND, START_DESCRIPTION),
             BotCommand(HELP_COMMAND, HELP_DESCRIPTION),
             BotCommand(SUPPORT_COMMAND, SUPPORT_DESCRIPTION),
+            BotCommand(DELETE_COMMAND, DELETE_DESCRIPTION),
         ]
 
         await self._app.bot.set_my_commands(commands)
