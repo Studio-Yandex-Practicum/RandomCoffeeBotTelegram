@@ -1,6 +1,6 @@
 from django import forms
 
-from bot.models import Recruiter, ItSpecialist
+from bot.models import ItSpecialist, Recruiter
 
 
 class ItSpecialistForm(forms.ModelForm):

@@ -1,7 +1,7 @@
 from django.db import IntegrityError
 from loguru import logger
 
-from bot.models import CreatedPair, PassedPair, Recruiter, ItSpecialist
+from bot.models import CreatedPair, ItSpecialist, PassedPair, Recruiter
 
 
 async def make_pair(itspecialist: ItSpecialist, recruiter: Recruiter) -> bool:
