@@ -3,11 +3,17 @@ from django.conf import settings
 from django.core.paginator import Paginator
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 
-from bot.constants.buttons import (ALL_RIGHT_BUTTON, CHANGE_NAME_BUTTON,
-                                   CONTINUE_BUTTON, FILL_AGAIN_BUTTON,
-                                   IT_SPECIALIST_ROLE_BUTTON, NO_BUTTON,
-                                   RECRUITER_ROLE_BUTTON, START_BUTTON,
-                                   YES_BUTTON)
+from bot.constants.buttons import (
+    ALL_RIGHT_BUTTON,
+    CHANGE_NAME_BUTTON,
+    CONTINUE_BUTTON,
+    FILL_AGAIN_BUTTON,
+    IT_SPECIALIST_ROLE_BUTTON,
+    NO_BUTTON,
+    RECRUITER_ROLE_BUTTON,
+    START_BUTTON,
+    YES_BUTTON,
+)
 from bot.models import Profession
 from bot.utils.pagination import InlineKeyboardPaginator
 

@@ -6,23 +6,31 @@ from telegram import Update
 from telegram.ext import CallbackContext
 
 from bot.constants.links import FORM_KEYS
-from bot.constants.messages import (CHANGE_NAME_MESSAGE,
-                                    CHOOSE_PROFESSION_MESSAGE,
-                                    CHOOSE_ROLE_MESSAGE, FOUND_PAIR,
-                                    GUESS_NAME_MESSAGE, NEXT_TIME_MESSAGE,
-                                    PAIR_SEARCH_MESSAGE, POST_CALL_MESSAGE,
-                                    POST_CALL_MESSAGE_FOR_IT_SPECIALIST,
-                                    POST_CALL_MESSAGE_FOR_RECRUITER,
-                                    PROFILE_MESSAGE, START_PAIR_SEARCH_MESSAGE,
-                                    USERNAME_NOT_FOUND_MESSAGE)
+from bot.constants.messages import (
+    CHANGE_NAME_MESSAGE,
+    CHOOSE_PROFESSION_MESSAGE,
+    CHOOSE_ROLE_MESSAGE,
+    FOUND_PAIR,
+    GUESS_NAME_MESSAGE,
+    NEXT_TIME_MESSAGE,
+    PAIR_SEARCH_MESSAGE,
+    POST_CALL_MESSAGE,
+    POST_CALL_MESSAGE_FOR_RECRUITER,
+    POST_CALL_MESSAGE_FOR_IT_SPECIALIST,
+    PROFILE_MESSAGE,
+    START_PAIR_SEARCH_MESSAGE,
+    USERNAME_NOT_FOUND_MESSAGE,
+)
 from bot.constants.states import States
 from bot.handlers.command_handlers import start
 from bot.keyboards.command_keyboards import start_keyboard_markup
-from bot.keyboards.conversation_keyboards import (build_profession_keyboard,
-                                                  guess_name_keyboard_markup,
-                                                  profile_keyboard_markup,
-                                                  restart_keyboard_markup,
-                                                  role_choice_keyboard_markup)
+from bot.keyboards.conversation_keyboards import (
+    build_profession_keyboard,
+    guess_name_keyboard_markup,
+    profile_keyboard_markup,
+    restart_keyboard_markup,
+    role_choice_keyboard_markup,
+)
 from bot.models import CreatedPair, ItSpecialist, Profession, Recruiter
 from bot.utils.form_url import get_form_url
 from bot.utils.message_senders import send_is_pair_successful_message

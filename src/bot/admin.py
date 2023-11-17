@@ -1,8 +1,14 @@
+from admin_user.actions import delete_users_and_send_message
 from django.contrib import admin
 
-from admin_user.actions import delete_users_and_send_message
-from bot.models import (CreatedPair, FormUrl, ItSpecialist, PassedPair,
-                        Profession, Recruiter)
+from bot.models import (
+    CreatedPair,
+    FormUrl,
+    ItSpecialist,
+    PassedPair,
+    Profession,
+    Recruiter,
+)
 from bot.utils.forms import ItSpecialistForm, RecruiterForm
 
 

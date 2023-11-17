@@ -5,8 +5,9 @@ from django.utils import timezone
 from factory.django import DjangoModelFactory
 from factory.fuzzy import FuzzyInteger
 
-from bot.models import (CreatedPair, ItSpecialist, PassedPair, Profession,
-                        Recruiter)
+from bot.models import (
+    CreatedPair, ItSpecialist, PassedPair, Profession, Recruiter,
+)
 
 LOW_LIMIT_NUMBER = 900000000
 HIGH_LIMIT_NUMBER = 999999999
