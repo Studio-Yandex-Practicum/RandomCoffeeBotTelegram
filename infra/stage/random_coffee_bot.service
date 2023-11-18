@@ -11,19 +11,19 @@ RestartSec=5
 TimeOutStartSec=1200
 User=root
 
-WorkingDirectory=/home/deploy/random_coffe/infra/stage/
+WorkingDirectory=/home/deploy/random-coffee/infra/stage/
 
-ExecStartPre=docker compose -f docker_compose_stage.yaml --env-file /home/deploy/random_coffe/.env pull bot
-ExecStartPre=docker compose -f docker_compose_stage.yaml --env-file /home/deploy/random_coffe/.env pull postgres-db
-ExecStartPre=docker compose -f docker_compose_stage.yaml --env-file /home/deploy/random_coffe/.env pull redis
-ExecStartPre=docker compose -f docker_compose_stage.yaml --env-file /home/deploy/random_coffe/.env pull nginx
-ExecStartPre=docker compose -f docker_compose_stage.yaml --env-file /home/deploy/random_coffe/.env down
+ExecStartPre=docker compose -f docker_compose_stage.yaml --env-file /home/deploy/random-coffee/.env pull bot
+ExecStartPre=docker compose -f docker_compose_stage.yaml --env-file /home/deploy/random-coffee/.env pull postgres-db
+ExecStartPre=docker compose -f docker_compose_stage.yaml --env-file /home/deploy/random-coffee/.env pull redis
+ExecStartPre=docker compose -f docker_compose_stage.yaml --env-file /home/deploy/random-coffee/.env pull nginx
+ExecStartPre=docker compose -f docker_compose_stage.yaml --env-file /home/deploy/random-coffee/.env down
 
 # compose up
-ExecStart=docker compose -f docker_compose_stage.yaml --env-file /home/deploy/random_coffe/.env up -d
+ExecStart=docker compose -f docker_compose_stage.yaml --env-file /home/deploy/random-coffee/.env up
 
 # compose down
-ExecStop=docker compose -f docker_compose_stage.yaml --env-file /home/deploy/random_coffe/.env down
+ExecStop=docker compose -f docker_compose_stage.yaml --env-file /home/deploy/random-coffee/.env down
 
 [Install]
 
