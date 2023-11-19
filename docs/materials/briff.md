@@ -9,7 +9,7 @@
 
 ## Описание телеграм-бота:
 
-### [Схема состояний](https://github.com/Studio-Yandex-Practicum/RandomCoffeeBotTelegram/blob/develop/docs/Diagramm%20of%20bot%20logic.jpg) - визуальное изображение стейтов
+### [Схема состояний](https://github.com/Studio-Yandex-Practicum/RandomCoffeeBotTelegram/blob/develop/docs/Diagramm_of_bot_logic.jpg) - визуальное изображение стейтов
 
 ### [Схема для поиска пары](https://github.com/Studio-Yandex-Practicum/RandomCoffeeBotTelegram/blob/develop/docs/flowchart_search_pair.jpg) - визуальное изображение поиска пары
 
