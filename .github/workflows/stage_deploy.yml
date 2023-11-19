@@ -106,10 +106,11 @@ jobs:
             docker system prune --force
 
             # Installing defend service for app
-            sudo cp -f /home/deploy/random_coffe/infra/stage/random_coffee_bot.service /etc/systemd/system/random_coffee_bot.service
+            sudo cp -f /home/deploy/random-coffee/infra/stage/random_coffee_bot.service /etc/systemd/system/random_coffee_bot.service
             sudo systemctl daemon-reload
             sudo systemctl restart random_coffee_bot.service
 
+            sleep 10
             docker exec random-coffee-bot python manage.py migrate
             docker exec random-coffee-bot python manage.py collectstatic --noinput
             docker exec random-coffee-bot python manage.py loaddata core/fixture/admin_interface_theme_random_cofe_bot.json
