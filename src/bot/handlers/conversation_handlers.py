@@ -199,10 +199,14 @@ async def profile(update: Update, context: CallbackContext):
     await to_create_user_in_db(update, context)
     if await user_is_exist(query.from_user.id):
         await query.edit_message_text(START_PAIR_SEARCH_MESSAGE)
-        await query.edit_message_reply_markup(reply_markup=start_keyboard_markup)
+        await query.edit_message_reply_markup(
+            reply_markup=start_keyboard_markup
+        )
         return States.START
     else:
-        logger.error(f"Пользователь {query.from_user} не сохранен в базе данных.")
+        logger.error(
+            f"Пользователь {query.from_user} не сохранен в базе данных."
+        )
 
 
 async def send_name_message(update: Update, context: CallbackContext):
@@ -242,12 +246,16 @@ async def send_profile_form(update: Update, context: CallbackContext):
         context.user_data["contact"] = query.from_user.username
         await query.answer()
         await query.edit_message_text(
-            PROFILE_MESSAGE.format(name, profession, context.user_data["contact"])
+            PROFILE_MESSAGE.format(
+                name, profession, context.user_data["contact"]
+            )
         )
         await query.edit_message_reply_markup(profile_keyboard_markup)
     else:
         await update.message.reply_text(
-            PROFILE_MESSAGE.format(name, profession, context.user_data["contact"]),
+            PROFILE_MESSAGE.format(
+                name, profession, context.user_data["contact"]
+            ),
             reply_markup=profile_keyboard_markup,
         )
 
@@ -296,7 +304,9 @@ async def to_create_user_in_db(update: Update, context: CallbackContext):
             profession = await Profession.objects.aget(
                 name=context.user_data["profession"]
             )
-            await ItSpecialist.objects.acreate(profession=profession, **user_data)
+            await ItSpecialist.objects.acreate(
+                profession=profession, **user_data
+            )
     except Exception as error:
         logger.error(f"Не удалось сохранить данные в таблицу: {error}")
 
@@ -336,10 +346,14 @@ async def calling_is_successful(update: Update, context: CallbackContext):
     pair = await get_active_pair(context.user_data["role"], current_user.id)
     await query.answer()
     if pair:
-        await delete_pair(pair.itspecialist, pair.recruiter, query.data == "yes")
+        await delete_pair(
+            pair.itspecialist, pair.recruiter, query.data == "yes"
+        )
     if query.data == "no":
         communicate_url = await get_form_url(FORM_KEYS["FEEDBACK"])
-        await query.edit_message_text(POST_CALL_MESSAGE.format(communicate_url))
+        await query.edit_message_text(
+            POST_CALL_MESSAGE.format(communicate_url)
+        )
     elif context.user_data["role"] == "recruiter":
         await query.edit_message_text(
             POST_CALL_MESSAGE_FOR_RECRUITER.format(feedback_url)
