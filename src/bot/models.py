@@ -119,9 +119,8 @@ class CreatedPair(CustomPair):
             models.UniqueConstraint(
                 fields=["itspecialist"], name="unique_itspecialist"
             ),
-            models.UniqueConstraint(
-                fields=["recruiter"], name="unique_recruiter"
-            ),
+            models.UniqueConstraint(fields=["recruiter"],
+                                    name="unique_recruiter"),
             models.UniqueConstraint(
                 fields=["itspecialist", "recruiter"],
                 name="unique_created_pair"
