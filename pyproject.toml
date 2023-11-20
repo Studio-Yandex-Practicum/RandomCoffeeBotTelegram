@@ -30,6 +30,7 @@ ruff = "^0.0.290"
 black = "^23.9.1"
 isort = "^5.12.0"
 factory-boy = "^3.3.0"
+mypy = "^1.7.0"
 
 [build-system]
 requires = ["poetry-core"]

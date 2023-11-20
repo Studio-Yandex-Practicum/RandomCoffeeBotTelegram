@@ -16,37 +16,33 @@ from core.config.logging import debug_logger
 
 
 @debug_logger
-async def start(update: Update, context: CallbackContext):
+async def start(update: Update, context: CallbackContext) -> States:
     """Функция-обработчик команды start."""
     if update.message:
         await update.message.reply_text(
             text=START_MESSAGE, reply_markup=start_keyboard_markup
         )
-    else:
-        query = update.callback_query
-        await query.answer()
-        await query.edit_message_reply_markup(reply_markup=None)
-        await query.message.reply_text(
-            START_MESSAGE, reply_markup=start_keyboard_markup
-        )
-
     return States.START
 
 
 @debug_logger
-async def support_bot(update: Update, context: CallbackContext):
+async def support_bot(update: Update, context: CallbackContext) -> States:
     """Функция-обработчик для команды /support."""
-    await update.message.reply_text(
-        text=ASSISTANCE_MESSAGE, reply_markup=await create_support_keyboard()
-    )
+    if update.message:
+        await update.message.reply_text(
+            text=ASSISTANCE_MESSAGE,
+            reply_markup=await create_support_keyboard(),
+        )
+    return States.SUPPORT
 
 
 @debug_logger
-async def help(update: Update, context: CallbackContext):
+async def help(update: Update, context: CallbackContext) -> States:
     """Функция-обработчик для команды /help."""
-    await update.message.reply_html(
-        text=(HELP_MESSAGE), reply_markup=help_keyboard_markup
-    )
+    if update.message:
+        await update.message.reply_html(
+            text=(HELP_MESSAGE), reply_markup=help_keyboard_markup
+        )
     return States.HELP
 
 
@@ -55,10 +51,11 @@ async def redirection_to_support(
     update: Update, context: CallbackContext
 ) -> None:
     """Перенаправление на команду /support."""
-    query = update.callback_query
-    await query.edit_message_text(
-        text=ASSISTANCE_MESSAGE, reply_markup=await create_support_keyboard()
-    )
+    if update.callback_query:
+        await update.callback_query.edit_message_text(
+            text=ASSISTANCE_MESSAGE,
+            reply_markup=await create_support_keyboard(),
+        )
 
 
 start_handler = CommandHandler("start", start)
