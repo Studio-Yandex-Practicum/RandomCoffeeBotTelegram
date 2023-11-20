@@ -164,7 +164,7 @@ async def set_new_name(update: Update, context: CallbackContext) -> States:
     """Обработчик для ввода нового имени."""
     if context.user_data and update.message:
         context.user_data["name"] = update.message.text
-    await send_name_message(update, context)
+        await send_name_message(update, context)
     return States.SET_NAME
 
 
@@ -259,7 +259,7 @@ async def send_name_message(update: Update, context: CallbackContext) -> None:
         await query.answer()
         await query.edit_message_text(GUESS_NAME_MESSAGE.format(guessed_name))
         await query.edit_message_reply_markup(guess_name_keyboard_markup)
-    elif update.message and not context.user_data:
+    elif update.message:
         await update.message.reply_text(
             GUESS_NAME_MESSAGE.format(guessed_name),
             reply_markup=guess_name_keyboard_markup,

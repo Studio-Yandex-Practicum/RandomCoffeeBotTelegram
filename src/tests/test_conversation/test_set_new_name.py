@@ -13,7 +13,12 @@ async def test_set_new_name(
     context,user_data и возвращает правильное состояние.
     """
     update.message = mocked_message
-    context.user_data = {}
+    context.user_data = {
+        "role": "student",
+        "name": "name",
+        "profession": "profession",
+        "contact": "contact",
+    }
 
     result = await set_new_name(update, context)
 
