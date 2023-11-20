@@ -1,4 +1,4 @@
-from typing import Optional, Union
+from typing import Literal, Optional, Union
 
 from django.utils import timezone
 from loguru import logger
@@ -64,7 +64,9 @@ async def go(update: Update, context: CallbackContext) -> Optional[States]:
     return None
 
 
-async def search_pair(update: Update, context: CallbackContext) -> States:
+async def search_pair(
+    update: Update, context: CallbackContext
+) -> Literal[States.CALLING_IS_SUCCESSFUL]:
     """Поиск пары."""
     query = update.callback_query
     if query and context.user_data and query.message:
@@ -94,21 +96,21 @@ async def found_pair(
     context: CallbackContext,
     current_user: Union[Recruiter, Student],
     found_user: Union[Recruiter, Student],
-) -> States:
+) -> Literal[States.CALLING_IS_SUCCESSFUL]:
     """Обработчик найденной пары found_pair."""
-    if context.user_data:
+    if context.user_data and context.job_queue:
         student, recruiter = (
             (current_user, found_user)
             if context.user_data["role"] == "student"
             else (found_user, current_user)
         )
         if await make_pair(student, recruiter):
-            context.job_queue.run_once(
+            context.job_queue.run_once(  # type: ignore[attr-defined]
                 callback=send_is_pair_successful_message,
                 when=TIME_IN_SECONDS,
                 user_id=student.telegram_id,
             )
-            context.job_queue.run_once(
+            context.job_queue.run_once(  # type: ignore[attr-defined]
                 callback=send_is_pair_successful_message,
                 when=TIME_IN_SECONDS,
                 user_id=recruiter.telegram_id,
@@ -118,7 +120,9 @@ async def found_pair(
 
 
 @debug_logger
-async def next_time(update: Update, context: CallbackContext) -> States:
+async def next_time(
+    update: Update, context: CallbackContext
+) -> Literal[States.NEXT_TIME]:
     """Обработчик кнопки "В следующий раз"."""
     query = update.callback_query
     if query:
@@ -131,7 +135,9 @@ async def next_time(update: Update, context: CallbackContext) -> States:
 
 
 @debug_logger
-async def restart_callback(update: Update, context: CallbackContext) -> States:
+async def restart_callback(
+    update: Update, context: CallbackContext
+) -> Literal[States.START]:
     """Обработчик для кнопки start."""
     query = update.callback_query
     if query:
@@ -140,7 +146,9 @@ async def restart_callback(update: Update, context: CallbackContext) -> States:
 
 
 @debug_logger
-async def role_choice(update: Update, context: CallbackContext) -> States:
+async def role_choice(
+    update: Update, context: CallbackContext
+) -> Literal[States.SET_NAME]:
     """Обработчик для выбора роли."""
     query = update.callback_query
     if query and context.user_data:
@@ -150,7 +158,9 @@ async def role_choice(update: Update, context: CallbackContext) -> States:
 
 
 @debug_logger
-async def change_name(update: Update, context: CallbackContext) -> States:
+async def change_name(
+    update: Update, context: CallbackContext
+) -> Literal[States.SET_NEW_NAME]:
     """Обработчик для кнопки "Изменить имя"."""
     query = update.callback_query
     if query:
@@ -160,7 +170,9 @@ async def change_name(update: Update, context: CallbackContext) -> States:
 
 
 @debug_logger
-async def set_new_name(update: Update, context: CallbackContext) -> States:
+async def set_new_name(
+    update: Update, context: CallbackContext
+) -> Literal[States.SET_NAME]:
     """Обработчик для ввода нового имени."""
     if context.user_data and update.message:
         context.user_data["name"] = update.message.text
@@ -171,7 +183,9 @@ async def set_new_name(update: Update, context: CallbackContext) -> States:
 @debug_logger
 async def continue_name(
     update: Update, context: CallbackContext
-) -> Optional[States]:
+) -> Optional[
+    Literal[States.PROFESSION_CHOICE, States.PROFILE, States.SET_PHONE_NUMBER]
+]:
     """Обработчик для кнопки 'Продолжить'."""
     query = update.callback_query
     if (
@@ -200,7 +214,7 @@ async def continue_name(
 @debug_logger
 async def profession_choice(
     update: Update, context: CallbackContext
-) -> Optional[States]:
+) -> Optional[Literal[States.PROFILE, States.SET_PHONE_NUMBER]]:
     """Обработчик для выбора профессии."""
     query = update.callback_query
     if query and context.user_data:
@@ -210,7 +224,9 @@ async def profession_choice(
 
 
 @debug_logger
-async def set_phone_number(update: Update, context: CallbackContext) -> States:
+async def set_phone_number(
+    update: Update, context: CallbackContext
+) -> Literal[States.SET_PHONE_NUMBER, States.PROFILE]:
     """Обработчик для ввода номера телефона."""
     if update.message and update.message.text and context.user_data:
         phone_number = update.message.text
@@ -225,7 +241,7 @@ async def set_phone_number(update: Update, context: CallbackContext) -> States:
 @debug_logger
 async def profile(
     update: Update, context: CallbackContext
-) -> Optional[States]:
+) -> Optional[Literal[States.ROLE_CHOICE, States.START]]:
     """Обработчик для профиля."""
     query = update.callback_query
     if query:
@@ -268,7 +284,7 @@ async def send_name_message(update: Update, context: CallbackContext) -> None:
 
 async def check_username(
     update: Update, context: CallbackContext
-) -> Optional[States]:
+) -> Optional[Literal[States.PROFILE, States.SET_PHONE_NUMBER]]:
     """Проверяет наличие username."""
     query = update.callback_query
     if query:
@@ -396,7 +412,7 @@ async def get_active_pair(role: str, user_id: int) -> Union[CreatedPair, None]:
 @debug_logger
 async def calling_is_successful(
     update: Update, context: CallbackContext
-) -> States:
+) -> Literal[States.START]:
     """Возвращает пользователям сообщение об обратной связи."""
     query = update.callback_query
     if query and context.user_data:

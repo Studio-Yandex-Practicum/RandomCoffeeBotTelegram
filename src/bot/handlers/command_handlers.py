@@ -1,3 +1,5 @@
+from typing import Literal
+
 from telegram import Update
 from telegram.ext import CallbackContext, CommandHandler
 
@@ -16,7 +18,9 @@ from core.config.logging import debug_logger
 
 
 @debug_logger
-async def start(update: Update, context: CallbackContext) -> States:
+async def start(
+    update: Update, context: CallbackContext
+) -> Literal[States.START]:
     """Функция-обработчик команды start."""
     if update.message:
         await update.message.reply_text(
@@ -26,7 +30,9 @@ async def start(update: Update, context: CallbackContext) -> States:
 
 
 @debug_logger
-async def support_bot(update: Update, context: CallbackContext) -> States:
+async def support_bot(
+    update: Update, context: CallbackContext
+) -> Literal[States.SUPPORT]:
     """Функция-обработчик для команды /support."""
     if update.message:
         await update.message.reply_text(
@@ -37,7 +43,9 @@ async def support_bot(update: Update, context: CallbackContext) -> States:
 
 
 @debug_logger
-async def help(update: Update, context: CallbackContext) -> States:
+async def help(
+    update: Update, context: CallbackContext
+) -> Literal[States.HELP]:
     """Функция-обработчик для команды /help."""
     if update.message:
         await update.message.reply_html(
