@@ -6,7 +6,11 @@ from factory.django import DjangoModelFactory
 from factory.fuzzy import FuzzyInteger
 
 from bot.models import (
-    CreatedPair, ItSpecialist, PassedPair, Profession, Recruiter
+    CreatedPair,
+    ItSpecialist,
+    PassedPair,
+    Profession,
+    Recruiter,
 )
 
 LOW_LIMIT_NUMBER = 900000000
