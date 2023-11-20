@@ -40,13 +40,23 @@ from bot.constants.states import States
 from bot.handlers.command_handlers import (
     help_handler,
     redirection_to_support,
-                                           start_handler, support_bot_handler)
-from bot.handlers.conversation_handlers import (calling_is_successful,
-                                                change_name, continue_name,
-                                                found_pair, go, next_time,
-                                                profession_choice, profile,
-                                                restart_callback, role_choice,
-                                                set_new_name, set_phone_number)
+    start_handler,
+    support_bot_handler,
+)
+from bot.handlers.conversation_handlers import (
+    calling_is_successful,
+    change_name,
+    continue_name,
+    found_pair,
+    go,
+    next_time,
+    profession_choice,
+    profile,
+    restart_callback,
+    role_choice,
+    set_new_name,
+    set_phone_number,
+)
 from bot.persistence import RedisPersistence
 
 
