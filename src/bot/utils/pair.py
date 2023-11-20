@@ -30,7 +30,9 @@ async def make_pair(itspecialist: ItSpecialist, recruiter: Recruiter) -> bool:
 
 
 async def delete_pair(
-    itspecialist: ItSpecialist, recruiter: Recruiter, interview_successful: bool
+    itspecialist: ItSpecialist,
+    recruiter: Recruiter,
+    interview_successful: bool,
 ) -> bool:
     """Функция для удаления пары IT-специалист - рекрутер."""
     try:

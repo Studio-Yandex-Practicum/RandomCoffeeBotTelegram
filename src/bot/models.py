@@ -27,7 +27,9 @@ class Profession(models.Model):
 def create_key(sender, instance, *args, **kwargs) -> None:
     """Save transliterate field from 'name' into 'professional_key'."""
     if hasattr(sender, "professional_key"):
-        instance.professional_key = transliteration(instance.name, prefix="profession_")
+        instance.professional_key = transliteration(
+            instance.name, prefix="profession_"
+        )
 
 
 class PracticumUser(models.Model):
@@ -117,9 +119,12 @@ class CreatedPair(CustomPair):
             models.UniqueConstraint(
                 fields=["itspecialist"], name="unique_itspecialist"
             ),
-            models.UniqueConstraint(fields=["recruiter"], name="unique_recruiter"),
             models.UniqueConstraint(
-                fields=["itspecialist", "recruiter"], name="unique_created_pair"
+                fields=["recruiter"], name="unique_recruiter"
+            ),
+            models.UniqueConstraint(
+                fields=["itspecialist", "recruiter"],
+                name="unique_created_pair",
             ),
         ]
         verbose_name = "Активная пара"
