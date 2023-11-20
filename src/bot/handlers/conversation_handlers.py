@@ -7,6 +7,7 @@ from telegram.ext import CallbackContext
 
 from bot.constants.links import FORM_KEYS
 from bot.constants.messages import (
+    ACCOUNT_DELETED_MESSAGE,
     CHANGE_NAME_MESSAGE,
     CHOOSE_PROFESSION_MESSAGE,
     CHOOSE_ROLE_MESSAGE,
@@ -344,6 +345,24 @@ async def get_active_pair(role: str, user_id: int) -> Union[CreatedPair, None]:
             .select_related("student", "recruiter")
             .afirst()
         )
+
+
+async def deleting_account(update: Update, context: CallbackContext):
+    """Удаляет пользователя."""
+    query = update.callback_query
+    user_id = query.from_user.id
+    if (
+        await Recruiter.objects.filter(telegram_id=user_id).aexists()
+        is not None
+    ):
+        await Recruiter.objects.filter(telegram_id=user_id).adelete()
+    else:
+        await Student.objects.filter(telegram_id=user_id).adelete()
+    await query.answer()
+    await query.edit_message_reply_markup(reply_markup=None)
+    await query.edit_message_text(ACCOUNT_DELETED_MESSAGE)
+    await query.edit_message_reply_markup(restart_keyboard_markup)
+    return States.ACCOUNT_DELETED
 
 
 @debug_logger

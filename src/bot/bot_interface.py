@@ -29,6 +29,7 @@ from bot.constants.patterns import (
     CALLING_IS_SUCCESSFUL,
     CHANGE_NAME_PATTERN,
     CONTINUE_NAME_PATTERN,
+    DELETE_PATERN,
     GO_PATTERN,
     NEXT_TIME_PATTERN,
     PARTICIPATE_PATTERN,
@@ -50,6 +51,7 @@ from bot.handlers.conversation_handlers import (
     calling_is_successful,
     change_name,
     continue_name,
+    deleting_account,
     found_pair,
     go,
     next_time,
@@ -225,6 +227,24 @@ async def build_main_handler():
                     calling_is_successful, pattern=CALLING_IS_SUCCESSFUL
                 ),
             ],
+            States.NOT_REGISTERED: [
+                start_handler,
+                CallbackQueryHandler(
+                    restart_callback, pattern=RESTART_PATTERN
+                ),
+            ],
+            States.DELETE_ACCOUNT: [
+                CallbackQueryHandler(deleting_account, pattern=DELETE_PATERN),
+                CallbackQueryHandler(
+                    restart_callback, pattern=RESTART_PATTERN
+                ),
+            ],
+            States.ACCOUNT_DELETED: [
+                start_handler,
+                CallbackQueryHandler(
+                    restart_callback, pattern=RESTART_PATTERN
+                ),
+            ],
         },
-        fallbacks=[help_handler, start_handler],
+        fallbacks=[help_handler, start_handler, delete_handler],
     )

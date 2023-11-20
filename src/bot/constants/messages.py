@@ -97,3 +97,6 @@ NOT_REGISTRED_MESSAGE = (
 CONFIRMATION_DELETE_ACCOUNT_MESSAGE = (
     "Ваша профессия {}.\n" "Хотите удалить аккаунт?"
 )
+ACCOUNT_DELETED_MESSAGE = (
+    "Ваш аккаунт удален, если хотите\n" "продолжить нажмите старт"
+)

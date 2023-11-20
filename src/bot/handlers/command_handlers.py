@@ -76,11 +76,12 @@ async def delete_account(update: Update, context: CallbackContext):
             text=CONFIRMATION_DELETE_ACCOUNT_MESSAGE.format(profession),
             reply_markup=delete_keyboard_markup,
         )
+        return States.DELETE_ACCOUNT
     else:
         await update.message.reply_text(
             text=NOT_REGISTRED_MESSAGE, reply_markup=restart_keyboard_markup
         )
-        return States.START
+        return States.NOT_REGISTERED
 
 
 async def user_is_exist(user_id: int) -> bool:

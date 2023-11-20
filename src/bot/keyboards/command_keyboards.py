@@ -58,7 +58,7 @@ delete_keyboard_markup = InlineKeyboardMarkup(
             InlineKeyboardButton(
                 text=YES_BUTTON, callback_data="deleting_account"
             ),
-            InlineKeyboardButton(text=NO_BUTTON, callback_data="go"),
+            InlineKeyboardButton(text=NO_BUTTON, callback_data="restart"),
         ]
     ]
 )
