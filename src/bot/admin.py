@@ -55,7 +55,7 @@ class PassedPairAdmin(admin.ModelAdmin):
 
 
 @admin.register(ItSpecialist)
-class itspecialistAdmin(admin.ModelAdmin):
+class ItSpecialistAdmin(admin.ModelAdmin):
     """Управление моделью IT-специалиста."""
 
     form = ItSpecialistForm

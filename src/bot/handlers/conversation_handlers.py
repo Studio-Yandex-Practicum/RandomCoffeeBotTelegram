@@ -11,13 +11,16 @@ from bot.constants.messages import (
     CHOOSE_PROFESSION_MESSAGE,
     CHOOSE_ROLE_MESSAGE,
     FOUND_PAIR,
+    FOUND_PAIR_NO_USERNAME,
     GUESS_NAME_MESSAGE,
+    MESSAGE_INCORRECT_PHONE_NUMBER,
     NEXT_TIME_MESSAGE,
     PAIR_SEARCH_MESSAGE,
     POST_CALL_MESSAGE,
     POST_CALL_MESSAGE_FOR_IT_SPECIALIST,
     POST_CALL_MESSAGE_FOR_RECRUITER,
     PROFILE_MESSAGE,
+    PROFILE_MESSAGE_NO_USERNAME,
     START_PAIR_SEARCH_MESSAGE,
     USERNAME_NOT_FOUND_MESSAGE,
 )
@@ -36,6 +39,7 @@ from bot.utils.form_url import get_form_url
 from bot.utils.message_senders import send_is_pair_successful_message
 from bot.utils.pagination import parse_callback_data
 from bot.utils.pair import delete_pair, make_pair
+from bot.utils.validate_phone import validation_phone_number
 from core.config.logging import debug_logger
 
 TIME_IN_SECONDS = (
@@ -183,6 +187,9 @@ async def profession_choice(update: Update, context: CallbackContext):
 async def set_phone_number(update: Update, context: CallbackContext):
     """Обработчик для ввода номера телефона."""
     phone_number = update.message.text
+    if not await validation_phone_number(phone_number):
+        await update.message.reply_text(MESSAGE_INCORRECT_PHONE_NUMBER)
+        return States.SET_PHONE_NUMBER
     context.user_data["contact"] = phone_number
     await send_profile_form(update, context)
     return States.PROFILE
@@ -253,7 +260,7 @@ async def send_profile_form(update: Update, context: CallbackContext):
         await query.edit_message_reply_markup(profile_keyboard_markup)
     else:
         await update.message.reply_text(
-            PROFILE_MESSAGE.format(
+            PROFILE_MESSAGE_NO_USERNAME.format(
                 name, profession, context.user_data["contact"]
             ),
             reply_markup=profile_keyboard_markup,
@@ -268,9 +275,15 @@ async def send_both_users_message(
     itspecialist_profession = await Profession.objects.aget(
         pk=itspecialist.profession_id
     )
+    form_itspecialist = [FOUND_PAIR, FOUND_PAIR_NO_USERNAME][
+        await validation_phone_number(itspecialist.telegram_username)
+    ]
+    form_recruiter = [FOUND_PAIR, FOUND_PAIR_NO_USERNAME][
+        await validation_phone_number(recruiter.telegram_username)
+    ]
     await context.bot.send_message(
         chat_id=itspecialist.telegram_id,
-        text=FOUND_PAIR.format(
+        text=form_recruiter.format(
             recruiter.name,
             "It-рекрутер",
             recruiter.telegram_username,
@@ -279,7 +292,7 @@ async def send_both_users_message(
     )
     await context.bot.send_message(
         chat_id=recruiter.telegram_id,
-        text=FOUND_PAIR.format(
+        text=form_itspecialist.format(
             itspecialist.name,
             itspecialist_profession,
             itspecialist.telegram_username,

@@ -3,6 +3,7 @@ from django.db.models.signals import pre_save
 from django.dispatch import receiver
 
 from bot.utils.transliteration import transliteration
+from bot.utils.validators import validator_message_key
 
 
 class Profession(models.Model):
@@ -165,3 +166,27 @@ class FormUrl(models.Model):
 
     def __str__(self):
         return f"Название {self.title} | Ссылка {self.url}"
+
+
+class MessageBot(models.Model):
+    """Модель сообщений бота."""
+
+    title = models.CharField(
+        max_length=255, unique=True, verbose_name="Название сообщения бота"
+    )
+    message = models.TextField(
+        unique=True, verbose_name="Текст сообщения бота"
+    )
+    message_key = models.CharField(
+        max_length=255,
+        unique=True,
+        verbose_name="Ключ сообщения бота",
+        validators=[validator_message_key()],
+    )
+
+    class Meta:
+        verbose_name = "Сообщение бота"
+        verbose_name_plural = "Сообщения бота"
+
+    def __str__(self):
+        return f"Название {self.title} | Сообщение '{self.message}'"

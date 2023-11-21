@@ -8,13 +8,20 @@ Random Coffee bot for the Telegram
 
 1. [БРИФ](docs/materials/briff.md)
 
-   1.1 [Инструкции и ритуалы на проекте](docs/materials/instructions.md)
+   1.1. [Инструкции и ритуалы на проекте](docs/materials/instructions.md)
 
-   1.2 [ER - диаграмма сущностей](docs/RandomCoffeeER.jpg)
+   1.2. [ER - диаграмма сущностей](docs/RandomCoffeeModelsER.jpg)
 
-   1.3 [Feature list проекта](docs/materials/featch_list.md)
+   1.3. [Feature list проекта](docs/materials/featch_list.md)
 
-2. [Структура проекта](#structure)
+   1.4. [Диаграмма логики работы бота](docs/Diagramm_of_bot_logic.jpg)
+
+2. [О проекте](#project)
+
+    2.1. [Структура проекта](#structure)
+
+    2.2. [Используемых технологий в проекте](#technologies-project)
+
 3. [Подготовка к запуску](#start)
 
     3.1. [Правила работы с git](#git)
@@ -35,12 +42,25 @@ Random Coffee bot for the Telegram
 
 <br><br>
 
-# 2. Структура проекта <a id="structure"></a>
+# 2. О проекте <a id="project"></a>
+
+## 2.1 Структура проекта <a id="structure"></a>
 
 | Имя  | Описание |
 | ------------- | ------------- |
 | infrastructure | Docker-compose файлы для запуска проекта с помощью Docker |
 | src | к описанию этой папки стоит вернутся когда рефакторинг закончим |
+
+## 2.2 Используемые технологии в проекте<a id="technologies-project"></a>:
+
+[![Python][Python-badge]][Python-url]
+[![Poetry][Poetry-badge]][Poetry-url]
+[![Pre-commit][Pre-commit-badge]][Pre-commit-url]
+[![Python-telegram-bot][Python-telegram-bot-badge]][Python-telegram-bot-url]
+[![Django][Django-badge]][Django-url]
+[![Docker][Docker-badge]][Docker-url]
+[![Postgres][Postgres-badge]][Postgres-url]
+[![Redis][Redis-badge]][Redis-url]
 
 # 3. Подготовка к запуску <a id="start"></a>
 
@@ -241,7 +261,7 @@ poetry update
 cd src/
 
 # Запустить веб-сервер командой
-poetry run uvicorn config.asgi:application --reload
+poetry run uvicorn core.asgi:application --reload
 ```
 
 Базовая команда для запуска БД, миграций, бота и джанго:
@@ -277,7 +297,7 @@ make create-itspecialist amount=3
 
 ```shell
 # Создание тестовых профилей рекрутеров
-make create-recruit amount=3
+make create-recruiter amount=3
 ```
 
 ```shell
@@ -322,10 +342,10 @@ make create-pair amount=3
 
 #### Написание тестов
 Для написания тестов используется pytest.
-Основные настройки тестов хранятся в файле conftest.py.
-Фикстуры хранятся в файле fixtures/fixture_data.py
-Основные тесты бота хранятся в файле test_bot.py. В зависимости от функционала
-тестов можно добавлять файлы тестов. Файлы тестов должны начинаться с "test_".
+Фикстуры хранятся в файле tests/conftest.py
+Основные тесты бота хранятся в директории tests.
+В зависимости от функционала тестов можно добавлять файлы тестов.
+Файлы тестов должны начинаться с "test_".
 
 #### Что необходимо тестировать
 Разработчик самостоятельно определяет функционал, который будет покрыт
@@ -333,6 +353,31 @@ make create-pair amount=3
 самостоятельно основные функции бота, функции отправки и получения сообщений,
 функции перенаправления на сторонние или внутренние ресурсы.
 
-#### Рекомендации к написанию кода [Codestyle](https://github.com/Studio-Yandex-Practicum/RandomCoffeeBotTelegram/tree/develop/docs/codestyle.md)
+#### Рекомендации к написанию кода [Codestyle](docs/codestyle.md)
 
-#### Диаграмма логики работы бота [Diagram](https://github.com/Studio-Yandex-Practicum/RandomCoffeeBotTelegram/tree/develop/docs/Diagramm_of_bot_logic.drawio)
+
+<!-- MARKDOWN LINKS & BADGES -->
+
+[Python-url]: https://www.python.org/downloads/release/python-3110/
+[Python-badge]: https://img.shields.io/badge/python-v3.11-yellow?style=for-the-badge&logo=python
+
+[Poetry-url]: https://python-poetry.org/
+[Poetry-badge]: https://img.shields.io/badge/poetry-blue?style=for-the-badge&logo=poetry
+
+[Pre-commit-url]: https://pre-commit.com/
+[Pre-commit-badge]: https://img.shields.io/badge/Pre--commit-teal?style=for-the-badge&logo=precommit
+
+[Python-telegram-bot-url]: https://docs.python-telegram-bot.org/en/v20.6/
+[Python-telegram-bot-badge]: https://img.shields.io/badge/python--telegram--bot-v20.6-red?style=for-the-badge
+
+[Django-url]: https://docs.djangoproject.com/en/4.2/releases/4.2.6/
+[Django-badge]: https://img.shields.io/badge/Django-v4.2.6-008000?logo=django&style=for-the-badge
+
+[Docker-url]: https://www.docker.com/
+[Docker-badge]: https://img.shields.io/badge/docker-red?style=for-the-badge&logo=docker
+
+[Postgres-url]: https://www.postgresql.org/
+[Postgres-badge]: https://img.shields.io/badge/postgresql-gray?style=for-the-badge&logo=postgresql
+
+[Redis-url]: https://redis.io/
+[Redis-badge]: https://img.shields.io/badge/redis-black?style=for-the-badge&logo=redis

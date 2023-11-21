@@ -12,11 +12,15 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="recruiter",
             name="surname",
-            field=models.CharField(max_length=255, null=True, verbose_name="Фамилия"),
+            field=models.CharField(
+                max_length=255, null=True, verbose_name="Фамилия"
+            ),
         ),
         migrations.AlterField(
             model_name="itspecialist",
             name="surname",
-            field=models.CharField(max_length=255, null=True, verbose_name="Фамилия"),
+            field=models.CharField(
+                max_length=255, null=True, verbose_name="Фамилия"
+            ),
         ),
     ]

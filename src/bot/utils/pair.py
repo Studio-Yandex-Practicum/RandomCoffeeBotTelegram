@@ -5,7 +5,7 @@ from bot.models import CreatedPair, ItSpecialist, PassedPair, Recruiter
 
 
 async def make_pair(itspecialist: ItSpecialist, recruiter: Recruiter) -> bool:
-    """Функция для создания пары IT-специалист - рекрутер."""
+    """Функция для создания пары IT-специалист-рекрутер."""
     status = False
     try:
         itspecialist.has_pair = True
@@ -34,7 +34,7 @@ async def delete_pair(
     recruiter: Recruiter,
     interview_successful: bool,
 ) -> bool:
-    """Функция для удаления пары IT-специалист - рекрутер."""
+    """Функция для удаления пары IT-специалист-рекрутер."""
     try:
         itspecialist.has_pair = False
         recruiter.has_pair = False

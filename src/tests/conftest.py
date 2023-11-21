@@ -58,7 +58,7 @@ async def profession(db):
 
 @pytest.fixture
 async def itspecialist(db, profession):
-    """itspecialist object."""
+    """ItSpecialist object."""
     return await ItSpecialist.objects.acreate(
         telegram_id=1,
         name="itspecialist-1",
@@ -69,7 +69,7 @@ async def itspecialist(db, profession):
 
 @pytest.fixture
 async def recruiter(db):
-    """itspecialist object."""
+    """ItSpecialist object."""
     return await Recruiter.objects.acreate(
         telegram_id=1,
         name="recruiter-1",

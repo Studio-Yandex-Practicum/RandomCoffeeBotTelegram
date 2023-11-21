@@ -43,7 +43,7 @@ class ItSpecialistFactory(RecruiterFactory):
 
 
 class PairFactory(DjangoModelFactory):
-    """Фабрика тестовой пары IT-специалист - рекрутёр."""
+    """Фабрика тестовой пары IT-специалист-рекрутёр."""
 
     class Meta:
         model = CreatedPair
@@ -54,7 +54,7 @@ class PairFactory(DjangoModelFactory):
 
 
 class PassedPairFactory(DjangoModelFactory):
-    """Фабрика тестовой пары IT-специалист - рекрутёр, которая созвонилась."""
+    """Фабрика тестовой пары IT-специалист-рекрутёр, которая созвонилась."""
 
     class Meta:
         model = PassedPair
@@ -76,10 +76,10 @@ def create_recruiter(amount: int = 1):
 
 
 def create_pair(amount: int = 1):
-    """Создание тестовой пары IT-специалист - рекрутёр."""
+    """Создание тестовой пары IT-специалист-рекрутёр."""
     PairFactory.create_batch(amount)
 
 
 def create_passedpair(amount: int = 1):
-    """Создание тестовой пары IT-специалист - рекрутёр, которая созвонилась."""
+    """Создание тестовой пары IT-специалист-рекрутёр, которая созвонилась."""
     PassedPairFactory.create_batch(amount)

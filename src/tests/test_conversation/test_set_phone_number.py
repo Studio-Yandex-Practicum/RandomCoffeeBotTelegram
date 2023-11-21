@@ -15,7 +15,7 @@ async def test_set_phone_number(update, context):
     """
     update.callback_query = None
     update.message = AsyncMock()
-    contact = "test_contact"
+    contact = "+7(111)111-11-11"
     update.message.text = contact
     context.user_data = {"profession": "test_prof", "name": "test_name"}
 

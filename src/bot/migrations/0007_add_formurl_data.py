@@ -9,7 +9,7 @@ def create_url_support(apps, schema_editor):
     FormUrl.objects.create(
         title="Ссылка на форму поддержки бота",
         url="https://practicum.yandex.ru/",
-        url_key="support_form"
+        url_key="support_form",
     )
 
 
@@ -26,7 +26,7 @@ def create_url_guide(apps, schema_editor):
     FormUrl.objects.create(
         title="Ссылка на разговорный гайд",
         url="https://practicum.yandex.ru/",
-        url_key="guide_form"
+        url_key="guide_form",
     )
 
 
@@ -43,7 +43,7 @@ def create_url_feedback(apps, schema_editor):
     FormUrl.objects.create(
         title="Ссылка на форму обратной связи",
         url="https://practicum.yandex.ru/",
-        url_key="feedback_form"
+        url_key="feedback_form",
     )
 
 
@@ -56,20 +56,15 @@ def remove_url_feedback(apps, schema_editor):
 
 class Migration(migrations.Migration):
     dependencies = [
-        ('bot', '0006_add_formurl_model'),
+        ("bot", "0006_add_formurl_model"),
     ]
 
     operations = [
         migrations.RunPython(
-            create_url_support,
-            reverse_code=remove_url_support
+            create_url_support, reverse_code=remove_url_support
         ),
+        migrations.RunPython(create_url_guide, reverse_code=remove_url_guide),
         migrations.RunPython(
-            create_url_guide,
-            reverse_code=remove_url_guide
-        ),
-        migrations.RunPython(
-            create_url_feedback,
-            reverse_code=remove_url_feedback
+            create_url_feedback, reverse_code=remove_url_feedback
         ),
     ]
