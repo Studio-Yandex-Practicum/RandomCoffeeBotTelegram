@@ -39,11 +39,12 @@ LOCAL_APPS = ["bot", "admin_user", ]
 
 EXTERNAL_APPS = ["admin_interface", "colorfield"]
 
-CONTROLCENTER_DASHBOARDS = (
-    ('board', 'bot.dashboards.MyDashboard'),
-)
-CONTROLCENTER_CHARTIST_COLORS = 'material'
 INSTALLED_APPS = EXTERNAL_APPS + DEFAULT_APPS + LOCAL_APPS
+
+CONTROLCENTER_DASHBOARDS = (
+    ("board", "bot.dashboards.MyDashboard"),
+)
+CONTROLCENTER_CHARTIST_COLORS = "material"
 
 X_FRAME_OPTIONS = "SAMEORIGIN"
 SILENCED_SYSTEM_CHECKS = ["security.W019"]

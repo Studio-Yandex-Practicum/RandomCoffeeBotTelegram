@@ -53,7 +53,6 @@ class PassedPairItemList(widgets.ItemList):
 class Diogramm(widgets.SinglePieChart):
     """Диаграмма студентов, рекрутеров, пар."""
 
-    list_display = ("student",)
     title = "Статистика рекрутеров, студентов и пар."
     width = 3
 
@@ -74,7 +73,6 @@ class Diogramm(widgets.SinglePieChart):
 class DashPair(widgets.SingleBarChart):
     """Таблица пар."""
 
-    values_list = None
     title = "Статистика пар."
     width = 3
 
