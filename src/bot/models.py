@@ -172,7 +172,11 @@ class MessageBot(models.Model):
         max_length=255, unique=True, verbose_name="Название сообщения бота"
     )
     message = models.TextField(
-        unique=True, verbose_name="Текст сообщения бота"
+        unique=True,
+        verbose_name="Текст сообщения бота",
+        help_text=(
+            "Не удаляйте '{}'. Это метка для вставки динамических данных."
+        ),
     )
     message_key = models.CharField(
         max_length=255,
