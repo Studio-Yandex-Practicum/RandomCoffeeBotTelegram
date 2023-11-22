@@ -4,12 +4,12 @@ from django.contrib import admin
 from bot.models import (
     CreatedPair,
     FormUrl,
+    ItSpecialist,
     PassedPair,
     Profession,
     Recruiter,
-    Student,
 )
-from bot.utils.forms import RecruiterForm, StudentForm
+from bot.utils.forms import ItSpecialistForm, RecruiterForm
 
 
 @admin.register(Profession)
@@ -24,12 +24,12 @@ class ProfessionAdmin(admin.ModelAdmin):
 class CreatedPairAdmin(admin.ModelAdmin):
     """Управление созданной парой."""
 
-    list_display = ("id", "student", "recruiter", "date")
+    list_display = ("id", "itspecialist", "recruiter", "date")
     list_filter = ("date",)
     search_fields = (
-        "student__telegram_id",
+        "itspecialist__telegram_id",
         "recruiter__telegram_id",
-        "student__telegram_username",
+        "itspecialist__telegram_username",
         "recruiter__telegram_username",
     )
 
@@ -40,25 +40,25 @@ class PassedPairAdmin(admin.ModelAdmin):
 
     list_display = (
         "id",
-        "student",
+        "itspecialist",
         "recruiter",
         "date",
         "interview_successful",
     )
     list_filter = ("date", "interview_successful")
     search_fields = (
-        "student__telegram_id",
+        "itspecialist__telegram_id",
         "recruiter__telegram_id",
-        "student__telegram_username",
+        "itspecialist__telegram_username",
         "recruiter__telegram_username",
     )
 
 
-@admin.register(Student)
-class StudentAdmin(admin.ModelAdmin):
-    """Управление моделью студента."""
+@admin.register(ItSpecialist)
+class ItSpecialistAdmin(admin.ModelAdmin):
+    """Управление моделью IT-специалиста."""
 
-    form = StudentForm
+    form = ItSpecialistForm
     list_display = (
         "telegram_id",
         "name",

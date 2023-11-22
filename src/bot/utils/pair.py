@@ -1,19 +1,19 @@
 from django.db import IntegrityError
 from loguru import logger
 
-from bot.models import CreatedPair, PassedPair, Recruiter, Student
+from bot.models import CreatedPair, ItSpecialist, PassedPair, Recruiter
 
 
-async def make_pair(student: Student, recruiter: Recruiter) -> bool:
-    """Функция для создания пары студент-рекрутер."""
+async def make_pair(itspecialist: ItSpecialist, recruiter: Recruiter) -> bool:
+    """Функция для создания пары IT-специалист-рекрутер."""
     status = False
     try:
-        student.has_pair = True
+        itspecialist.has_pair = True
         recruiter.has_pair = True
         created_pair = await CreatedPair.objects.acreate(
-            student=student, recruiter=recruiter
+            itspecialist=itspecialist, recruiter=recruiter
         )
-        await student.asave(update_fields=["has_pair"])
+        await itspecialist.asave(update_fields=["has_pair"])
         await recruiter.asave(update_fields=["has_pair"])
         logger.info(f"The pair was made with {created_pair}")
         status = True
@@ -22,7 +22,7 @@ async def make_pair(student: Student, recruiter: Recruiter) -> bool:
     except Exception as exp:
         logger.error(
             (
-                f"Error in making pair with {student.name} "
+                f"Error in making pair with {itspecialist.name} "
                 f"and {recruiter.name}: {exp}"
             )
         )
@@ -30,21 +30,23 @@ async def make_pair(student: Student, recruiter: Recruiter) -> bool:
 
 
 async def delete_pair(
-    student: Student, recruiter: Recruiter, interview_successful: bool
+    itspecialist: ItSpecialist,
+    recruiter: Recruiter,
+    interview_successful: bool,
 ) -> bool:
-    """Функция для удаления пары студент-рекрутер."""
+    """Функция для удаления пары IT-специалист-рекрутер."""
     try:
-        student.has_pair = False
+        itspecialist.has_pair = False
         recruiter.has_pair = False
         await CreatedPair.objects.filter(
-            student=student, recruiter=recruiter
+            itspecialist=itspecialist, recruiter=recruiter
         ).adelete()
         passed_pair = await PassedPair.objects.acreate(
-            student=student,
+            itspecialist=itspecialist,
             recruiter=recruiter,
             interview_successful=interview_successful,
         )
-        await student.asave(update_fields=["has_pair"])
+        await itspecialist.asave(update_fields=["has_pair"])
         await recruiter.asave(update_fields=["has_pair"])
         logger.debug(f"The passed  pair was made with {passed_pair}")
         return True
@@ -53,7 +55,7 @@ async def delete_pair(
     except Exception as error:
         logger.error(
             (
-                f"Error in delete pair with {student.name} "
+                f"Error in delete pair with {itspecialist.name} "
                 f"and {recruiter.name}: {error}"
             )
         )

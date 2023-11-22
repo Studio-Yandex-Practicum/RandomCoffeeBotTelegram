@@ -1,3 +1,3 @@
-from bot.models import Recruiter, Student
+from bot.models import ItSpecialist, Recruiter
 
-PARENT_CASE_ROLE = {Student: "Студента", Recruiter: "Рекрутера"}
+PARENT_CASE_ROLE = {ItSpecialist: "IT-специалиста", Recruiter: "Рекрутера"}

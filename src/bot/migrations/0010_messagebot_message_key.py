@@ -20,8 +20,10 @@ class Migration(migrations.Migration):
                     django.core.validators.RegexValidator(
                         "^[A-z0-9_]+$",
                         code="Invalid key",
-                        message=("Ключ должен стостоять только из латинских "
-                                 "букв, цифр и знака подчеркивания"),
+                        message=(
+                            "Ключ должен стостоять только из латинских "
+                            "букв, цифр и знака подчеркивания"
+                        ),
                     )
                 ],
                 verbose_name="Ключ сообщения бота",

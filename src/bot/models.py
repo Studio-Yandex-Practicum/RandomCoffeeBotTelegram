@@ -68,19 +68,19 @@ class PracticumUser(models.Model):
         return f"{self.telegram_username} | id: {self.telegram_id}"
 
 
-class Student(PracticumUser):
-    """Модель для студентов."""
+class ItSpecialist(PracticumUser):
+    """Модель для IT-специалистов."""
 
     profession = models.ForeignKey(
         Profession,
-        related_name="students",
+        related_name="itspecialists",
         on_delete=models.PROTECT,
         verbose_name="Профессия",
     )
 
     class Meta:
-        verbose_name = "Студент"
-        verbose_name_plural = "Студенты"
+        verbose_name = "IT-специалист"
+        verbose_name_plural = "IT-специалисты"
 
 
 class Recruiter(PracticumUser):
@@ -94,8 +94,8 @@ class Recruiter(PracticumUser):
 class CustomPair(models.Model):
     """Базовая модель для создания пар."""
 
-    student = models.ForeignKey(
-        Student, on_delete=models.CASCADE, verbose_name="Студент"
+    itspecialist = models.ForeignKey(
+        ItSpecialist, on_delete=models.CASCADE, verbose_name="IT-специалист"
     )
     recruiter = models.ForeignKey(
         Recruiter, on_delete=models.CASCADE, verbose_name="Рекрутер"
@@ -107,7 +107,7 @@ class CustomPair(models.Model):
 
     def __str__(self):
         return (
-            f"Студент {self.student.telegram_username} | "
+            f"IT-специалист {self.itspecialist.telegram_username} | "
             f"Рекрутер {self.recruiter.telegram_username}"
         )
 
@@ -117,12 +117,15 @@ class CreatedPair(CustomPair):
 
     class Meta:
         constraints = [
-            models.UniqueConstraint(fields=["student"], name="unique_student"),
+            models.UniqueConstraint(
+                fields=["itspecialist"], name="unique_itspecialist"
+            ),
             models.UniqueConstraint(
                 fields=["recruiter"], name="unique_recruiter"
             ),
             models.UniqueConstraint(
-                fields=["student", "recruiter"], name="unique_created_pair"
+                fields=["itspecialist", "recruiter"],
+                name="unique_created_pair",
             ),
         ]
         verbose_name = "Активная пара"
@@ -139,7 +142,7 @@ class PassedPair(CustomPair):
     class Meta:
         constraints = [
             models.UniqueConstraint(
-                fields=["student", "recruiter"], name="unique_passed_pair"
+                fields=["itspecialist", "recruiter"], name="unique_passed_pair"
             )
         ]
         verbose_name = "Завершенная пара"

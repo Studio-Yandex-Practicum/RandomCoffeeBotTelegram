@@ -23,7 +23,9 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "title",
-                    models.CharField(max_length=255, verbose_name="Название ссылки"),
+                    models.CharField(
+                        max_length=255, verbose_name="Название ссылки"
+                    ),
                 ),
                 ("url", models.URLField(verbose_name="Ссылка", null=True)),
                 (
