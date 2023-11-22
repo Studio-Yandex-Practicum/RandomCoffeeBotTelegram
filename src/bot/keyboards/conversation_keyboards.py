@@ -1,3 +1,5 @@
+from typing import Dict, List
+
 from asgiref.sync import sync_to_async
 from django.conf import settings
 from django.core.paginator import Paginator
@@ -65,9 +67,9 @@ profile_keyboard_markup = InlineKeyboardMarkup(
 
 async def build_profession_keyboard(page: int) -> InlineKeyboardPaginator:
     """Создает клавиатуру с пагинацией для выбора профессии."""
-    professions = await sync_to_async(list)(
+    professions: List[Dict[str, str]] = await sync_to_async(list)(
         Profession.objects.all().values("name", "professional_key")
-    )
+    )  # type: ignore [call-arg]
     data_paginator = Paginator(professions, settings.PROFESSION_PER_PAGE)
     telegram_paginator = InlineKeyboardPaginator(
         data_paginator.num_pages,
