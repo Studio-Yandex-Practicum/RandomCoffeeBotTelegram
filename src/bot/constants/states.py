@@ -5,6 +5,7 @@ class States(str, enum.Enum):
     """Класс, описывающий состояния бота."""
 
     START = "start"
+    SUPPORT = "support"
     ROLE_CHOICE = "role_choice"
     PAIR_SEARCH = "pair_search"
     PROFESSION_CHOICE = "profession_choice"

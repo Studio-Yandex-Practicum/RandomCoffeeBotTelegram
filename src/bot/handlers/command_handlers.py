@@ -1,3 +1,5 @@
+from typing import Literal
+
 from telegram import Update
 from telegram.ext import CallbackContext, CommandHandler
 
@@ -16,42 +18,44 @@ from bot.keyboards.command_keyboards import (
     start_keyboard_markup,
 )
 from bot.keyboards.conversation_keyboards import restart_keyboard_markup
-from bot.utils.db_utils import user_is_exist
+from bot.utils.db_utils.user import user_is_exist
 from core.config.logging import debug_logger
 
 
 @debug_logger
-async def start(update: Update, context: CallbackContext):
+async def start(
+    update: Update, context: CallbackContext
+) -> Literal[States.START]:
     """Функция-обработчик команды start."""
     if update.message:
         await update.message.reply_text(
             text=START_MESSAGE, reply_markup=start_keyboard_markup
         )
-    else:
-        query = update.callback_query
-        await query.answer()
-        await query.edit_message_reply_markup(reply_markup=None)
-        await query.message.reply_text(
-            START_MESSAGE, reply_markup=start_keyboard_markup
-        )
-
     return States.START
 
 
 @debug_logger
-async def support_bot(update: Update, context: CallbackContext):
+async def support_bot(
+    update: Update, context: CallbackContext
+) -> Literal[States.SUPPORT]:
     """Функция-обработчик для команды /support."""
-    await update.message.reply_text(
-        text=ASSISTANCE_MESSAGE, reply_markup=await create_support_keyboard()
-    )
+    if update.message:
+        await update.message.reply_text(
+            text=ASSISTANCE_MESSAGE,
+            reply_markup=await create_support_keyboard(),
+        )
+    return States.SUPPORT
 
 
 @debug_logger
-async def help(update: Update, context: CallbackContext):
+async def help(
+    update: Update, context: CallbackContext
+) -> Literal[States.HELP]:
     """Функция-обработчик для команды /help."""
-    await update.message.reply_html(
-        text=(HELP_MESSAGE), reply_markup=help_keyboard_markup
-    )
+    if update.message:
+        await update.message.reply_html(
+            text=(HELP_MESSAGE), reply_markup=help_keyboard_markup
+        )
     return States.HELP
 
 
@@ -60,10 +64,11 @@ async def redirection_to_support(
     update: Update, context: CallbackContext
 ) -> None:
     """Перенаправление на команду /support."""
-    query = update.callback_query
-    await query.edit_message_text(
-        text=ASSISTANCE_MESSAGE, reply_markup=await create_support_keyboard()
-    )
+    if update.callback_query:
+        await update.callback_query.edit_message_text(
+            text=ASSISTANCE_MESSAGE,
+            reply_markup=await create_support_keyboard(),
+        )
 
 
 @debug_logger

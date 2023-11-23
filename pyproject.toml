@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "randomcoffeebottelegram"
 version = "0.1.0"
-description = "Project for communication between recruiters and students."
+description = "Project for communication between recruiters and itspecialists."
 authors = ["Ярослав Андреев <1frost34eone@gmail.com>"]
 readme = "README.md"
 
@@ -30,6 +30,7 @@ ruff = "^0.0.290"
 black = "^23.9.1"
 isort = "^5.12.0"
 factory-boy = "^3.3.0"
+mypy = "^1.7.0"
 
 [build-system]
 requires = ["poetry-core"]
