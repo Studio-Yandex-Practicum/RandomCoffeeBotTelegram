@@ -12,6 +12,8 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name="profession",
             name="professional_key",
-            field=models.CharField(blank=True, max_length=128, null=True, unique=True),
+            field=models.CharField(
+                blank=True, max_length=128, null=True, unique=True
+            ),
         ),
     ]
