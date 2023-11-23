@@ -1,3 +1,5 @@
+from typing import Union
+
 from django.db import IntegrityError
 from loguru import logger
 
@@ -60,3 +62,19 @@ async def delete_pair(
             )
         )
     return False
+
+
+async def get_active_pair(role: str, user_id: int) -> Union[CreatedPair, None]:
+    """Возвращает активную пару, с участием пользователя."""
+    if role == "itspecialist":
+        return (
+            await CreatedPair.objects.filter(itspecialist=user_id)
+            .select_related("itspecialist", "recruiter")
+            .afirst()
+        )
+    else:
+        return (
+            await CreatedPair.objects.filter(recruiter=user_id)
+            .select_related("itspecialist", "recruiter")
+            .afirst()
+        )
