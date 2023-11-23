@@ -14,3 +14,4 @@ PHONE_NUMBER_PATTERN = (
     r"^(\+?\d\d?\d?\d?)\((\d{3})\)(\d{3})\-(\d{2})\-(\d{2})$"
 )
 MESSAGE_KEY_PATTERN = r"^[A-z0-9_]+$"
+DELETE_PATERN = "^deleting_account$"

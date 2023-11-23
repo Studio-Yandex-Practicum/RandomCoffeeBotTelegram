@@ -38,3 +38,11 @@ async def user_is_exist(user_id: int) -> bool:
     ):
         return True
     return False
+
+
+async def deleting_account(user_id: int) -> None:
+    """Фунция удаления аккаунта."""
+    if await Recruiter.objects.filter(telegram_id=user_id).aexists():
+        await Recruiter.objects.filter(telegram_id=user_id).adelete()
+    else:
+        await ItSpecialist.objects.filter(telegram_id=user_id).adelete()

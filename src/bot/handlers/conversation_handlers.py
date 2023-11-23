@@ -7,6 +7,7 @@ from telegram.ext import CallbackContext
 
 from bot.constants.links import FORM_KEYS
 from bot.constants.messages import (
+    ACCOUNT_DELETED_MESSAGE,
     CHANGE_NAME_MESSAGE,
     CHOOSE_PROFESSION_MESSAGE,
     CHOOSE_ROLE_MESSAGE,
@@ -33,8 +34,12 @@ from bot.keyboards.conversation_keyboards import (
     role_choice_keyboard_markup,
 )
 from bot.models import ItSpecialist, Profession, Recruiter
-from bot.utils.db_utlis.pair import delete_pair, get_active_pair, make_pair
-from bot.utils.db_utlis.user import to_create_user_in_db, user_is_exist
+from bot.utils.db_utils.pair import delete_pair, get_active_pair, make_pair
+from bot.utils.db_utils.user import (
+    deleting_account,
+    to_create_user_in_db,
+    user_is_exist,
+)
 from bot.utils.form_url import get_form_url
 from bot.utils.message_senders import (
     send_is_pair_successful_message,
@@ -325,6 +330,18 @@ async def send_both_users_message(
             guide_url,
         ),
     )
+
+
+async def confirm_delete_account(update: Update, context: CallbackContext):
+    """Удаляет пользователя."""
+    query = update.callback_query
+    user_id = query.from_user.id
+    await deleting_account(user_id)
+    await query.answer()
+    await query.edit_message_reply_markup(reply_markup=None)
+    await query.edit_message_text(ACCOUNT_DELETED_MESSAGE)
+    await query.edit_message_reply_markup(restart_keyboard_markup)
+    return States.ACCOUNT_DELETED
 
 
 @debug_logger

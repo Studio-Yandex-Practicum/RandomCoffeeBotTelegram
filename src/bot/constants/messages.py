@@ -89,3 +89,14 @@ POST_CALL_MESSAGE = (
 MESSAGE_INCORRECT_PHONE_NUMBER = (
     "Некорректный номер телефона.\n" "Введите заново:"
 )
+NOT_REGISTRED_MESSAGE = (
+    "Вас нет в зарегистрированных\n"
+    "пользователях, для того, чтобы начать\n"
+    "нажмите /start"
+)
+CONFIRMATION_DELETE_ACCOUNT_MESSAGE = (
+    "Ваша профессия {}.\n" "Хотите удалить аккаунт?"
+)
+ACCOUNT_DELETED_MESSAGE = (
+    "Ваш аккаунт удален, если хотите\n" "продолжить нажмите старт"
+)
