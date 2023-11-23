@@ -16,7 +16,7 @@ from bot.keyboards.command_keyboards import (
     start_keyboard_markup,
 )
 from bot.keyboards.conversation_keyboards import restart_keyboard_markup
-from bot.models import Recruiter, Student
+from bot.utils.db_utils import user_is_exist
 from core.config.logging import debug_logger
 
 
@@ -67,7 +67,7 @@ async def redirection_to_support(
 
 
 @debug_logger
-async def delete_account(update: Update, context: CallbackContext):
+async def start_delete_account(update: Update, context: CallbackContext):
     """Обработчик удаления аккаунта."""
     user = update.message.from_user
     profession = context.user_data["profession"]
@@ -84,17 +84,7 @@ async def delete_account(update: Update, context: CallbackContext):
         return States.NOT_REGISTERED
 
 
-async def user_is_exist(user_id: int) -> bool:
-    """Проверяет наличие юзера в базе данных."""
-    if (
-        await Recruiter.objects.filter(telegram_id=user_id).aexists()
-        or await Student.objects.filter(telegram_id=user_id).aexists()
-    ):
-        return True
-    return False
-
-
 start_handler = CommandHandler("start", start)
 support_bot_handler = CommandHandler("support", support_bot)
 help_handler = CommandHandler("help", help)
-delete_handler = CommandHandler("delete_account", delete_account)
+delete_handler = CommandHandler("delete_account", start_delete_account)

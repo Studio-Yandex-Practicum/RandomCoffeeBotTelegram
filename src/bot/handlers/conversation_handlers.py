@@ -36,6 +36,7 @@ from bot.keyboards.conversation_keyboards import (
     role_choice_keyboard_markup,
 )
 from bot.models import CreatedPair, Profession, Recruiter, Student
+from bot.utils.db_utils import deleting_account, user_is_exist
 from bot.utils.form_url import get_form_url
 from bot.utils.message_senders import send_is_pair_successful_message
 from bot.utils.pagination import parse_callback_data
@@ -321,16 +322,6 @@ async def to_create_user_in_db(update: Update, context: CallbackContext):
         logger.error(f"Не удалось сохранить данные в таблицу: {error}")
 
 
-async def user_is_exist(user_id: int) -> bool:
-    """Проверяет наличие юзера в базе данных."""
-    if (
-        await Recruiter.objects.filter(telegram_id=user_id).aexists()
-        or await Student.objects.filter(telegram_id=user_id).aexists()
-    ):
-        return True
-    return False
-
-
 async def get_active_pair(role: str, user_id: int) -> Union[CreatedPair, None]:
     """Возвращает активную пару, с участием пользователя."""
     if role == "student":
@@ -347,17 +338,11 @@ async def get_active_pair(role: str, user_id: int) -> Union[CreatedPair, None]:
         )
 
 
-async def deleting_account(update: Update, context: CallbackContext):
+async def confirm_delete_account(update: Update, context: CallbackContext):
     """Удаляет пользователя."""
     query = update.callback_query
     user_id = query.from_user.id
-    if (
-        await Recruiter.objects.filter(telegram_id=user_id).aexists()
-        is not None
-    ):
-        await Recruiter.objects.filter(telegram_id=user_id).adelete()
-    else:
-        await Student.objects.filter(telegram_id=user_id).adelete()
+    await deleting_account(user_id)
     await query.answer()
     await query.edit_message_reply_markup(reply_markup=None)
     await query.edit_message_text(ACCOUNT_DELETED_MESSAGE)

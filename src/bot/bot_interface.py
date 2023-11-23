@@ -50,8 +50,8 @@ from bot.handlers.command_handlers import (
 from bot.handlers.conversation_handlers import (
     calling_is_successful,
     change_name,
+    confirm_delete_account,
     continue_name,
-    deleting_account,
     found_pair,
     go,
     next_time,
@@ -234,7 +234,9 @@ async def build_main_handler():
                 ),
             ],
             States.DELETE_ACCOUNT: [
-                CallbackQueryHandler(deleting_account, pattern=DELETE_PATERN),
+                CallbackQueryHandler(
+                    confirm_delete_account, pattern=DELETE_PATERN
+                ),
                 CallbackQueryHandler(
                     restart_callback, pattern=RESTART_PATTERN
                 ),
