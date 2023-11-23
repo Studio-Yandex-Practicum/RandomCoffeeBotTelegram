@@ -190,4 +190,4 @@ class MessageBot(models.Model):
         verbose_name_plural = "Сообщения бота"
 
     def __str__(self):
-        return f"Название {self.title} | Сообщение '{self.message}'"
+        return f"Название '{self.title}'"
