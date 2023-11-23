@@ -5,6 +5,7 @@ from bot.models import (
     CreatedPair,
     FormUrl,
     ItSpecialist,
+    MessageBot,
     PassedPair,
     Profession,
     Recruiter,
@@ -109,4 +110,25 @@ class FormUrlAdmin(admin.ModelAdmin):
 
     def has_add_permission(self, request):
         """Запрещает создавать новые ссылки."""
+        return False
+
+
+@admin.register(MessageBot)
+class MessageBotAdmin(admin.ModelAdmin):
+    """Управление моделью сообщений бота."""
+
+    list_display = (
+        "title",
+        "message",
+    )
+    list_filter = ("title",)
+    search_fields = ("title",)
+    exclude = ("message_key",)
+
+    def has_delete_permission(self, request, obj=None):
+        """Запрещает удалять сообщения."""
+        return False
+
+    def has_add_permission(self, request):
+        """Запрещает создавать новые сообщения."""
         return False
