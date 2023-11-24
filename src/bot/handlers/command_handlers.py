@@ -28,9 +28,10 @@ async def start(
 ) -> Literal[States.START]:
     """Функция-обработчик команды start."""
     user = update.message.from_user
-    # user_id = update.message.from_user['id']
+    user_id = update.message.from_user.id
     # print(user_id)
-    if user and await user_is_exist(user["id"]):
+    # print(type(user_id))
+    if user and await user_is_exist(user_id):
         # await update_last_login_date(user.id)
         pass
 
