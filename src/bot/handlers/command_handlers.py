@@ -27,9 +27,9 @@ async def start(
     update: Update, context: CallbackContext
 ) -> Literal[States.START]:
     """Функция-обработчик команды start."""
-    user = update.message.from_user
-    if user and await user_is_exist(user.id):
-        await update_last_login_date(user.id)
+    # user = update.message.from_user
+    # if user and await user_is_exist(user.id):
+    #     await update_last_login_date(user.id)
 
     if update.message:
         await update.message.reply_text(
