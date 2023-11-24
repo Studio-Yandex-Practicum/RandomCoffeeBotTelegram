@@ -22,7 +22,7 @@ def create_messages(apps, schema_editor):
         MessageBot(title="Сообщение об удалении",
                    message=(
                     "Ваш аккаунт удален, если хотите\n"
-                    "продолжить нажмите старт"
+                    "продолжить нажмите /start"
                    ),
                    message_key="account_deleted_message"),
     )
