@@ -28,7 +28,7 @@ async def start(
 ) -> Literal[States.START]:
     """Функция-обработчик команды start."""
     user = update.message.from_user
-    if await user_is_exist(user.id):
+    if user and await user_is_exist(user.id):
         await update_last_login_date(user.id)
 
     if update.message:
@@ -44,7 +44,7 @@ async def support_bot(
 ) -> Literal[States.SUPPORT]:
     """Функция-обработчик для команды /support."""
     user = update.message.from_user
-    if await user_is_exist(user.id):
+    if user and await user_is_exist(user.id):
         await update_last_login_date(user.id)
 
     if update.message:
@@ -61,7 +61,7 @@ async def help(
 ) -> Literal[States.HELP]:
     """Функция-обработчик для команды /help."""
     user = update.message.from_user
-    if await user_is_exist(user.id):
+    if user and await user_is_exist(user.id):
         await update_last_login_date(user.id)
 
     if update.message:
