@@ -46,3 +46,12 @@ async def deleting_account(user_id: int) -> None:
         await Recruiter.objects.filter(telegram_id=user_id).adelete()
     else:
         await ItSpecialist.objects.filter(telegram_id=user_id).adelete()
+
+
+async def update_last_login_date(user_id: int) -> None:
+    """Функция обновления последнего входа юзера."""
+    if await Recruiter.objects.filter(telegram_id=user_id).aexists():
+        user = await Recruiter.objects.filter(telegram_id=user_id).afirst()
+    else:
+        user = await ItSpecialist.objects.filter(telegram_id=user_id).afirst()
+    await user.asave()
