@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Optional
 
 from django.core.exceptions import ObjectDoesNotExist
 from loguru import logger
@@ -6,7 +6,7 @@ from loguru import logger
 from bot.models import MessageBot
 
 
-async def get_message_bot(message_key: str) -> Union[None, str]:
+async def get_message_bot(message_key: str) -> Optional[str]:
     """Возвращает сообщение бота."""
     try:
         message_bot = await MessageBot.objects.aget(message_key=message_key)
