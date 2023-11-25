@@ -48,10 +48,10 @@ class PracticumUser(models.Model):
     telegram_username = models.CharField(
         max_length=255, verbose_name="Ник в телеграмме", unique=True
     )
-    registration_date = models.DateField(
+    registration_date = models.DateTimeField(
         auto_now_add=True, verbose_name="Дата регистрации"
     )
-    last_login_date = models.DateField(
+    last_login_date = models.DateTimeField(
         auto_now=True, verbose_name="Заходил в последний раз"
     )
     has_pair = models.BooleanField(default=False, verbose_name="Есть пара")
