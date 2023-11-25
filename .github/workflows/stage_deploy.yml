@@ -75,6 +75,9 @@ jobs:
           script: |
             cd ${{ env.DEPLOY_PATH }}
 
+            rm .env
+            touch .env
+
             echo NGINX_HOST=${{ secrets.NGINX_HOST }} >> .env
             echo NGINX_PORT=${{ secrets.NGINX_PORT }} >> .env
 
