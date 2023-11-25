@@ -50,7 +50,7 @@ async def test_profile_create_user(update, context):
         "profession": "prof-1",
         "name": "test_name",
         "contact": "test_contact",
-        "role": "student",
+        "role": "itspecialist",
     }
     result = await profile(update, context)
     update.callback_query.edit_message_text.assert_awaited_with(

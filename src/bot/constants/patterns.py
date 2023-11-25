@@ -1,6 +1,6 @@
 GO_PATTERN = "^go$"
 NEXT_TIME_PATTERN = "^next_time$"
-ROLE_CHOICE_PATTERN = "^(student|recruiter)$"
+ROLE_CHOICE_PATTERN = "^(itspecialist|recruiter)$"
 RESTART_PATTERN = "^restart$"
 TO_SUPPORT_PATTERN = "^support$"
 PARTICIPATE_PATTERN = "^participate$"
@@ -10,3 +10,8 @@ PROFESSION_CHOICE_PATTERN = "^profession.*$"
 PROFILE_PATTERN = "^(all_right|fill_again)*$"
 FOUND_PAIR = "^found_pair$"
 CALLING_IS_SUCCESSFUL = "^(yes|no)$"
+PHONE_NUMBER_PATTERN = (
+    r"^(\+?\d\d?\d?\d?)\((\d{3})\)(\d{3})\-(\d{2})\-(\d{2})$"
+)
+MESSAGE_KEY_PATTERN = r"^[A-z0-9_]+$"
+DELETE_PATERN = "^deleting_account$"
