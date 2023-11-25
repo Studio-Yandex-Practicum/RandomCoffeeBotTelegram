@@ -28,12 +28,8 @@ async def start(
 ) -> Literal[States.START]:
     """Функция-обработчик команды start."""
     user = update.message.from_user
-    user_id = update.message.from_user.id
-    # print(user_id)
-    # print(type(user_id))
-    if user and await user_is_exist(int(user_id)):
-        # await update_last_login_date(user.id)
-        pass
+    if user and await user_is_exist(int(user.id)):
+        await update_last_login_date(int(user.id))
 
     if update.message:
         await update.message.reply_text(
@@ -48,9 +44,9 @@ async def support_bot(
     update: Update, context: CallbackContext
 ) -> Literal[States.SUPPORT]:
     """Функция-обработчик для команды /support."""
-    # user = update.message.from_user
-    # if user and await user_is_exist(user.id):
-    #     await update_last_login_date(user.id)
+    user = update.message.from_user
+    if user and await user_is_exist(int(user.id)):
+        await update_last_login_date(int(user.id))
 
     if update.message:
         await update.message.reply_text(
@@ -66,8 +62,8 @@ async def help(
 ) -> Literal[States.HELP]:
     """Функция-обработчик для команды /help."""
     user = update.message.from_user
-    if user and await user_is_exist(user.id):
-        await update_last_login_date(user.id)
+    if user and await user_is_exist(int(user.id)):
+        await update_last_login_date(int(user.id))
 
     if update.message:
         await update.message.reply_html(
