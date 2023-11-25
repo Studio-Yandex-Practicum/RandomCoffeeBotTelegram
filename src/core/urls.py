@@ -5,8 +5,7 @@ from django.urls import include, path
 
 urlpatterns = [
     path("admin_user/", include("admin_user.urls"), name="admin_user"),
-    # path("", lambda req: redirect("/admin/")),
-    path("", admin.site.urls),
+    path("admin/", admin.site.urls),
 ]
 
 if settings.DEBUG:
