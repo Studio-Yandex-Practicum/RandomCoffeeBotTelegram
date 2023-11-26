@@ -7,6 +7,7 @@ from bot.constants.messages import CHOOSE_PROFESSION_MESSAGE
 from bot.handlers.conversation_handlers import continue_name
 
 
+@pytest.mark.django_db
 @pytest.mark.asyncio
 async def test_continue_name_itspecialist_role(
     update, context, pagination_keyboard, mocked_pagination_reply_markup
@@ -39,6 +40,7 @@ async def test_continue_name_itspecialist_role(
     )
 
 
+@pytest.mark.django_db
 @pytest.mark.asyncio
 async def test_continue_name_recruiter_role(update, context):
     """

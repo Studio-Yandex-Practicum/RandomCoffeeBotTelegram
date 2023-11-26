@@ -12,6 +12,7 @@ from bot.keyboards.command_keyboards import start_keyboard_markup
 from bot.keyboards.conversation_keyboards import role_choice_keyboard_markup
 
 
+@pytest.mark.django_db
 @pytest.mark.asyncio
 async def test_profile_fill_again(update, context):
     """

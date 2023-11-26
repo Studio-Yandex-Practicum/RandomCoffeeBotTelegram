@@ -4,6 +4,7 @@ from bot.constants.messages import NEXT_TIME_MESSAGE
 from bot.handlers.conversation_handlers import next_time
 
 
+@pytest.mark.django_db
 @pytest.mark.asyncio
 async def test_next_time_handler(update, context):
     """

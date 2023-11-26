@@ -7,6 +7,7 @@ from bot.constants.states import States
 from bot.constants.messages import CHANGE_NAME_MESSAGE
 
 
+@pytest.mark.django_db
 @pytest.mark.asyncio
 async def test_change_name(update, context):
     """

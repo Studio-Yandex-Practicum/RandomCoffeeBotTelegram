@@ -7,6 +7,7 @@ from bot.handlers.conversation_handlers import send_profile_form
 from bot.keyboards.conversation_keyboards import profile_keyboard_markup
 
 
+@pytest.mark.django_db
 @pytest.mark.asyncio
 async def test_send_profile_form_with_callback_query(update, context):
     """
@@ -34,6 +35,7 @@ async def test_send_profile_form_with_callback_query(update, context):
     )
 
 
+@pytest.mark.django_db
 @pytest.mark.asyncio
 async def test_send_profile_form_without_callback_query(update, context):
     """
