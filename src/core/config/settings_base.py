@@ -44,7 +44,7 @@ EXTERNAL_APPS = []
 INSTALLED_APPS = EXTERNAL_APPS + DEFAULT_APPS + LOCAL_APPS
 
 CONTROLCENTER_DASHBOARDS = (
-    ("board", "bot.dashboards.MyDashboard"),
+    ("board", "bot.dashoboard_widgets.MyDashboard"),
 )
 
 CONTROLCENTER_CHARTIST_COLORS = "material"
