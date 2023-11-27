@@ -36,16 +36,16 @@ async def test_go_user_is_no_exist(update, context):
 
 @pytest.mark.django_db
 @pytest.mark.asyncio
-async def test_go_user_is_exist(update, context, student):
+async def test_go_user_is_exist(update, context, itspecialist):
     """
     Проверяем, что go handler возвращает
     нужное состояние, сообщение и клавиатуру
     если пользователь существует и пара отсутствует.
     """
     update.callback_query = AsyncMock()
-    student = await student
-    context.user_data = {"role": "student"}
-    update.callback_query.from_user.id = student.telegram_id
+    itspecialist = await itspecialist
+    context.user_data = {"role": "itspecialist"}
+    update.callback_query.from_user.id = itspecialist.telegram_id
     result = await go(update, context)
     update.callback_query.message.reply_text.assert_awaited_with(
         PAIR_SEARCH_MESSAGE

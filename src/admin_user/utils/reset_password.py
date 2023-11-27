@@ -1,4 +1,5 @@
 import os
+from typing import Union
 
 from django.contrib.auth.tokens import default_token_generator
 from django.urls import reverse
@@ -11,8 +12,10 @@ from core.config import settings_base
 
 
 def send_password_reset_email(
-    instance: AdminUser, message=None, template=None
-):
+    instance: AdminUser,
+    message: Union[str, None] = None,
+    template: Union[str, None] = None,
+) -> None:
     """Send email with password reset link."""
     if template is None:
         template = "emailing/password_reset_email.html"
@@ -33,7 +36,7 @@ def send_password_reset_email(
     email.send(fail_silently=False)
 
 
-def get_password_reset_link(instance):
+def get_password_reset_link(instance: AdminUser) -> str:
     """Generate password reset link."""
     uid = urlsafe_base64_encode(force_bytes(instance.pk))
     token = default_token_generator.make_token(instance)

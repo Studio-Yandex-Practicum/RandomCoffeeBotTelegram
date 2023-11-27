@@ -1,3 +1,5 @@
+from typing import Dict, List
+
 from asgiref.sync import sync_to_async
 from django.conf import settings
 from django.core.paginator import Paginator
@@ -8,11 +10,10 @@ from bot.constants.buttons import (
     CHANGE_NAME_BUTTON,
     CONTINUE_BUTTON,
     FILL_AGAIN_BUTTON,
-    GO_BUTTON,
+    IT_SPECIALIST_ROLE_BUTTON,
     NO_BUTTON,
     RECRUITER_ROLE_BUTTON,
     START_BUTTON,
-    STUDENT_ROLE_BUTTON,
     YES_BUTTON,
 )
 from bot.models import Profession
@@ -26,7 +27,7 @@ role_choice_keyboard_markup = InlineKeyboardMarkup(
     [
         [
             InlineKeyboardButton(
-                text=STUDENT_ROLE_BUTTON, callback_data="student"
+                text=IT_SPECIALIST_ROLE_BUTTON, callback_data="itspecialist"
             )
         ],
         [
@@ -66,9 +67,9 @@ profile_keyboard_markup = InlineKeyboardMarkup(
 
 async def build_profession_keyboard(page: int) -> InlineKeyboardPaginator:
     """Создает клавиатуру с пагинацией для выбора профессии."""
-    professions = await sync_to_async(list)(
+    professions: List[Dict[str, str]] = await sync_to_async(list)(
         Profession.objects.all().values("name", "professional_key")
-    )
+    )  # type: ignore [call-arg]
     data_paginator = Paginator(professions, settings.PROFESSION_PER_PAGE)
     telegram_paginator = InlineKeyboardPaginator(
         data_paginator.num_pages,
@@ -92,14 +93,6 @@ is_pair_successful_keyboard_markup = InlineKeyboardMarkup(
         [
             InlineKeyboardButton(text=YES_BUTTON, callback_data="yes"),
             InlineKeyboardButton(text=NO_BUTTON, callback_data="no"),
-        ],
-    ]
-)
-
-search_pair_again_keyboard_markup = InlineKeyboardMarkup(
-    [
-        [
-            InlineKeyboardButton(text=GO_BUTTON, callback_data="go"),
         ],
     ]
 )

@@ -8,16 +8,16 @@ from bot.handlers.conversation_handlers import continue_name
 
 
 @pytest.mark.asyncio
-async def test_continue_name_student_role(
+async def test_continue_name_itspecialist_role(
     update, context, pagination_keyboard, mocked_pagination_reply_markup
 ):
     """
     Проверяем, что continue_name handler
     возвращает нужное сообщение и клавиатуру
-    если выбрана роль студента.
+    если выбрана роль IT-специалиста.
     """
     update.callback_query = AsyncMock()
-    context.user_data = {"role": "student"}
+    context.user_data = {"role": "itspecialist"}
 
     with (
         patch(
@@ -44,7 +44,7 @@ async def test_continue_name_recruiter_role(update, context):
     """
     Проверяем, что continue_name handler
     ставит роль It-рекрутер
-    если роль не студент.
+    если роль не IT-специалист.
     """
     update.callback_query = AsyncMock()
     context.user_data = {"role": "", "name": "test_user"}
