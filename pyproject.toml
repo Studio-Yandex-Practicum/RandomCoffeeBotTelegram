@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "randomcoffeebottelegram"
 version = "0.1.0"
-description = "Project for communication between recruiters and students."
+description = "Project for communication between recruiters and itspecialists."
 authors = ["Ярослав Андреев <1frost34eone@gmail.com>"]
 readme = "README.md"
 

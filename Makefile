@@ -60,16 +60,16 @@ bot-init: # Базовая команда для запуска БД, мигра
 bot-existing-db: # Команда запуска бота и контейнера с БД с уже существующими данными.
 	make start-db run-app
 
-create-student: # Команда для создания тестового профиля студента
-	poetry run python src/manage.py create_student --amount ${amount}
+create-itspecialist: # Команда для создания тестового профиля IT-специалиста
+	poetry run python src/manage.py create_itspecialist --amount ${amount}
 
 create-recruiter: # Команда для создания тестового профиля рекрутера
 	poetry run python src/manage.py create_recruiter --amount ${amount}
 
-create-pair: # Команда для создания пары студент-рекрутер
+create-pair: # Команда для создания пары IT-специалист-рекрутер
 	poetry run python src/manage.py create_pair --amount ${amount}
 
-create-passedpair: # Команда для создания пары студент-рекрутер
+create-passedpair: # Команда для создания пары IT-специалист-рекрутер
 	poetry run python src/manage.py create_passedpair --amount ${amount}
 
 change-interface: # Команда для изменения темы админ панели

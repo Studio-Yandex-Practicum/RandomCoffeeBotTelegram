@@ -5,7 +5,13 @@ from django.utils import timezone
 from factory.django import DjangoModelFactory
 from factory.fuzzy import FuzzyInteger
 
-from bot.models import CreatedPair, PassedPair, Profession, Recruiter, Student
+from bot.models import (
+    CreatedPair,
+    ItSpecialist,
+    PassedPair,
+    Profession,
+    Recruiter,
+)
 
 LOW_LIMIT_NUMBER = 900000000
 HIGH_LIMIT_NUMBER = 999999999
@@ -27,41 +33,41 @@ class RecruiterFactory(DjangoModelFactory):
     search_start_time = timezone.now()
 
 
-class StudentFactory(RecruiterFactory):
-    """Фабрика профиля студента для тестирования проекта."""
+class ItSpecialistFactory(RecruiterFactory):
+    """Фабрика профиля IT-специалиста для тестирования проекта."""
 
     class Meta:
-        model = Student
+        model = ItSpecialist
 
     profession = factory.LazyFunction(lambda: choice(Profession.objects.all()))
 
 
 class PairFactory(DjangoModelFactory):
-    """Фабрика тестовой пары студент-рекрутёр."""
+    """Фабрика тестовой пары IT-специалист-рекрутёр."""
 
     class Meta:
         model = CreatedPair
 
-    student = factory.SubFactory(StudentFactory, has_pair=True)
+    itspecialist = factory.SubFactory(ItSpecialistFactory, has_pair=True)
     recruiter = factory.SubFactory(RecruiterFactory, has_pair=True)
     date = timezone.now()
 
 
 class PassedPairFactory(DjangoModelFactory):
-    """Фабрика тестовой пары студент-рекрутёр, которая созвонилась."""
+    """Фабрика тестовой пары IT-специалист-рекрутёр, которая созвонилась."""
 
     class Meta:
         model = PassedPair
 
     interview_successful = True
-    student = factory.SubFactory(StudentFactory)
+    itspecialist = factory.SubFactory(ItSpecialistFactory)
     recruiter = factory.SubFactory(RecruiterFactory)
     date = timezone.now()
 
 
-def create_student(amount: int = 1):
-    """Создание профиля студента для тестов программы."""
-    StudentFactory.create_batch(amount)
+def create_itspecialist(amount: int = 1):
+    """Создание профиля IT-специалиста для тестов программы."""
+    ItSpecialistFactory.create_batch(amount)
 
 
 def create_recruiter(amount: int = 1):
@@ -70,10 +76,10 @@ def create_recruiter(amount: int = 1):
 
 
 def create_pair(amount: int = 1):
-    """Создание тестовой пары студент-рекрутёр."""
+    """Создание тестовой пары IT-специалист-рекрутёр."""
     PairFactory.create_batch(amount)
 
 
 def create_passedpair(amount: int = 1):
-    """Создание тестовой пары студент-рекрутёр, которая созвонилась."""
+    """Создание тестовой пары IT-специалист-рекрутёр, которая созвонилась."""
     PassedPairFactory.create_batch(amount)

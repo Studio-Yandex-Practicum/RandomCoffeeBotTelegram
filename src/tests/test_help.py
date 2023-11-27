@@ -7,6 +7,7 @@ from bot.handlers import command_handlers
 from bot.keyboards.command_keyboards import help_keyboard_markup
 
 
+@pytest.mark.django_db
 @pytest.mark.asyncio
 async def test_help_handler(
     update,

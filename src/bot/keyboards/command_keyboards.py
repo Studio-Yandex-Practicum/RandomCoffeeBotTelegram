@@ -3,8 +3,10 @@ from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from bot.constants.buttons import (
     GO_BUTTON,
     NEXT_TIME_BUTTON,
+    NO_BUTTON,
     PARTICIPATE_BUTTON,
     SUPPORT_BUTTON,
+    YES_BUTTON,
 )
 from bot.constants.links import FORM_KEYS
 from bot.utils.form_url import get_form_url
@@ -45,6 +47,18 @@ help_keyboard_markup = InlineKeyboardMarkup(
                 PARTICIPATE_BUTTON, callback_data="participate"
             ),
             InlineKeyboardButton(SUPPORT_BUTTON, callback_data="support"),
+        ]
+    ]
+)
+
+
+delete_keyboard_markup = InlineKeyboardMarkup(
+    [
+        [
+            InlineKeyboardButton(
+                text=YES_BUTTON, callback_data="deleting_account"
+            ),
+            InlineKeyboardButton(text=NO_BUTTON, callback_data="restart"),
         ]
     ]
 )
