@@ -16,6 +16,8 @@ from telegram.ext import (
 )
 
 from bot.constants.commands import (
+    DELETE_COMMAND,
+    DELETE_DESCRIPTION,
     HELP_COMMAND,
     HELP_DESCRIPTION,
     START_COMMAND,
@@ -27,6 +29,7 @@ from bot.constants.patterns import (
     CALLING_IS_SUCCESSFUL,
     CHANGE_NAME_PATTERN,
     CONTINUE_NAME_PATTERN,
+    DELETE_PATERN,
     GO_PATTERN,
     NEXT_TIME_PATTERN,
     PARTICIPATE_PATTERN,
@@ -38,6 +41,7 @@ from bot.constants.patterns import (
 )
 from bot.constants.states import States
 from bot.handlers.command_handlers import (
+    delete_handler,
     help_handler,
     redirection_to_support,
     start_handler,
@@ -46,6 +50,7 @@ from bot.handlers.command_handlers import (
 from bot.handlers.conversation_handlers import (
     calling_is_successful,
     change_name,
+    confirm_delete_account,
     continue_name,
     found_pair,
     go,
@@ -116,7 +121,9 @@ class Bot:
             .build()
         )
         main_handler = await build_main_handler()
-        app.add_handlers([main_handler, help_handler, support_bot_handler])
+        app.add_handlers(
+            [main_handler, help_handler, support_bot_handler, delete_handler]
+        )
         return app
 
     async def _manage_webhook(self) -> None:
@@ -147,6 +154,7 @@ class Bot:
             BotCommand(START_COMMAND, START_DESCRIPTION),
             BotCommand(HELP_COMMAND, HELP_DESCRIPTION),
             BotCommand(SUPPORT_COMMAND, SUPPORT_DESCRIPTION),
+            BotCommand(DELETE_COMMAND, DELETE_DESCRIPTION),
         ]
 
         await self._app.bot.set_my_commands(commands)
@@ -219,6 +227,26 @@ async def build_main_handler():
                     calling_is_successful, pattern=CALLING_IS_SUCCESSFUL
                 ),
             ],
+            States.NOT_REGISTERED: [
+                start_handler,
+                CallbackQueryHandler(
+                    restart_callback, pattern=RESTART_PATTERN
+                ),
+            ],
+            States.DELETE_ACCOUNT: [
+                CallbackQueryHandler(
+                    confirm_delete_account, pattern=DELETE_PATERN
+                ),
+                CallbackQueryHandler(
+                    restart_callback, pattern=RESTART_PATTERN
+                ),
+            ],
+            States.ACCOUNT_DELETED: [
+                start_handler,
+                CallbackQueryHandler(
+                    restart_callback, pattern=RESTART_PATTERN
+                ),
+            ],
         },
-        fallbacks=[help_handler, start_handler],
+        fallbacks=[help_handler, start_handler, delete_handler],
     )

@@ -64,26 +64,23 @@ def remove_profession_tester(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('bot', '0007_add_formurl_data'),
+        ("bot", "0007_add_formurl_data"),
     ]
 
     operations = [
         migrations.RunPython(
-            create_profession_analyst,
-            reverse_code=remove_profession_analyst
+            create_profession_analyst, reverse_code=remove_profession_analyst
         ),
         migrations.RunPython(
             create_profession_backend_developer,
-            reverse_code=remove_profession_backend_developer
+            reverse_code=remove_profession_backend_developer,
         ),
         migrations.RunPython(
             create_profession_frontend_developer,
-            reverse_code=remove_profession_frontend_developer
+            reverse_code=remove_profession_frontend_developer,
         ),
         migrations.RunPython(
-            create_profession_tester,
-            reverse_code=remove_profession_tester
+            create_profession_tester, reverse_code=remove_profession_tester
         ),
     ]

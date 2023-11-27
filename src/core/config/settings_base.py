@@ -12,12 +12,12 @@ env = environ.Env()
 if DEBUG := env.bool("DEBUG", default=True):
     environ.Env.read_env(find_dotenv(".env"))
 
-DEFAULT = 'some_default_key'
+DEFAULT = "some_default_key"
 
-SECRET_KEY = env.str('SECRET_KEY', default=DEFAULT)
+SECRET_KEY = env.str("SECRET_KEY", default=DEFAULT)
 
-ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['*'])
-CSRF_TRUSTED_ORIGINS = env.list('CSRF_TRUSTED_ORIGINS', default=['*'])
+ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["*"])
+CSRF_TRUSTED_ORIGINS = env.list("CSRF_TRUSTED_ORIGINS", default=["*"])
 
 AUTH_USER_MODEL = "admin_user.AdminUser"
 
@@ -33,7 +33,10 @@ DEFAULT_APPS = [
     "django.contrib.staticfiles",
 ]
 
-LOCAL_APPS = ["bot", "admin_user", ]
+LOCAL_APPS = [
+    "bot",
+    "admin_user",
+]
 
 # EXTERNAL_APPS = ["admin_interface", "colorfield"]
 EXTERNAL_APPS = []
@@ -64,7 +67,7 @@ ROOT_URLCONF = "core.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [os.path.join(BASE_DIR, 'templates')],
+        "DIRS": [os.path.join(BASE_DIR, "templates")],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -81,12 +84,14 @@ WSGI_APPLICATION = "core.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": env.str("POSTGRES_ENGINE", default='django.db.backends.postgresql'),
-        "NAME": env.str("POSTGRES_NAME", default='postgres'),
-        "USER": env.str("POSTGRES_USER", default='postgres'),
-        "PASSWORD": env.str("POSTGRES_PASSWORD", default='postgres'),
-        "HOST": env.str("POSTGRES_HOST", default='localhost'),
-        "PORT": env.str("POSTGRES_PORT", default='5432'),
+        "ENGINE": env.str(
+            "POSTGRES_ENGINE", default="django.db.backends.postgresql"
+        ),
+        "NAME": env.str("POSTGRES_NAME", default="postgres"),
+        "USER": env.str("POSTGRES_USER", default="postgres"),
+        "PASSWORD": env.str("POSTGRES_PASSWORD", default="postgres"),
+        "HOST": env.str("POSTGRES_HOST", default="localhost"),
+        "PORT": env.str("POSTGRES_PORT", default="5432"),
     }
 }
 
@@ -114,17 +119,17 @@ USE_I18N = True
 USE_TZ = True
 
 REDIS = {
-    'host': env.str('REDIS_HOST', default='localhost'),
-    'port': env.str('REDIS_PORT', default='6379')
+    "host": env.str("REDIS_HOST", default="localhost"),
+    "port": env.str("REDIS_PORT", default="6379"),
 }
 
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(ROOT_DIR, 'static/')
+STATIC_URL = "/static/"
+STATIC_ROOT = os.path.join(ROOT_DIR, "static/")
 
-TELEGRAM_TOKEN = env.str('TELEGRAM_TOKEN', default=DEFAULT)
-USE_REDIS_PERSISTENCE = env.bool('REDIS', default=False)
+TELEGRAM_TOKEN = env.str("TELEGRAM_TOKEN", default=DEFAULT)
+USE_REDIS_PERSISTENCE = env.bool("REDIS", default=False)
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 WEBHOOK_MODE = False
 WEBHOOK_URL = ""
@@ -137,11 +142,13 @@ Path.mkdir(PERSISTENCE_DIR, exist_ok=True)
 
 # Настройки пагинации
 
-DEFAULT_PAGE_NUMBER = 5 # Количество страниц в панели пагинации по умолчанию
-KEYBOARD_PAGE_OFFSET = 3 # Сдвиг страниц, если количество превышает DEFAULT_PAGE_NUMBER
-PROFESSION_PER_PAGE = 5 # Количество профессий на странице
-PAGE_SEP_SYMBOL = "#" # Символ, отделяющий номер страницы
-DEFAULT_PAGE = 1 # Номер страницы по умолчанию
+DEFAULT_PAGE_NUMBER = 5  # Количество страниц в панели пагинации по умолчанию
+KEYBOARD_PAGE_OFFSET = (
+    3  # Сдвиг страниц, если количество превышает DEFAULT_PAGE_NUMBER
+)
+PROFESSION_PER_PAGE = 5  # Количество профессий на странице
+PAGE_SEP_SYMBOL = "#"  # Символ, отделяющий номер страницы
+DEFAULT_PAGE = 1  # Номер страницы по умолчанию
 
 
 EMAIL_BACKEND = env.str(

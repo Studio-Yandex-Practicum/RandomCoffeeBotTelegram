@@ -22,7 +22,7 @@ async def test_search_pair(update, context):
         "profession": "prof-1",
         "name": "test_name",
         "contact": "test_contact",
-        "role": "student",
+        "role": "itspecialist",
     }
 
     result = await search_pair(update, context)

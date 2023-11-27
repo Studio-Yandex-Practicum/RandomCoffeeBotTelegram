@@ -4,12 +4,13 @@ from django.contrib import admin
 from bot.models import (
     CreatedPair,
     FormUrl,
+    ItSpecialist,
+    MessageBot,
     PassedPair,
     Profession,
     Recruiter,
-    Student,
 )
-from bot.utils.forms import RecruiterForm, StudentForm
+from bot.utils.forms import ItSpecialistForm, RecruiterForm
 
 
 @admin.register(Profession)
@@ -25,12 +26,12 @@ class ProfessionAdmin(admin.ModelAdmin):
 class CreatedPairAdmin(admin.ModelAdmin):
     """Управление созданной парой."""
 
-    list_display = ("id", "student", "recruiter", "date")
+    list_display = ("id", "itspecialist", "recruiter", "date")
     list_filter = ("date",)
     search_fields = (
-        "student__telegram_id",
+        "itspecialist__telegram_id",
         "recruiter__telegram_id",
-        "student__telegram_username",
+        "itspecialist__telegram_username",
         "recruiter__telegram_username",
     )
     icon_name = "people"
@@ -42,26 +43,26 @@ class PassedPairAdmin(admin.ModelAdmin):
 
     list_display = (
         "id",
-        "student",
+        "itspecialist",
         "recruiter",
         "date",
         "interview_successful",
     )
     list_filter = ("date", "interview_successful")
     search_fields = (
-        "student__telegram_id",
+        "itspecialist__telegram_id",
         "recruiter__telegram_id",
-        "student__telegram_username",
+        "itspecialist__telegram_username",
         "recruiter__telegram_username",
     )
     icon_name = "people_outline"
 
 
-@admin.register(Student)
-class StudentAdmin(admin.ModelAdmin):
-    """Управление моделью студента."""
+@admin.register(ItSpecialist)
+class ItSpecialistAdmin(admin.ModelAdmin):
+    """Управление моделью IT-специалиста."""
 
-    form = StudentForm
+    form = ItSpecialistForm
     list_display = (
         "telegram_id",
         "name",
@@ -69,9 +70,15 @@ class StudentAdmin(admin.ModelAdmin):
         "telegram_username",
         "registration_date",
         "last_login_date",
+        "profession",
         "has_pair",
     )
-    list_filter = ("registration_date", "last_login_date", "has_pair")
+    list_filter = (
+        "registration_date",
+        "last_login_date",
+        "profession",
+        "has_pair",
+    )
     search_fields = ("telegram_id", "telegram_username")
     actions = [delete_users_and_send_message]
     icon_name = "school"
@@ -115,4 +122,25 @@ class FormUrlAdmin(admin.ModelAdmin):
 
     def has_add_permission(self, request):
         """Запрещает создавать новые ссылки."""
+        return False
+
+
+@admin.register(MessageBot)
+class MessageBotAdmin(admin.ModelAdmin):
+    """Управление моделью сообщений бота."""
+
+    list_display = (
+        "title",
+        "message",
+    )
+    list_filter = ("title",)
+    search_fields = ("title",)
+    exclude = ("message_key",)
+
+    def has_delete_permission(self, request, obj=None):
+        """Запрещает удалять сообщения."""
+        return False
+
+    def has_add_permission(self, request):
+        """Запрещает создавать новые сообщения."""
         return False

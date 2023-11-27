@@ -31,8 +31,9 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "message",
-                    models.TextField(unique=True,
-                                     verbose_name="Текст сообщения бота"),
+                    models.TextField(
+                        unique=True, verbose_name="Текст сообщения бота"
+                    ),
                 ),
             ],
             options={
