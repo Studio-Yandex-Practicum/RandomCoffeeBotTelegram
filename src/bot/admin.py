@@ -67,9 +67,15 @@ class ItSpecialistAdmin(admin.ModelAdmin):
         "telegram_username",
         "registration_date",
         "last_login_date",
+        "profession",
         "has_pair",
     )
-    list_filter = ("registration_date", "last_login_date", "has_pair")
+    list_filter = (
+        "registration_date",
+        "last_login_date",
+        "profession",
+        "has_pair",
+    )
     search_fields = ("telegram_id", "telegram_username")
     actions = [delete_users_and_send_message]
 

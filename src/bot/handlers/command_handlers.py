@@ -12,7 +12,7 @@ from bot.keyboards.command_keyboards import (
 )
 from bot.keyboards.conversation_keyboards import restart_keyboard_markup
 from bot.utils.db_utils.message import get_message_bot
-from bot.utils.db_utils.user import user_is_exist
+from bot.utils.db_utils.user import update_last_login_date, user_is_exist
 from core.config.logging import debug_logger
 
 
@@ -21,11 +21,16 @@ async def start(
     update: Update, context: CallbackContext
 ) -> Literal[States.START]:
     """Функция-обработчик команды start."""
+    user = update.message.from_user
+    if user and await user_is_exist(int(user.id)):
+        await update_last_login_date(int(user.id))
+
     if update.message:
         await update.message.reply_text(
             text=await get_message_bot("start_message"),
             reply_markup=start_keyboard_markup,
         )
+
     return States.START
 
 
@@ -34,6 +39,10 @@ async def support_bot(
     update: Update, context: CallbackContext
 ) -> Literal[States.SUPPORT]:
     """Функция-обработчик для команды /support."""
+    user = update.message.from_user
+    if user and await user_is_exist(int(user.id)):
+        await update_last_login_date(int(user.id))
+
     if update.message:
         await update.message.reply_text(
             text=await get_message_bot("assistance_message"),
@@ -47,6 +56,10 @@ async def help(
     update: Update, context: CallbackContext
 ) -> Literal[States.HELP]:
     """Функция-обработчик для команды /help."""
+    user = update.message.from_user
+    if user and await user_is_exist(int(user.id)):
+        await update_last_login_date(int(user.id))
+
     if update.message:
         await update.message.reply_html(
             text=await get_message_bot("help_message"),

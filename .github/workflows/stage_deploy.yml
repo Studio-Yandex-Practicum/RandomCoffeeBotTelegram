@@ -75,6 +75,12 @@ jobs:
           script: |
             cd ${{ env.DEPLOY_PATH }}
 
+            rm .env
+            touch .env
+
+            echo NGINX_HOST=${{ secrets.NGINX_HOST }} >> .env
+            echo NGINX_PORT=${{ secrets.NGINX_PORT }} >> .env
+
             echo TELEGRAM_TOKEN=${{ secrets.TELEGRAM_TOKEN }} > .env
 
             echo WEBHOOK_ENABLED=${{ secrets.WEBHOOK_ENABLED }} >> .env

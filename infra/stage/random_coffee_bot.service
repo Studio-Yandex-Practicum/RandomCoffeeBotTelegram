@@ -25,6 +25,9 @@ ExecStart=docker compose -f docker_compose_stage.yaml --env-file /home/deploy/ra
 # compose down
 ExecStop=docker compose -f docker_compose_stage.yaml --env-file /home/deploy/random-coffee/.env down
 
+# Remove all unused containers, networks, images
+ExecStartPost=docker system prune --force
+
 [Install]
 
 WantedBy=multi-user.target
