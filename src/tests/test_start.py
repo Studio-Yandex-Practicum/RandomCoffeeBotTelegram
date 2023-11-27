@@ -2,7 +2,7 @@ from unittest.mock import AsyncMock
 
 import pytest
 
-from bot.constants.messages import START_MESSAGE
+from bot.utils.db_utils.message import get_message_bot
 from bot.handlers import command_handlers
 from bot.keyboards.command_keyboards import start_keyboard_markup
 
@@ -24,6 +24,6 @@ async def test_start_handler_answer_to_user_message(
     await command_handlers.start(update, context)
 
     update.message.reply_text.assert_called_with(
-        text=START_MESSAGE,
+        text=await get_message_bot("start_message"),
         reply_markup=start_keyboard_markup,
     )
