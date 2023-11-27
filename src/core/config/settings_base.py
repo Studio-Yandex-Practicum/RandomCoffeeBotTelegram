@@ -4,8 +4,6 @@ from pathlib import Path
 import environ
 from dotenv import find_dotenv
 
-# from django.utils.translation import gettext_lazy as _
-
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 ROOT_DIR = BASE_DIR.parent
 
@@ -25,9 +23,9 @@ AUTH_USER_MODEL = "admin_user.AdminUser"
 
 DEFAULT_APPS = [
     "controlcenter",
-    # "material",
-    # "material.admin",
-    "django.contrib.admin",
+    "material",
+    "material.admin",
+    # "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
@@ -37,7 +35,8 @@ DEFAULT_APPS = [
 
 LOCAL_APPS = ["bot", "admin_user", ]
 
-EXTERNAL_APPS = ["admin_interface", "colorfield"]
+# EXTERNAL_APPS = ["admin_interface", "colorfield"]
+EXTERNAL_APPS = []
 
 INSTALLED_APPS = EXTERNAL_APPS + DEFAULT_APPS + LOCAL_APPS
 
@@ -159,3 +158,8 @@ EMAIL_HOST_PASSWORD = env.str("EMAIL_PASSWORD", default="password")
 EMAIL_TIMEOUT = 5
 EMAIL_USE_SSL = True
 DEFAULT_RECEIVER = env.str("DEFAULT_EMAIL_ADDRESS", default="NOT_SET")
+
+MATERIAL_ADMIN_SITE = {
+    'MAIN_BG_COLOR':  'green',  # Admin site main color, css color should be specified
+    'SHOW_THEMES':  True,  #  Show default admin themes button
+}
