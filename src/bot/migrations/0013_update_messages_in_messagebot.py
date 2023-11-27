@@ -41,7 +41,7 @@ def remove_messages(apps, schema_editor):
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("bot", "0011_add_messages_in_messagebot"),
+        ("bot", "0012_alter_itspecialist_last_login_date_and_more"),
     ]
 
     operations = [
