@@ -58,13 +58,13 @@ class StudentAdmin(admin.ModelAdmin):
     """Управление моделью студента."""
 
     list_display = (
-        "telegram_id",
         "name",
         "surname",
+        "telegram_id",
         "telegram_username",
-        "registration_date",
-        "last_login_date",
         "has_pair",
+        "last_login_date",
+        "registration_date",
     )
     list_filter = ("registration_date", "last_login_date", "has_pair")
     search_fields = ("telegram_id", "telegram_username")
@@ -76,13 +76,13 @@ class RecruiterAdmin(admin.ModelAdmin):
     """Управление моделью рекрутера."""
 
     list_display = (
-        "telegram_id",
         "name",
         "surname",
+        "telegram_id",
         "telegram_username",
-        "registration_date",
-        "last_login_date",
         "has_pair",
+        "last_login_date",
+        "registration_date",
     )
     list_filter = ("registration_date", "last_login_date", "has_pair")
     search_fields = ("telegram_id", "telegram_username")

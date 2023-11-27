@@ -35,29 +35,32 @@ def create_key(sender, instance, *args, **kwargs) -> None:
 class PracticumUser(models.Model):
     """Базовая модель для пользователей."""
 
-    telegram_id = models.BigIntegerField(
-        primary_key=True, verbose_name="Telegram User ID"
-    )
     name = models.CharField(max_length=255, verbose_name="Имя")
     surname = models.CharField(
         max_length=255,
         verbose_name="Фамилия",
         null=True,
     )
+    telegram_id = models.BigIntegerField(
+        primary_key=True,
+        verbose_name="Telegram User ID",
+    )
     telegram_username = models.CharField(
-        max_length=255, verbose_name="Ник в телеграмме", unique=True
-    )
-    registration_date = models.DateField(
-        auto_now_add=True, verbose_name="Дата регистрации"
-    )
-    last_login_date = models.DateField(
-        auto_now=True, verbose_name="Заходил в последний раз"
+        max_length=255,
+        verbose_name="Ник телеграма или номер телефона",
+        unique=True,
     )
     has_pair = models.BooleanField(default=False, verbose_name="Есть пара")
     search_start_time = models.DateTimeField(
         blank=True,
         null=True,
         verbose_name="Время начала поиска",
+    )
+    last_login_date = models.DateField(
+        auto_now=True, verbose_name="Заходил в последний раз"
+    )
+    registration_date = models.DateField(
+        auto_now_add=True, verbose_name="Дата регистрации"
     )
 
     class Meta:
