@@ -25,7 +25,6 @@ DEFAULT_APPS = [
     "controlcenter",
     "material",
     "material.admin",
-    # "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
@@ -38,7 +37,6 @@ LOCAL_APPS = [
     "admin_user",
 ]
 
-# EXTERNAL_APPS = ["admin_interface", "colorfield"]
 EXTERNAL_APPS = []
 
 INSTALLED_APPS = EXTERNAL_APPS + DEFAULT_APPS + LOCAL_APPS
@@ -49,8 +47,6 @@ CONTROLCENTER_DASHBOARDS = (
 
 CONTROLCENTER_CHARTIST_COLORS = "material"
 
-X_FRAME_OPTIONS = "SAMEORIGIN"
-SILENCED_SYSTEM_CHECKS = ["security.W019"]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
