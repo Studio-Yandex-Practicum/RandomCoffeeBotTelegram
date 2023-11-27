@@ -1,7 +1,7 @@
 from controlcenter.views import DashboardView
 
 from bot.dashboards import DashPair, Diogramm, MyDashboard, PairDiogramm
-from bot.models import Profession, Recruiter, Student
+from bot.models import ItSpecialist, Profession, Recruiter
 from core.forms import DateForm
 
 
@@ -27,7 +27,7 @@ class DashView(DashboardView):
                         values.append(
                             (
                                 profession.name,
-                                Student.objects.filter(
+                                ItSpecialist.objects.filter(
                                     profession=profession.pk,
                                     registration_date__range=time,
                                 ).count(),

@@ -1,6 +1,12 @@
 from controlcenter import Dashboard, widgets
 
-from bot.models import CreatedPair, PassedPair, Profession, Recruiter, Student
+from bot.models import (
+    CreatedPair,
+    ItSpecialist,
+    PassedPair,
+    Profession,
+    Recruiter,
+)
 
 
 class Diogramm(widgets.SinglePieChart):
@@ -21,7 +27,9 @@ class Diogramm(widgets.SinglePieChart):
             values.append(
                 (
                     profession.name,
-                    Student.objects.filter(profession=profession.pk).count(),
+                    ItSpecialist.objects.filter(
+                        profession=profession.pk
+                    ).count(),
                 )
             )
             for profession in Profession.objects.all()
