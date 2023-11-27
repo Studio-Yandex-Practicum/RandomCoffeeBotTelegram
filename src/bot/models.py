@@ -69,8 +69,6 @@ class PracticumUser(models.Model):
 
     def __str__(self):
         return f"{self.telegram_username} | id: {self.telegram_id}"
-        self.fields["telegram_id"].widget.attrs["readonly"] = True
-        self.fields["telegram_username"].widget.attrs["readonly"] = True
 
 
 class ItSpecialist(PracticumUser):
@@ -87,6 +85,9 @@ class ItSpecialist(PracticumUser):
         verbose_name = "IT-специалист"
         verbose_name_plural = "IT-специалисты"
 
+    def __str__(self):
+        return f"{self.name} {self.surname}"
+
 
 class Recruiter(PracticumUser):
     """Модель для рекрутеров."""
@@ -94,6 +95,9 @@ class Recruiter(PracticumUser):
     class Meta:
         verbose_name = "Рекрутер"
         verbose_name_plural = "Рекрутеры"
+
+    def __str__(self):
+        return f"{self.name} {self.surname}"
 
 
 class CustomPair(models.Model):
