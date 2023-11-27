@@ -68,6 +68,8 @@ class PracticumUser(models.Model):
 
     def __str__(self):
         return f"{self.telegram_username} | id: {self.telegram_id}"
+        self.fields["telegram_id"].widget.attrs["readonly"] = True
+        self.fields["telegram_username"].widget.attrs["readonly"] = True
 
 
 class Student(PracticumUser):
