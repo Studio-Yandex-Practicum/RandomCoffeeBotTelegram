@@ -17,8 +17,8 @@ class Profession(models.Model):
     )
 
     class Meta:
-        verbose_name = "Профессия"
-        verbose_name_plural = "Профессии"
+        verbose_name = "Профессия IT специалиста"
+        verbose_name_plural = "Профессии IT специалистов"
 
     def __str__(self):
         return self.name

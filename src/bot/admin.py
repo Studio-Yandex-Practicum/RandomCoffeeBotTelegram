@@ -136,6 +136,7 @@ class MessageBotAdmin(admin.ModelAdmin):
     list_filter = ("title",)
     search_fields = ("title",)
     exclude = ("message_key",)
+    icon_name = "message"
 
     def has_delete_permission(self, request, obj=None):
         """Запрещает удалять сообщения."""
