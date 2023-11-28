@@ -6,24 +6,6 @@ from telegram import Update
 from telegram.ext import CallbackContext
 
 from bot.constants.links import FORM_KEYS
-from bot.constants.messages import (
-    ACCOUNT_DELETED_MESSAGE,
-    CHANGE_NAME_MESSAGE,
-    CHOOSE_PROFESSION_MESSAGE,
-    CHOOSE_ROLE_MESSAGE,
-    FOUND_PAIR,
-    FOUND_PAIR_NO_USERNAME,
-    MESSAGE_INCORRECT_PHONE_NUMBER,
-    NEXT_TIME_MESSAGE,
-    PAIR_SEARCH_MESSAGE,
-    POST_CALL_MESSAGE,
-    POST_CALL_MESSAGE_FOR_IT_SPECIALIST,
-    POST_CALL_MESSAGE_FOR_RECRUITER,
-    PROFILE_MESSAGE,
-    PROFILE_MESSAGE_NO_USERNAME,
-    START_PAIR_SEARCH_MESSAGE,
-    USERNAME_NOT_FOUND_MESSAGE,
-)
 from bot.constants.states import States
 from bot.handlers.command_handlers import start
 from bot.keyboards.command_keyboards import start_keyboard_markup
@@ -34,6 +16,7 @@ from bot.keyboards.conversation_keyboards import (
     role_choice_keyboard_markup,
 )
 from bot.models import ItSpecialist, Profession, Recruiter
+from bot.utils.db_utils.message import get_message_bot
 from bot.utils.db_utils.pair import delete_pair, get_active_pair, make_pair
 from bot.utils.db_utils.user import (
     deleting_account,
@@ -63,7 +46,9 @@ async def go(update: Update, context: CallbackContext) -> Optional[States]:
         await query.answer()
         await query.edit_message_reply_markup(reply_markup=None)
         if not await user_is_exist(user.id):
-            await query.edit_message_text(CHOOSE_ROLE_MESSAGE)
+            await query.edit_message_text(
+                await get_message_bot("choose_role_message")
+            )
             await query.edit_message_reply_markup(role_choice_keyboard_markup)
             return States.ROLE_CHOICE
         else:
@@ -95,7 +80,9 @@ async def search_pair(
         )
         if found_user:
             return await found_pair(update, context, current_user, found_user)
-        await query.message.reply_text(PAIR_SEARCH_MESSAGE)
+        await query.message.reply_text(
+            await get_message_bot("pair_search_message")
+        )
     return States.CALLING_IS_SUCCESSFUL
 
 
@@ -138,7 +125,9 @@ async def next_time(
     query = update.callback_query
     if query:
         await query.answer()
-        await query.edit_message_text(NEXT_TIME_MESSAGE)
+        await query.edit_message_text(
+            await get_message_bot("next_time_message")
+        )
         await query.edit_message_reply_markup(
             reply_markup=restart_keyboard_markup
         )
@@ -174,7 +163,7 @@ async def change_name(
     """Обработчик для кнопки "Изменить имя"."""
     query = update.callback_query
     await query.answer()
-    await query.edit_message_text(CHANGE_NAME_MESSAGE)
+    await query.edit_message_text(await get_message_bot("change_name_message"))
     return States.SET_NEW_NAME
 
 
@@ -201,7 +190,9 @@ async def continue_name(
         await query.answer()
         keyboard = await build_profession_keyboard(page_number)
         if query.message.reply_markup.to_json() != keyboard.markup:
-            await query.edit_message_text(CHOOSE_PROFESSION_MESSAGE)
+            await query.edit_message_text(
+                await get_message_bot("choose_profession_message")
+            )
             await query.edit_message_reply_markup(reply_markup=keyboard.markup)
         return States.PROFESSION_CHOICE
     else:
@@ -228,7 +219,9 @@ async def set_phone_number(
     if update.message and update.message.text and context.user_data:
         phone_number = update.message.text
         if not await validation_phone_number(phone_number):
-            await update.message.reply_text(MESSAGE_INCORRECT_PHONE_NUMBER)
+            await update.message.reply_text(
+                await get_message_bot("message_incorrect_phone_number")
+            )
             return States.SET_PHONE_NUMBER
         context.user_data["contact"] = phone_number
         await send_profile_form(update, context)
@@ -243,12 +236,16 @@ async def profile(
     query = update.callback_query
     if query:
         if query.data == "fill_again":
-            await query.edit_message_text(CHOOSE_ROLE_MESSAGE)
+            await query.edit_message_text(
+                await get_message_bot("choose_role_message")
+            )
             await query.edit_message_reply_markup(role_choice_keyboard_markup)
             return States.ROLE_CHOICE
         await to_create_user_in_db(update, context)
         if await user_is_exist(query.from_user.id):
-            await query.edit_message_text(START_PAIR_SEARCH_MESSAGE)
+            await query.edit_message_text(
+                await get_message_bot("start_pair_search_message")
+            )
             await query.edit_message_reply_markup(
                 reply_markup=start_keyboard_markup
             )
@@ -267,7 +264,9 @@ async def check_username(
     query = update.callback_query
     if query:
         if not query.from_user.username:
-            await query.edit_message_text(USERNAME_NOT_FOUND_MESSAGE)
+            await query.edit_message_text(
+                await get_message_bot("username_not_found_message")
+            )
             return States.SET_PHONE_NUMBER
         await send_profile_form(update, context)
         return States.PROFILE
@@ -283,17 +282,15 @@ async def send_profile_form(update: Update, context: CallbackContext) -> None:
     if query:
         context.user_data["contact"] = query.from_user.username
         await query.answer()
+        message = await get_message_bot("profile_message")
         await query.edit_message_text(
-            PROFILE_MESSAGE.format(
-                name, profession, context.user_data["contact"]
-            )
+            message.format(name, profession, context.user_data["contact"])
         )
         await query.edit_message_reply_markup(profile_keyboard_markup)
     elif not query and update.message:
+        message = await get_message_bot("profile_message_no_username")
         await update.message.reply_text(
-            PROFILE_MESSAGE_NO_USERNAME.format(
-                name, profession, context.user_data["contact"]
-            ),
+            message.format(name, profession, context.user_data["contact"]),
             reply_markup=profile_keyboard_markup,
         )
 
@@ -306,10 +303,12 @@ async def send_both_users_message(
     itspecialist_profession = await Profession.objects.aget(
         pk=itspecialist.profession_id
     )
-    form_itspecialist = [FOUND_PAIR, FOUND_PAIR_NO_USERNAME][
+    found_pair = await get_message_bot("found_pair")
+    found_pair_no_username = await get_message_bot("found_pair_no_username")
+    form_itspecialist = [found_pair, found_pair_no_username][
         await validation_phone_number(itspecialist.telegram_username)
     ]
-    form_recruiter = [FOUND_PAIR, FOUND_PAIR_NO_USERNAME][
+    form_recruiter = [found_pair, found_pair_no_username][
         await validation_phone_number(recruiter.telegram_username)
     ]
     await context.bot.send_message(
@@ -339,7 +338,9 @@ async def confirm_delete_account(update: Update, context: CallbackContext):
     await deleting_account(user_id)
     await query.answer()
     await query.edit_message_reply_markup(reply_markup=None)
-    await query.edit_message_text(ACCOUNT_DELETED_MESSAGE)
+    await query.edit_message_text(
+        await get_message_bot("account_deleted_message")
+    )
     await query.edit_message_reply_markup(restart_keyboard_markup)
     return States.ACCOUNT_DELETED
 
@@ -359,14 +360,14 @@ async def calling_is_successful(
         )
     if query.data == "no":
         communicate_url = await get_form_url(FORM_KEYS["FEEDBACK"])
-        await query.edit_message_text(
-            POST_CALL_MESSAGE.format(communicate_url)
-        )
+        message = await get_message_bot("post_call_message")
+        await query.edit_message_text(message.format(communicate_url))
     elif context.user_data["role"] == "recruiter":
-        await query.edit_message_text(
-            POST_CALL_MESSAGE_FOR_RECRUITER.format(feedback_url)
-        )
+        message = await get_message_bot("post_call_message_for_recruiter")
+        await query.edit_message_text(message.format(feedback_url))
     else:
-        await query.edit_message_text(POST_CALL_MESSAGE_FOR_IT_SPECIALIST)
+        await query.edit_message_text(
+            await get_message_bot("post_call_message_for_it_specialist")
+        )
     await query.edit_message_reply_markup(reply_markup=start_keyboard_markup)
     return States.START

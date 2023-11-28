@@ -8,7 +8,7 @@
           <a href="{{ app.app_url }}" class="section" title="{% blocktranslate with name=app.name %}Models in the {{ name }} application{% endblocktranslate %}">{{ app.name }}</a>
         </caption>
         {% for model in app.models %}
-          {% if model.object_name != "FormUrl" %}
+          {% if model.object_name != "FormUrl" and model.object_name != "MessageBot" %}
             <tr class="model-{{ model.object_name|lower }}{% if model.admin_url in request.path|urlencode %} current-model{% endif %}">
               {% if model.admin_url %}
                 <th scope="row"><a href="{{ model.admin_url }}"{% if model.admin_url in request.path|urlencode %} aria-current="page"{% endif %}>{{ model.name }}</a></th>
@@ -39,16 +39,20 @@
   {% endfor %}
   <div class="forms module{% if app.app_url in request.path|urlencode %} current-app{% endif %}">
     <table>
-
-      <tr class="model-formurl">
-        <th scope="row">
-          <a href="/admin/bot/formurl/">Ссылки на формы</a>
-        </th>
-        <td></td>
-        <td>
-          <a href="/admin/bot/formurl/" class="changelink">Изменить</a>
-        </td>
-      </tr>
+      {% for app in app_list %}
+        {% for model in app.models %}
+          {% if model.object_name == "FormUrl" or model.object_name == "MessageBot" %}
+            <tr class="model-formurl">
+              <th scope="row">
+                <a href="{{ model.admin_url }}">{{ model.name }}</a>
+              </th>
+              <td>
+                <a href="{{ model.admin_url }}" class="changelink">{% translate 'Change' %}</a>
+              </td>
+            </tr>
+          {% endif %}
+        {% endfor %}
+      {% endfor %}
     </table>
   </div>
 {% else %}
