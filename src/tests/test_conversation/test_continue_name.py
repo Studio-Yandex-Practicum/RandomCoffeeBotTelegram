@@ -3,10 +3,11 @@ from unittest.mock import AsyncMock, Mock, patch
 import pytest
 from django.conf import settings
 
-from bot.constants.messages import CHOOSE_PROFESSION_MESSAGE
+from bot.utils.db_utils.message import get_message_bot
 from bot.handlers.conversation_handlers import continue_name
 
 
+@pytest.mark.django_db
 @pytest.mark.asyncio
 async def test_continue_name_itspecialist_role(
     update, context, pagination_keyboard, mocked_pagination_reply_markup
@@ -32,13 +33,14 @@ async def test_continue_name_itspecialist_role(
         await continue_name(update, context)
 
     update.callback_query.edit_message_text.assert_awaited_with(
-        CHOOSE_PROFESSION_MESSAGE,
+        await get_message_bot("choose_profession_message"),
     )
     update.callback_query.edit_message_reply_markup.assert_awaited_with(
         reply_markup=mocked_pagination_reply_markup
     )
 
 
+@pytest.mark.django_db
 @pytest.mark.asyncio
 async def test_continue_name_recruiter_role(update, context):
     """

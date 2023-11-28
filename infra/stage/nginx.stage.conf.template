@@ -1,7 +1,7 @@
 server {
-    listen ${NGINX_PORT};
+    listen ${PORT_NG};
     server_tokens off;
-    server_name ${NGINX_HOST};
+    server_name ${HOST_NG};
 
     location /static/ {
         root /var/html/;

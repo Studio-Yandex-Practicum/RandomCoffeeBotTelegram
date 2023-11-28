@@ -6,6 +6,7 @@ from bot.constants.states import States
 from bot.handlers.conversation_handlers import set_phone_number
 
 
+@pytest.mark.django_db
 @pytest.mark.asyncio
 async def test_set_phone_number(update, context):
     """
