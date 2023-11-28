@@ -1,9 +1,10 @@
 import pytest
 
-from bot.constants.messages import NEXT_TIME_MESSAGE
+from bot.utils.db_utils.message import get_message_bot
 from bot.handlers.conversation_handlers import next_time
 
 
+@pytest.mark.django_db
 @pytest.mark.asyncio
 async def test_next_time_handler(update, context):
     """
@@ -13,5 +14,5 @@ async def test_next_time_handler(update, context):
     await next_time(update, context)
 
     update.callback_query.edit_message_text.assert_awaited_with(
-        NEXT_TIME_MESSAGE
+        await get_message_bot("next_time_message")
     )

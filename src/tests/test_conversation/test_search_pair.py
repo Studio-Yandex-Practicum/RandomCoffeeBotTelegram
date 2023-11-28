@@ -2,9 +2,8 @@ from unittest.mock import AsyncMock
 
 import pytest
 from bot.handlers.conversation_handlers import search_pair
+from bot.utils.db_utils.message import get_message_bot
 from bot.constants.states import States
-
-from bot.constants.messages import PAIR_SEARCH_MESSAGE
 
 
 @pytest.mark.django_db
@@ -28,4 +27,6 @@ async def test_search_pair(update, context):
     result = await search_pair(update, context)
 
     assert result == States.CALLING_IS_SUCCESSFUL
-    query.message.reply_text.assert_called_with(PAIR_SEARCH_MESSAGE)
+    query.message.reply_text.assert_called_with(
+        await get_message_bot("pair_search_message")
+    )

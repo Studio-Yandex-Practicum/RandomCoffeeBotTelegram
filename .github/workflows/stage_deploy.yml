@@ -78,10 +78,10 @@ jobs:
             rm .env
             touch .env
 
-            echo NGINX_HOST=${{ secrets.NGINX_HOST }} >> .env
-            echo NGINX_PORT=${{ secrets.NGINX_PORT }} >> .env
+            echo HOST_NG=${{ secrets.HOST_NG }} >> .env
+            echo PORT_NG=${{ secrets.PORT_NG }} >> .env
 
-            echo TELEGRAM_TOKEN=${{ secrets.TELEGRAM_TOKEN }} > .env
+            echo TELEGRAM_TOKEN=${{ secrets.TELEGRAM_TOKEN }} >> .env
 
             echo WEBHOOK_ENABLED=${{ secrets.WEBHOOK_ENABLED }} >> .env
             echo WEBHOOK_URL=${{ secrets.WEBHOOK_URL }} >> .env

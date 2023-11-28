@@ -37,7 +37,7 @@ services:
   nginx:
     image: nginx:1.21.3-alpine
     ports:
-      - "80:${NGINX_PORT}"
+      - "80:${PORT_NG}"
     volumes:
       - ./nginx.stage.conf.template:/etc/nginx/templates/default.conf.template
       - static_value:/var/html/static/
