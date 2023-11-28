@@ -22,7 +22,9 @@ CSRF_TRUSTED_ORIGINS = env.list("CSRF_TRUSTED_ORIGINS", default=["*"])
 AUTH_USER_MODEL = "admin_user.AdminUser"
 
 DEFAULT_APPS = [
-    "django.contrib.admin",
+    "controlcenter",
+    "material",
+    "material.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
@@ -35,12 +37,16 @@ LOCAL_APPS = [
     "admin_user",
 ]
 
-EXTERNAL_APPS = ["admin_interface", "colorfield"]
+EXTERNAL_APPS = []
 
 INSTALLED_APPS = EXTERNAL_APPS + DEFAULT_APPS + LOCAL_APPS
 
-X_FRAME_OPTIONS = "SAMEORIGIN"
-SILENCED_SYSTEM_CHECKS = ["security.W019"]
+CONTROLCENTER_DASHBOARDS = (
+    ("board", "bot.dashoboard_widgets.MyDashboard"),
+)
+
+CONTROLCENTER_CHARTIST_COLORS = "material"
+
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -50,6 +56,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+
 ]
 
 ROOT_URLCONF = "core.urls"
@@ -155,3 +162,8 @@ EMAIL_HOST_PASSWORD = env.str("EMAIL_PASSWORD", default="password")
 EMAIL_TIMEOUT = 5
 EMAIL_USE_SSL = True
 DEFAULT_RECEIVER = env.str("DEFAULT_EMAIL_ADDRESS", default="NOT_SET")
+
+MATERIAL_ADMIN_SITE = {
+    'MAIN_BG_COLOR':  'green',  # Admin site main color, css color should be specified
+    'SHOW_THEMES':  True,  #  Show default admin themes button
+}
