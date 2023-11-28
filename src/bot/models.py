@@ -54,6 +54,9 @@ class PracticumUser(models.Model):
     last_login_date = models.DateField(
         auto_now=True, verbose_name="Заходил в последний раз"
     )
+    in_search_pair = models.BooleanField(
+        default=False, verbose_name="В поиске пары"
+    )
     has_pair = models.BooleanField(default=False, verbose_name="Есть пара")
     search_start_time = models.DateTimeField(
         blank=True,

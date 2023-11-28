@@ -15,3 +15,4 @@ PHONE_NUMBER_PATTERN = (
 )
 MESSAGE_KEY_PATTERN = r"^[A-z0-9_]+$"
 DELETE_PATERN = "^deleting_account$"
+CANCEL_SEARCH = "^cancel_pair_search$"

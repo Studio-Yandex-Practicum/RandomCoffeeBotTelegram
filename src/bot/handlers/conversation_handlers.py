@@ -29,6 +29,7 @@ from bot.handlers.command_handlers import start
 from bot.keyboards.command_keyboards import start_keyboard_markup
 from bot.keyboards.conversation_keyboards import (
     build_profession_keyboard,
+    cancel_pair_search_keyboard_markup,
     profile_keyboard_markup,
     restart_keyboard_markup,
     role_choice_keyboard_markup,
@@ -86,16 +87,25 @@ async def search_pair(
         )
         current_user = await model.objects.aget(telegram_id=telegram_id)
         current_user.search_start_time = timezone.now()
-        await current_user.asave(update_fields=("search_start_time",))
+        current_user.in_search_pair = True
+        await current_user.asave(
+            update_fields=("search_start_time", "in_search_pair")
+        )
         found_user = (
-            await opposite_model.objects.filter(has_pair=False)
+            await opposite_model.objects.filter(
+                has_pair=False, in_search_pair=True
+            )
             .exclude(**{f"passedpair__{role}": telegram_id})
             .order_by("search_start_time")
             .afirst()
         )
         if found_user:
             return await found_pair(update, context, current_user, found_user)
-        await query.message.reply_text(PAIR_SEARCH_MESSAGE)
+        await query.message.reply_text(
+            text=PAIR_SEARCH_MESSAGE,
+            reply_markup=cancel_pair_search_keyboard_markup,
+        )
+        return States.CANCEL
     return States.CALLING_IS_SUCCESSFUL
 
 
@@ -370,3 +380,15 @@ async def calling_is_successful(
         await query.edit_message_text(POST_CALL_MESSAGE_FOR_IT_SPECIALIST)
     await query.edit_message_reply_markup(reply_markup=start_keyboard_markup)
     return States.START
+
+
+async def cancel_pair_search(update: Update, context: CallbackContext):
+    """Отмена поиска."""
+    query = update.callback_query
+    role = context.user_data["role"]
+    telegram_id = query.from_user.id
+    model = ItSpecialist if role == "itspecialist" else Recruiter
+    current_user = await model.objects.aget(telegram_id=telegram_id)
+    current_user.in_search_pair = False
+    await current_user.asave(update_fields=["in_search_pair"])
+    return await start(update, context)
