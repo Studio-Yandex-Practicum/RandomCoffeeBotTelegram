@@ -21,16 +21,24 @@ async def start(
     update: Update, context: CallbackContext
 ) -> Literal[States.START]:
     """Функция-обработчик команды start."""
-    user = update.message.from_user
-    if user and await user_is_exist(int(user.id)):
-        await update_last_login_date(int(user.id))
-
     if update.message:
+        user = update.message.from_user
+        if user and await user_is_exist(int(user.id)):
+            await update_last_login_date(int(user.id))
+
         await update.message.reply_text(
             text=await get_message_bot("start_message"),
             reply_markup=start_keyboard_markup,
         )
+    if update.callback_query:
+        user = update.callback_query.from_user
+        if user and await user_is_exist(int(user.id)):
+            await update_last_login_date(int(user.id))
 
+        await update.callback_query.edit_message_text(
+            text=await get_message_bot("start_message"),
+            reply_markup=start_keyboard_markup,
+        )
     return States.START
 
 
@@ -84,8 +92,8 @@ async def redirection_to_support(
 async def start_delete_account(update: Update, context: CallbackContext):
     """Обработчик удаления аккаунта."""
     user = update.message.from_user
-    profession = context.user_data["profession"]
     if user and await user_is_exist(user.id):
+        profession = context.user_data["profession"]
         message = await get_message_bot("confirmation_delete_account_message")
         await update.message.reply_text(
             text=message.format(profession),
