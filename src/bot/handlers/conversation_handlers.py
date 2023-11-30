@@ -342,16 +342,20 @@ async def send_both_users_message(
     )
 
 
-async def confirm_delete_account(update: Update, context: CallbackContext):
+async def confirm_delete_account(
+    update: Update, context: CallbackContext
+) -> Optional[Literal[States.ACCOUNT_DELETED]]:
     """Удаляет пользователя."""
     query = update.callback_query
-    user_id = query.from_user.id
-    await deleting_account(user_id)
-    await query.answer()
-    await query.edit_message_reply_markup(reply_markup=None)
-    await query.edit_message_text(ACCOUNT_DELETED_MESSAGE)
-    await query.edit_message_reply_markup(restart_keyboard_markup)
-    return States.ACCOUNT_DELETED
+    if query:
+        user_id = query.from_user.id
+        await deleting_account(user_id)
+        await query.answer()
+        await query.edit_message_reply_markup(reply_markup=None)
+        await query.edit_message_text(ACCOUNT_DELETED_MESSAGE)
+        await query.edit_message_reply_markup(restart_keyboard_markup)
+        return States.ACCOUNT_DELETED
+    return None
 
 
 @debug_logger
@@ -382,13 +386,20 @@ async def calling_is_successful(
     return States.START
 
 
-async def cancel_pair_search(update: Update, context: CallbackContext):
+async def cancel_pair_search(
+    update: Update, context: CallbackContext
+) -> Optional[Literal[States.NEXT_TIME]]:
     """Отмена поиска."""
     query = update.callback_query
-    role = context.user_data["role"]
-    telegram_id = query.from_user.id
-    model = ItSpecialist if role == "itspecialist" else Recruiter
-    current_user = await model.objects.aget(telegram_id=telegram_id)
-    current_user.in_search_pair = False
-    await current_user.asave(update_fields=["in_search_pair"])
-    return await start(update, context)
+    if query and context.user_data:
+        role = context.user_data["role"]
+        telegram_id = query.from_user.id
+        model = ItSpecialist if role == "itspecialist" else Recruiter
+        current_user = await model.objects.aget(telegram_id=telegram_id)
+        current_user.in_search_pair = False
+        current_user.search_start_time = None
+        await current_user.asave(
+            update_fields=("in_search_pair", "search_start_time")
+        )
+        return await next_time(update, context)
+    return None

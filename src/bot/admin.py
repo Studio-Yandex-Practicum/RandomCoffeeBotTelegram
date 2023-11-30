@@ -69,12 +69,14 @@ class ItSpecialistAdmin(admin.ModelAdmin):
         "last_login_date",
         "profession",
         "has_pair",
+        "in_search_pair",
     )
     list_filter = (
         "registration_date",
         "last_login_date",
         "profession",
         "has_pair",
+        "in_search_pair",
     )
     search_fields = ("telegram_id", "telegram_username")
     actions = [delete_users_and_send_message]
@@ -93,8 +95,14 @@ class RecruiterAdmin(admin.ModelAdmin):
         "registration_date",
         "last_login_date",
         "has_pair",
+        "in_search_pair",
     )
-    list_filter = ("registration_date", "last_login_date", "has_pair")
+    list_filter = (
+        "registration_date",
+        "last_login_date",
+        "has_pair",
+        "in_search_pair",
+    )
     search_fields = ("telegram_id", "telegram_username")
     actions = [delete_users_and_send_message]
 
