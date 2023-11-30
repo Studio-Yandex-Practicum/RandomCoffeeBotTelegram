@@ -5,6 +5,10 @@ from bot.handlers.conversation_handlers import search_pair
 from bot.utils.db_utils.message import get_message_bot
 from bot.constants.states import States
 
+from bot.keyboards.conversation_keyboards import (
+    cancel_pair_search_keyboard_markup,
+)
+
 
 @pytest.mark.django_db
 @pytest.mark.asyncio
@@ -26,7 +30,8 @@ async def test_search_pair(update, context):
 
     result = await search_pair(update, context)
 
-    assert result == States.CALLING_IS_SUCCESSFUL
+    assert result == States.CANCEL
     query.message.reply_text.assert_called_with(
-        await get_message_bot("pair_search_message")
+        await get_message_bot("pair_search_message"),
+        reply_markup=cancel_pair_search_keyboard_markup,
     )

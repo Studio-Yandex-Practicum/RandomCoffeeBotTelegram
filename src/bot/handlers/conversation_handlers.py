@@ -6,10 +6,6 @@ from telegram import Update
 from telegram.ext import CallbackContext
 
 from bot.constants.links import FORM_KEYS
-from bot.constants.messages import (
-    ACCOUNT_DELETED_MESSAGE,
-    PAIR_SEARCH_MESSAGE,
-)
 from bot.constants.states import States
 from bot.handlers.command_handlers import start
 from bot.keyboards.command_keyboards import start_keyboard_markup
@@ -63,7 +59,7 @@ async def go(update: Update, context: CallbackContext) -> Optional[States]:
 
 async def search_pair(
     update: Update, context: CallbackContext
-) -> Literal[States.CALLING_IS_SUCCESSFUL]:
+) -> Literal[States.CANCEL]:
     """Поиск пары."""
     query = update.callback_query
     if query and context.user_data and query.message:
@@ -91,11 +87,10 @@ async def search_pair(
         if found_user:
             return await found_pair(update, context, current_user, found_user)
         await query.message.reply_text(
-            text=PAIR_SEARCH_MESSAGE,
+            await get_message_bot("pair_search_message"),
             reply_markup=cancel_pair_search_keyboard_markup,
         )
-        return States.CANCEL
-    return States.CALLING_IS_SUCCESSFUL
+    return States.CANCEL
 
 
 @debug_logger
@@ -353,7 +348,9 @@ async def confirm_delete_account(
         await deleting_account(user_id)
         await query.answer()
         await query.edit_message_reply_markup(reply_markup=None)
-        await query.edit_message_text(ACCOUNT_DELETED_MESSAGE)
+        await query.edit_message_text(
+            await get_message_bot("account_deleted_message")
+        )
         await query.edit_message_reply_markup(restart_keyboard_markup)
         return States.ACCOUNT_DELETED
     return None
