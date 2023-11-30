@@ -17,8 +17,8 @@ class Profession(models.Model):
     )
 
     class Meta:
-        verbose_name = "Профессия"
-        verbose_name_plural = "Профессии"
+        verbose_name = "Профессия IT специалиста"
+        verbose_name_plural = "Профессии IT специалистов"
 
     def __str__(self):
         return self.name
@@ -36,23 +36,20 @@ def create_key(sender, instance, *args, **kwargs) -> None:
 class PracticumUser(models.Model):
     """Базовая модель для пользователей."""
 
-    telegram_id = models.BigIntegerField(
-        primary_key=True, verbose_name="Telegram User ID"
-    )
     name = models.CharField(max_length=255, verbose_name="Имя")
     surname = models.CharField(
         max_length=255,
         verbose_name="Фамилия",
         null=True,
     )
+    telegram_id = models.BigIntegerField(
+        primary_key=True,
+        verbose_name="Telegram User ID",
+    )
     telegram_username = models.CharField(
-        max_length=255, verbose_name="Ник в телеграмме", unique=True
-    )
-    registration_date = models.DateField(
-        auto_now_add=True, verbose_name="Дата регистрации"
-    )
-    last_login_date = models.DateField(
-        auto_now=True, verbose_name="Заходил в последний раз"
+        max_length=255,
+        verbose_name="Ник телеграма или номер телефона",
+        unique=True,
     )
     in_search_pair = models.BooleanField(
         default=False, verbose_name="В поиске пары"
@@ -62,6 +59,12 @@ class PracticumUser(models.Model):
         blank=True,
         null=True,
         verbose_name="Время начала поиска",
+    )
+    last_login_date = models.DateField(
+        auto_now=True, verbose_name="Заходил в последний раз"
+    )
+    registration_date = models.DateField(
+        auto_now_add=True, verbose_name="Дата регистрации"
     )
 
     class Meta:
@@ -85,6 +88,9 @@ class ItSpecialist(PracticumUser):
         verbose_name = "IT-специалист"
         verbose_name_plural = "IT-специалисты"
 
+    def __str__(self):
+        return f"{self.name} {self.surname}"
+
 
 class Recruiter(PracticumUser):
     """Модель для рекрутеров."""
@@ -92,6 +98,9 @@ class Recruiter(PracticumUser):
     class Meta:
         verbose_name = "Рекрутер"
         verbose_name_plural = "Рекрутеры"
+
+    def __str__(self):
+        return f"{self.name} {self.surname}"
 
 
 class CustomPair(models.Model):

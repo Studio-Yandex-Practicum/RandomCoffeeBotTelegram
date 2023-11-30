@@ -6,6 +6,7 @@ from bot.constants.states import States
 from bot.handlers.conversation_handlers import check_username
 
 
+@pytest.mark.django_db
 @pytest.mark.asyncio
 async def test_check_username_with_username(update, context):
     """
@@ -21,6 +22,7 @@ async def test_check_username_with_username(update, context):
     assert state == States.PROFILE
 
 
+@pytest.mark.django_db
 @pytest.mark.asyncio
 async def test_check_username_without_username(update, context):
     """

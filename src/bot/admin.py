@@ -19,6 +19,7 @@ class ProfessionAdmin(admin.ModelAdmin):
 
     list_display = ("name",)
     exclude = ("professional_key",)
+    icon_name = "card_travel"
 
 
 @admin.register(CreatedPair)
@@ -33,6 +34,7 @@ class CreatedPairAdmin(admin.ModelAdmin):
         "itspecialist__telegram_username",
         "recruiter__telegram_username",
     )
+    icon_name = "people"
 
 
 @admin.register(PassedPair)
@@ -53,6 +55,7 @@ class PassedPairAdmin(admin.ModelAdmin):
         "itspecialist__telegram_username",
         "recruiter__telegram_username",
     )
+    icon_name = "people_outline"
 
 
 @admin.register(ItSpecialist)
@@ -60,15 +63,32 @@ class ItSpecialistAdmin(admin.ModelAdmin):
     """Управление моделью IT-специалиста."""
 
     form = ItSpecialistForm
-    list_display = (
-        "telegram_id",
+    fields = (
         "name",
         "surname",
-        "telegram_username",
-        "registration_date",
-        "last_login_date",
         "profession",
         "has_pair",
+        "telegram_id",
+        "telegram_username",
+        "last_login_date",
+        "registration_date",
+        "in_search_pair",
+    )
+    readonly_fields = (
+        "telegram_id",
+        "telegram_username",
+        "last_login_date",
+        "registration_date",
+    )
+    list_display = (
+        "name",
+        "surname",
+        "telegram_id",
+        "telegram_username",
+        "profession",
+        "has_pair",
+        "last_login_date",
+        "registration_date",
         "in_search_pair",
     )
     list_filter = (
@@ -80,20 +100,34 @@ class ItSpecialistAdmin(admin.ModelAdmin):
     )
     search_fields = ("telegram_id", "telegram_username")
     actions = [delete_users_and_send_message]
+    icon_name = "school"
 
 
 @admin.register(Recruiter)
 class RecruiterAdmin(admin.ModelAdmin):
     """Управление моделью рекрутера."""
 
-    form = RecruiterForm
-    list_display = (
-        "telegram_id",
+    fields = (
         "name",
         "surname",
+        "has_pair",
+        "telegram_id",
         "telegram_username",
         "registration_date",
         "last_login_date",
+    )
+    readonly_fields = (
+        "telegram_id",
+        "telegram_username",
+        "last_login_date",
+        "registration_date",
+    )
+    form = RecruiterForm
+    list_display = (
+        "name",
+        "surname",
+        "telegram_id",
+        "telegram_username",
         "has_pair",
         "in_search_pair",
     )
@@ -102,9 +136,12 @@ class RecruiterAdmin(admin.ModelAdmin):
         "last_login_date",
         "has_pair",
         "in_search_pair",
+        "last_login_date",
+        "registration_date",
     )
     search_fields = ("telegram_id", "telegram_username")
     actions = [delete_users_and_send_message]
+    icon_name = "person"
 
 
 @admin.register(FormUrl)
@@ -117,6 +154,7 @@ class FormUrlAdmin(admin.ModelAdmin):
     )
     list_filter = ("title",)
     search_fields = ("title",)
+    icon_name = "link"
 
     def has_delete_permission(self, request, obj=None):
         """Запрещает удалять ссылки."""
@@ -138,6 +176,7 @@ class MessageBotAdmin(admin.ModelAdmin):
     list_filter = ("title",)
     search_fields = ("title",)
     exclude = ("message_key",)
+    icon_name = "message"
 
     def has_delete_permission(self, request, obj=None):
         """Запрещает удалять сообщения."""
