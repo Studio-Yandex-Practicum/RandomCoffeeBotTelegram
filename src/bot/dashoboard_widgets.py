@@ -57,12 +57,11 @@ class Diogramm(widgets.SinglePieChart):
         return values
 
 
-class PairDiogramm(widgets.SinglePieChart):
+class PairDiagramm(widgets.SinglePieChart):
     """Диаграмма показывающая количество пар."""
 
     title = "Общее количество пар."
     width = 3
-    CONTROLCENTER_CHARTIST_COLORS = "default"
 
     def legend(self):
         """Легенда создания диаграммы."""
@@ -121,6 +120,25 @@ class DashPair(widgets.SingleBarChart):
         return values
 
 
+class UsersInSearchDiagramm(PairDiagramm):
+    """Таблица пар."""
+
+    title = "Статистика пользователей в поиске."
+
+    def values(self):
+        """Значения передаваемые в диаграмму."""
+        return [
+            (
+                model._meta.verbose_name_plural,
+                model.objects.filter(
+                    registration_date__range=self.get_form_time,
+                    in_search_pair=True,
+                ).count(),
+            )
+            for model in (Recruiter, ItSpecialist)
+        ]
+
+
 class InervalWidget:
     """Промежуточный виджет."""
 
@@ -130,7 +148,7 @@ class InervalWidget:
 
     def widgets(self):
         """Добавление интервала для статистики."""
-        for model in (Diogramm, PairDiogramm, DashPair):
+        for model in (Diogramm, PairDiagramm, DashPair, UsersInSearchDiagramm):
             model.get_form_time = self.time
 
 
@@ -139,6 +157,9 @@ class MyDashboard(Dashboard):
 
     widgets = (
         Diogramm,
-        DashPair,
-        PairDiogramm,
+        (
+            DashPair,
+            PairDiagramm,
+        ),
+        UsersInSearchDiagramm,
     )
