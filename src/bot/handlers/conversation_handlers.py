@@ -18,7 +18,14 @@ from bot.keyboards.conversation_keyboards import (
 )
 from bot.models import ItSpecialist, Profession, Recruiter
 from bot.utils.db_utils.message import get_message_bot
-from bot.utils.db_utils.pair import delete_pair, get_active_pair, make_pair
+from bot.utils.db_utils.pair import (
+    delete_pair,
+    get_active_pair,
+    get_current_user,
+    get_user_for_pair,
+    make_pair,
+    set_now_search_start_time,
+)
 from bot.utils.db_utils.user import (
     deleting_account,
     to_create_user_in_db,
@@ -70,20 +77,11 @@ async def search_pair(
             if role == "itspecialist"
             else (Recruiter, ItSpecialist)
         )
-        current_user = await model.objects.aget(telegram_id=telegram_id)
-        current_user.search_start_time = timezone.now()
-        current_user.in_search_pair = True
-        await current_user.asave(
-            update_fields=("search_start_time", "in_search_pair")
+        current_user = await get_current_user(model, telegram_id)
+        await set_now_search_start_time(
+            current_user, start_time=timezone.now(), in_search=True
         )
-        found_user = (
-            await opposite_model.objects.filter(
-                has_pair=False, in_search_pair=True
-            )
-            .exclude(**{f"passedpair__{role}": telegram_id})
-            .order_by("search_start_time")
-            .afirst()
-        )
+        found_user = await get_user_for_pair(opposite_model, role, telegram_id)
         if found_user:
             return await found_pair(update, context, current_user, found_user)
         await query.message.reply_text(
@@ -393,11 +391,9 @@ async def cancel_pair_search(
         role = context.user_data["role"]
         telegram_id = query.from_user.id
         model = ItSpecialist if role == "itspecialist" else Recruiter
-        current_user = await model.objects.aget(telegram_id=telegram_id)
-        current_user.in_search_pair = False
-        current_user.search_start_time = None
-        await current_user.asave(
-            update_fields=("in_search_pair", "search_start_time")
+        current_user = await get_current_user(model, telegram_id)
+        await set_now_search_start_time(
+            current_user, start_time=None, in_search=False
         )
         return await next_time(update, context)
     return None
