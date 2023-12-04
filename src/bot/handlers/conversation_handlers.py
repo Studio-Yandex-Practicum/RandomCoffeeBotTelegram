@@ -1,5 +1,6 @@
 from typing import Literal, Optional, Union
 
+from django.utils import timezone
 from loguru import logger
 from telegram import Update
 from telegram.ext import CallbackContext
@@ -10,6 +11,7 @@ from bot.handlers.command_handlers import start
 from bot.keyboards.command_keyboards import start_keyboard_markup
 from bot.keyboards.conversation_keyboards import (
     build_profession_keyboard,
+    cancel_pair_search_keyboard_markup,
     profile_keyboard_markup,
     restart_keyboard_markup,
     role_choice_keyboard_markup,
@@ -64,7 +66,7 @@ async def go(update: Update, context: CallbackContext) -> Optional[States]:
 
 async def search_pair(
     update: Update, context: CallbackContext
-) -> Literal[States.CALLING_IS_SUCCESSFUL]:
+) -> Literal[States.CANCEL]:
     """Поиск пары."""
     query = update.callback_query
     if query and context.user_data and query.message:
@@ -76,14 +78,17 @@ async def search_pair(
             else (Recruiter, ItSpecialist)
         )
         current_user = await get_current_user(model, telegram_id)
-        await set_now_search_start_time(current_user)
+        await set_now_search_start_time(
+            current_user, start_time=timezone.now(), in_search=True
+        )
         found_user = await get_user_for_pair(opposite_model, role, telegram_id)
         if found_user:
             return await found_pair(update, context, current_user, found_user)
         await query.message.reply_text(
-            await get_message_bot("pair_search_message")
+            await get_message_bot("pair_search_message"),
+            reply_markup=cancel_pair_search_keyboard_markup,
         )
-    return States.CALLING_IS_SUCCESSFUL
+    return States.CANCEL
 
 
 @debug_logger
@@ -331,18 +336,22 @@ async def send_both_users_message(
     )
 
 
-async def confirm_delete_account(update: Update, context: CallbackContext):
+async def confirm_delete_account(
+    update: Update, context: CallbackContext
+) -> Optional[Literal[States.ACCOUNT_DELETED]]:
     """Удаляет пользователя."""
     query = update.callback_query
-    user_id = query.from_user.id
-    await deleting_account(user_id)
-    await query.answer()
-    await query.edit_message_reply_markup(reply_markup=None)
-    await query.edit_message_text(
-        await get_message_bot("account_deleted_message")
-    )
-    await query.edit_message_reply_markup(restart_keyboard_markup)
-    return States.ACCOUNT_DELETED
+    if query:
+        user_id = query.from_user.id
+        await deleting_account(user_id)
+        await query.answer()
+        await query.edit_message_reply_markup(reply_markup=None)
+        await query.edit_message_text(
+            await get_message_bot("account_deleted_message")
+        )
+        await query.edit_message_reply_markup(restart_keyboard_markup)
+        return States.ACCOUNT_DELETED
+    return None
 
 
 @debug_logger
@@ -371,3 +380,20 @@ async def calling_is_successful(
         )
     await query.edit_message_reply_markup(reply_markup=start_keyboard_markup)
     return States.START
+
+
+async def cancel_pair_search(
+    update: Update, context: CallbackContext
+) -> Optional[Literal[States.NEXT_TIME]]:
+    """Отмена поиска."""
+    query = update.callback_query
+    if query and context.user_data:
+        role = context.user_data["role"]
+        telegram_id = query.from_user.id
+        model = ItSpecialist if role == "itspecialist" else Recruiter
+        current_user = await get_current_user(model, telegram_id)
+        await set_now_search_start_time(
+            current_user, start_time=None, in_search=False
+        )
+        return await next_time(update, context)
+    return None

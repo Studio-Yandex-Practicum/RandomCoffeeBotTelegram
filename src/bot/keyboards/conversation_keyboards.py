@@ -7,6 +7,7 @@ from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 
 from bot.constants.buttons import (
     ALL_RIGHT_BUTTON,
+    CANCEL_PAIR_SEARCH_BUTTON,
     CHANGE_NAME_BUTTON,
     CONTINUE_BUTTON,
     FILL_AGAIN_BUTTON,
@@ -93,6 +94,18 @@ is_pair_successful_keyboard_markup = InlineKeyboardMarkup(
         [
             InlineKeyboardButton(text=YES_BUTTON, callback_data="yes"),
             InlineKeyboardButton(text=NO_BUTTON, callback_data="no"),
+        ],
+    ]
+)
+
+
+cancel_pair_search_keyboard_markup = InlineKeyboardMarkup(
+    [
+        [
+            InlineKeyboardButton(
+                text=CANCEL_PAIR_SEARCH_BUTTON,
+                callback_data="cancel_pair_search",
+            ),
         ],
     ]
 )

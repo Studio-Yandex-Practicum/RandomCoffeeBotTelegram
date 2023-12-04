@@ -20,3 +20,4 @@ class States(str, enum.Enum):
     DELETE_ACCOUNT = "delete_account"
     NOT_REGISTERED = "not_registered"
     ACCOUNT_DELETED = "account_deleted"
+    CANCEL = "cancel pair search"

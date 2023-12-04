@@ -27,6 +27,7 @@ from bot.constants.commands import (
 )
 from bot.constants.patterns import (
     CALLING_IS_SUCCESSFUL,
+    CANCEL_SEARCH,
     CHANGE_NAME_PATTERN,
     CONTINUE_NAME_PATTERN,
     DELETE_PATERN,
@@ -49,6 +50,7 @@ from bot.handlers.command_handlers import (
 )
 from bot.handlers.conversation_handlers import (
     calling_is_successful,
+    cancel_pair_search,
     change_name,
     confirm_delete_account,
     continue_name,
@@ -245,6 +247,11 @@ async def build_main_handler():
                 start_handler,
                 CallbackQueryHandler(
                     restart_callback, pattern=RESTART_PATTERN
+                ),
+            ],
+            States.CANCEL: [
+                CallbackQueryHandler(
+                    cancel_pair_search, pattern=CANCEL_SEARCH
                 ),
             ],
         },

@@ -68,12 +68,15 @@ class ItSpecialistAdmin(admin.ModelAdmin):
         "surname",
         "profession",
         "has_pair",
+        "in_search_pair",
         "telegram_id",
         "telegram_username",
         "last_login_date",
         "registration_date",
     )
     readonly_fields = (
+        "has_pair",
+        "in_search_pair",
         "telegram_id",
         "telegram_username",
         "last_login_date",
@@ -86,6 +89,7 @@ class ItSpecialistAdmin(admin.ModelAdmin):
         "telegram_username",
         "profession",
         "has_pair",
+        "in_search_pair",
         "last_login_date",
         "registration_date",
     )
@@ -94,12 +98,7 @@ class ItSpecialistAdmin(admin.ModelAdmin):
         "last_login_date",
         "profession",
         "has_pair",
-    )
-    list_filter = (
-        "registration_date",
-        "last_login_date",
-        "profession",
-        "has_pair",
+        "in_search_pair",
     )
     search_fields = ("telegram_id", "telegram_username")
     actions = [delete_users_and_send_message]
@@ -114,12 +113,15 @@ class RecruiterAdmin(admin.ModelAdmin):
         "name",
         "surname",
         "has_pair",
+        "in_search_pair",
         "telegram_id",
         "telegram_username",
         "registration_date",
         "last_login_date",
     )
     readonly_fields = (
+        "has_pair",
+        "in_search_pair",
         "telegram_id",
         "telegram_username",
         "last_login_date",
@@ -132,10 +134,18 @@ class RecruiterAdmin(admin.ModelAdmin):
         "telegram_id",
         "telegram_username",
         "has_pair",
+        "in_search_pair",
         "last_login_date",
         "registration_date",
     )
-    list_filter = ("registration_date", "last_login_date", "has_pair")
+    list_filter = (
+        "registration_date",
+        "last_login_date",
+        "has_pair",
+        "in_search_pair",
+        "last_login_date",
+        "registration_date",
+    )
     search_fields = ("telegram_id", "telegram_username")
     actions = [delete_users_and_send_message]
     icon_name = "person"

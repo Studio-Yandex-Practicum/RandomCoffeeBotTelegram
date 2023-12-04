@@ -51,6 +51,9 @@ class PracticumUser(models.Model):
         verbose_name="Ник телеграма или номер телефона",
         unique=True,
     )
+    in_search_pair = models.BooleanField(
+        default=False, verbose_name="В поиске пары"
+    )
     has_pair = models.BooleanField(default=False, verbose_name="Есть пара")
     search_start_time = models.DateTimeField(
         blank=True,

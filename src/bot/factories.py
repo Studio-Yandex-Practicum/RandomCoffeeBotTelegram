@@ -29,6 +29,7 @@ class RecruiterFactory(DjangoModelFactory):
     telegram_username = factory.Faker("user_name")
     registration_date = timezone.now()
     last_login_date = timezone.now()
+    in_search_pair = False
     has_pair = False
     search_start_time = timezone.now()
 

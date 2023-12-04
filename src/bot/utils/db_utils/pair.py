@@ -1,7 +1,7 @@
+from datetime import datetime
 from typing import Union
 
 from django.db import IntegrityError
-from django.utils import timezone
 from loguru import logger
 
 from bot.models import CreatedPair, ItSpecialist, PassedPair, Recruiter
@@ -13,11 +13,13 @@ async def make_pair(itspecialist: ItSpecialist, recruiter: Recruiter) -> bool:
     try:
         itspecialist.has_pair = True
         recruiter.has_pair = True
+        itspecialist.in_search_pair = False
+        recruiter.in_search_pair = False
         created_pair = await CreatedPair.objects.acreate(
             itspecialist=itspecialist, recruiter=recruiter
         )
-        await itspecialist.asave(update_fields=["has_pair"])
-        await recruiter.asave(update_fields=["has_pair"])
+        await itspecialist.asave(update_fields=("has_pair", "in_search_pair"))
+        await recruiter.asave(update_fields=("has_pair", "in_search_pair"))
         logger.info(f"The pair was made with {created_pair}")
         status = True
     except IntegrityError as error:
@@ -89,11 +91,12 @@ async def get_current_user(
 
 
 async def set_now_search_start_time(
-    user: Union[ItSpecialist, Recruiter]
+    user: Union[ItSpecialist, Recruiter], start_time: datetime, in_search: bool
 ) -> None:
     """Устанавливает время поиска по текущему."""
-    user.search_start_time = timezone.now()
-    await user.asave(update_fields=("search_start_time",))
+    user.search_start_time = start_time
+    user.in_search_pair = in_search
+    await user.asave(update_fields=("search_start_time", "in_search_pair"))
 
 
 async def get_user_for_pair(
@@ -101,7 +104,7 @@ async def get_user_for_pair(
 ) -> Union[ItSpecialist, Recruiter]:
     """Возвращает свободного пользователя для создания пары."""
     return (
-        await model.objects.filter(has_pair=False)
+        await model.objects.filter(has_pair=False, in_search_pair=True)
         .exclude(**{f"passedpair__{role}": telegram_id})
         .order_by("search_start_time")
         .afirst()

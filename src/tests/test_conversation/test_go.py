@@ -5,7 +5,10 @@ import pytest
 from bot.utils.db_utils.message import get_message_bot
 from bot.constants.states import States
 from bot.handlers.conversation_handlers import go
-from bot.keyboards.conversation_keyboards import role_choice_keyboard_markup
+from bot.keyboards.conversation_keyboards import (
+    role_choice_keyboard_markup,
+    cancel_pair_search_keyboard_markup,
+)
 
 
 @pytest.mark.django_db
@@ -43,6 +46,8 @@ async def test_go_user_is_exist(update, context, itspecialist):
     update.callback_query.from_user.id = itspecialist.telegram_id
     result = await go(update, context)
     update.callback_query.message.reply_text.assert_awaited_with(
-        await get_message_bot("pair_search_message")
+        await get_message_bot("pair_search_message"),
+        reply_markup=cancel_pair_search_keyboard_markup,
     )
-    assert States.CALLING_IS_SUCCESSFUL == result
+
+    assert States.CANCEL == result
