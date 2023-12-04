@@ -12,11 +12,13 @@ async def make_pair(itspecialist: ItSpecialist, recruiter: Recruiter) -> bool:
     try:
         itspecialist.has_pair = True
         recruiter.has_pair = True
+        itspecialist.in_search_pair = False
+        recruiter.in_search_pair = False
         created_pair = await CreatedPair.objects.acreate(
             itspecialist=itspecialist, recruiter=recruiter
         )
-        await itspecialist.asave(update_fields=["has_pair"])
-        await recruiter.asave(update_fields=["has_pair"])
+        await itspecialist.asave(update_fields=("has_pair", "in_search_pair"))
+        await recruiter.asave(update_fields=("has_pair", "in_search_pair"))
         logger.info(f"The pair was made with {created_pair}")
         status = True
     except IntegrityError as error:
