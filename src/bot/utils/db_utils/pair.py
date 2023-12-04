@@ -1,6 +1,7 @@
 from typing import Union
 
 from django.db import IntegrityError
+from django.utils import timezone
 from loguru import logger
 
 from bot.models import CreatedPair, ItSpecialist, PassedPair, Recruiter
@@ -78,3 +79,30 @@ async def get_active_pair(role: str, user_id: int) -> Union[CreatedPair, None]:
             .select_related("itspecialist", "recruiter")
             .afirst()
         )
+
+
+async def get_current_user(
+    model: Union[ItSpecialist, Recruiter], telegram_id: int
+) -> Union[ItSpecialist, Recruiter]:
+    """Возвращает пользователя по telegram_id."""
+    return await model.objects.aget(telegram_id=telegram_id)
+
+
+async def set_now_search_start_time(
+    user: Union[ItSpecialist, Recruiter]
+) -> None:
+    """Устанавливает время поиска по текущему."""
+    user.search_start_time = timezone.now()
+    await user.asave(update_fields=("search_start_time",))
+
+
+async def get_user_for_pair(
+    model: Union[ItSpecialist, Recruiter], role: str, telegram_id: int
+) -> Union[ItSpecialist, Recruiter]:
+    """Возвращает свободного пользователя для создания пары."""
+    return (
+        await model.objects.filter(has_pair=False)
+        .exclude(**{f"passedpair__{role}": telegram_id})
+        .order_by("search_start_time")
+        .afirst()
+    )

@@ -1,6 +1,5 @@
 from typing import Literal, Optional, Union
 
-from django.utils import timezone
 from loguru import logger
 from telegram import Update
 from telegram.ext import CallbackContext
@@ -17,7 +16,14 @@ from bot.keyboards.conversation_keyboards import (
 )
 from bot.models import ItSpecialist, Profession, Recruiter
 from bot.utils.db_utils.message import get_message_bot
-from bot.utils.db_utils.pair import delete_pair, get_active_pair, make_pair
+from bot.utils.db_utils.pair import (
+    delete_pair,
+    get_active_pair,
+    get_current_user,
+    get_user_for_pair,
+    make_pair,
+    set_now_search_start_time,
+)
 from bot.utils.db_utils.user import (
     deleting_account,
     to_create_user_in_db,
@@ -69,15 +75,9 @@ async def search_pair(
             if role == "itspecialist"
             else (Recruiter, ItSpecialist)
         )
-        current_user = await model.objects.aget(telegram_id=telegram_id)
-        current_user.search_start_time = timezone.now()
-        await current_user.asave(update_fields=("search_start_time",))
-        found_user = (
-            await opposite_model.objects.filter(has_pair=False)
-            .exclude(**{f"passedpair__{role}": telegram_id})
-            .order_by("search_start_time")
-            .afirst()
-        )
+        current_user = await get_current_user(model, telegram_id)
+        await set_now_search_start_time(current_user)
+        found_user = await get_user_for_pair(opposite_model, role, telegram_id)
         if found_user:
             return await found_pair(update, context, current_user, found_user)
         await query.message.reply_text(
