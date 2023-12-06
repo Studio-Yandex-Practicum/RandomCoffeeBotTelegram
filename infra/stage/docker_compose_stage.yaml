@@ -34,6 +34,28 @@ services:
       - postgres-db
       - redis
 
+  swag:
+    image: lscr.io/linuxserver/swag
+    container_name: swag
+    cap_add:
+      - NET_ADMIN
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+      - URL=${HOST_NG}
+    volumes:
+      - /home/aptalca/appdata/swag:/config
+      - ./nginx.stage.conf.template:/etc/nginx/templates/default.conf.template
+      - static_value:/var/html/static/
+      - ../../logs/nginx/:/var/log/nginx/
+    ports:
+      - 443:443
+      - "80:${PORT_NG}"
+    depends_on:
+      - bot
+    restart: unless-stopped
+
   nginx:
     image: nginx:1.21.3-alpine
     ports:
