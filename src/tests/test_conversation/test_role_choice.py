@@ -6,6 +6,7 @@ from bot.constants.states import States
 from bot.handlers.conversation_handlers import role_choice
 
 
+@pytest.mark.django_db
 @pytest.mark.asyncio
 async def test_role_choice(update, context):
     """
