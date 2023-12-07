@@ -31,53 +31,47 @@ server {
 }
 
 server {
-        listen 443 ssl http2;
-        listen [::]:443 ssl http2;
-        server_name ${HOST_NG};
 
-        index index.php index.html index.htm;
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
 
-        root /var/www/html;
+    keepalive_timeout          45;
+    reset_timedout_connection  on;
+    client_body_timeout        35;
+    send_timeout               30;
 
-        server_tokens off;
+    sendfile      on;
+    aio           on;
+    tcp_nopush    on;
 
-        ssl_certificate /etc/letsencrypt/live/north.world-ithech.ru/fullchain.pem;
-        ssl_certificate_key /etc/letsencrypt/live/north.world-ithech.ru/privkey.pem;
+    open_file_cache max=100000 inactive=20s;
+    open_file_cache_valid 45s;
+    open_file_cache_min_uses 2;
+    open_file_cache_errors on;
 
-        include /etc/nginx/conf.d/options-ssl-nginx.conf;
+    gzip                on;
+    gzip_disable        "msie6";
 
-        add_header X-Frame-Options "SAMEORIGIN" always;
-        add_header X-XSS-Protection "1; mode=block" always;
-        add_header X-Content-Type-Options "nosniff" always;
-        add_header Referrer-Policy "no-referrer-when-downgrade" always;
-        add_header Content-Security-Policy "default-src * data: 'unsafe-eval' 'unsafe-inline'" always;
+    gzip_vary on;
+    gzip_proxied any;
+    gzip_comp_level 6;
+    gzip_buffers 16 8k;
+    gzip_http_version 1.1;
+    gzip_min_length 1100;
+    gzip_types text/plain text/css application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript application/javascript application/vnd.ms-fontobject application/x-font-ttf font/opentype image/svg+xml image/x-icon;
 
-        location / {
-                try_files $uri $uri/ /index.php$is_args$args;
-        }
+    server_name ${HOST_NG};
 
-        location ~ \.php$ {
-                try_files $uri =404;
-                fastcgi_split_path_info ^(.+\.php)(/.+)$;
-                fastcgi_pass wp:9000;
-                fastcgi_index index.php;
-                include fastcgi_params;
-                fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-                fastcgi_param PATH_INFO $fastcgi_path_info;
-        }
+    include /config/nginx/ssl.conf;
 
-        location ~ /\.ht {
-                deny all;
-        }
+    client_max_body_size 10M;
 
-        location = /favicon.ico {
-                log_not_found off;
-        }
-        location = /robots.txt {
-                log_not_found off;
-        }
-        location ~* \.(css|gif|ico|jpeg|jpg|js|png)$ {
-                expires max;
-                log_not_found off;
-        }
+    location / {
+        include /config/nginx/proxy.conf;
+        set $upstream_app bot;
+        set $upstream_port 8000;
+        set $upstream_proto http;
+        proxy_pass $upstream_proto://$upstream_app:$upstream_port;
+    }
+
 }
