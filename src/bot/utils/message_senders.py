@@ -1,15 +1,11 @@
 from telegram import Update
 from telegram.ext import CallbackContext
 
-from bot.constants.messages import (
-    GUESS_NAME_MESSAGE,
-    IS_PAIR_SUCCESSFUL_MESSAGE,
-    USER_DELETE_MESSAGE,
-)
 from bot.keyboards.conversation_keyboards import (
     guess_name_keyboard_markup,
     is_pair_successful_keyboard_markup,
 )
+from bot.utils.db_utils.message import get_message_bot
 from core.config.logging import debug_logger
 
 
@@ -19,7 +15,7 @@ async def send_is_pair_successful_message(context: CallbackContext) -> None:
     if context.job:
         await context.bot.send_message(
             chat_id=context.job.user_id,
-            text=IS_PAIR_SUCCESSFUL_MESSAGE,
+            text=await get_message_bot("is_pair_successful_message"),
             reply_markup=is_pair_successful_keyboard_markup,
         )
 
@@ -28,9 +24,10 @@ async def send_is_pair_successful_message(context: CallbackContext) -> None:
 async def send_deleting_from_db_message(context: CallbackContext) -> None:
     """Отправляет сообщение об удалении из базы данных."""
     if context.job:
+        text = await get_message_bot("user_delete_message")
         await context.bot.send_message(
             chat_id=context.job.user_id,
-            text=USER_DELETE_MESSAGE.format(context.job.data),
+            text=text.format(context.job.data),
         )
 
 
@@ -43,12 +40,14 @@ async def send_name_message(update: Update, context: CallbackContext) -> None:
             "name", query.from_user.first_name if query else "unknown"
         )
     if query:
+        text = await get_message_bot("guess_name_message")
         context.user_data["name"] = guessed_name
         await query.answer()
-        await query.edit_message_text(GUESS_NAME_MESSAGE.format(guessed_name))
+        await query.edit_message_text(text.format(guessed_name))
         await query.edit_message_reply_markup(guess_name_keyboard_markup)
     elif update.message:
+        text = await get_message_bot("guess_name_message")
         await update.message.reply_text(
-            GUESS_NAME_MESSAGE.format(guessed_name),
+            text.format(guessed_name),
             reply_markup=guess_name_keyboard_markup,
         )
