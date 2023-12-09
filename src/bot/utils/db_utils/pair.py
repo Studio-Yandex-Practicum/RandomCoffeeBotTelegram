@@ -43,6 +43,8 @@ async def delete_pair(
     try:
         itspecialist.has_pair = False
         recruiter.has_pair = False
+        itspecialist.in_search_pair = False
+        recruiter.in_search_pair = False
         await CreatedPair.objects.filter(
             itspecialist=itspecialist, recruiter=recruiter
         ).adelete()
@@ -51,8 +53,8 @@ async def delete_pair(
             recruiter=recruiter,
             interview_successful=interview_successful,
         )
-        await itspecialist.asave(update_fields=["has_pair"])
-        await recruiter.asave(update_fields=["has_pair"])
+        await itspecialist.asave(update_fields=("has_pair", "in_search_pair"))
+        await recruiter.asave(update_fields=("has_pair", "in_search_pair"))
         logger.debug(f"The passed  pair was made with {passed_pair}")
         return True
     except IntegrityError as error:
