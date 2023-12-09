@@ -1,6 +1,7 @@
 from unittest.mock import AsyncMock
 
 import pytest
+from telegram.constants import ParseMode
 
 from bot.handlers.conversation_handlers import send_name_message
 from bot.utils.db_utils.message import get_message_bot
@@ -21,10 +22,11 @@ async def test_send_name_message_with_callback_query(update, context):
     message = await get_message_bot("guess_name_message")
     update.callback_query.answer.assert_awaited_once()
     update.callback_query.edit_message_text.assert_awaited_with(
-        message.format(context.user_data.get("name"))
+        message.format(context.user_data.get("name")),
+        parse_mode=ParseMode.HTML,
     )
     update.callback_query.edit_message_reply_markup.assert_awaited_with(
-        guess_name_keyboard_markup
+        guess_name_keyboard_markup,
     )
 
 
@@ -44,4 +46,5 @@ async def test_send_name_message_without_callback_query(update, context):
     update.message.reply_text.assert_awaited_with(
         message.format(context.user_data.get("name")),
         reply_markup=guess_name_keyboard_markup,
+        parse_mode=ParseMode.HTML,
     )
