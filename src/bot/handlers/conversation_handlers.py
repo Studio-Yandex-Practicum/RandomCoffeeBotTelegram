@@ -3,6 +3,7 @@ from typing import Literal, Optional, Union
 from django.utils import timezone
 from loguru import logger
 from telegram import Update
+from telegram.constants import ParseMode
 from telegram.ext import CallbackContext
 
 from bot.constants.links import FORM_KEYS
@@ -55,7 +56,8 @@ async def go(update: Update, context: CallbackContext) -> Optional[States]:
         await query.edit_message_reply_markup(reply_markup=None)
         if not await user_is_exist(user.id):
             await query.edit_message_text(
-                await get_message_bot("choose_role_message")
+                await get_message_bot("choose_role_message"),
+                parse_mode=ParseMode.HTML,
             )
             await query.edit_message_reply_markup(role_choice_keyboard_markup)
             return States.ROLE_CHOICE
@@ -87,6 +89,7 @@ async def search_pair(
         await query.message.reply_text(
             await get_message_bot("pair_search_message"),
             reply_markup=cancel_pair_search_keyboard_markup,
+            parse_mode=ParseMode.HTML,
         )
     return States.CANCEL
 
@@ -131,7 +134,8 @@ async def next_time(
     if query:
         await query.answer()
         await query.edit_message_text(
-            await get_message_bot("next_time_message")
+            await get_message_bot("next_time_message"),
+            parse_mode=ParseMode.HTML,
         )
         await query.edit_message_reply_markup(
             reply_markup=restart_keyboard_markup
@@ -168,7 +172,10 @@ async def change_name(
     """Обработчик для кнопки "Изменить имя"."""
     query = update.callback_query
     await query.answer()
-    await query.edit_message_text(await get_message_bot("change_name_message"))
+    await query.edit_message_text(
+        await get_message_bot("change_name_message"),
+        parse_mode=ParseMode.HTML,
+    )
     return States.SET_NEW_NAME
 
 
@@ -196,7 +203,8 @@ async def continue_name(
         keyboard = await build_profession_keyboard(page_number)
         if query.message.reply_markup.to_json() != keyboard.markup:
             await query.edit_message_text(
-                await get_message_bot("choose_profession_message")
+                await get_message_bot("choose_profession_message"),
+                parse_mode=ParseMode.HTML,
             )
             await query.edit_message_reply_markup(reply_markup=keyboard.markup)
         return States.PROFESSION_CHOICE
@@ -225,7 +233,8 @@ async def set_phone_number(
         phone_number = update.message.text
         if not await validation_phone_number(phone_number):
             await update.message.reply_text(
-                await get_message_bot("message_incorrect_phone_number")
+                await get_message_bot("message_incorrect_phone_number"),
+                parse_mode=ParseMode.HTML,
             )
             return States.SET_PHONE_NUMBER
         context.user_data["contact"] = phone_number
@@ -242,14 +251,16 @@ async def profile(
     if query:
         if query.data == "fill_again":
             await query.edit_message_text(
-                await get_message_bot("choose_role_message")
+                await get_message_bot("choose_role_message"),
+                parse_mode=ParseMode.HTML,
             )
             await query.edit_message_reply_markup(role_choice_keyboard_markup)
             return States.ROLE_CHOICE
         await to_create_user_in_db(update, context)
         if await user_is_exist(query.from_user.id):
             await query.edit_message_text(
-                await get_message_bot("start_pair_search_message")
+                await get_message_bot("start_pair_search_message"),
+                parse_mode=ParseMode.HTML,
             )
             await query.edit_message_reply_markup(
                 reply_markup=start_keyboard_markup
@@ -270,7 +281,8 @@ async def check_username(
     if query:
         if not query.from_user.username:
             await query.edit_message_text(
-                await get_message_bot("username_not_found_message")
+                await get_message_bot("username_not_found_message"),
+                parse_mode=ParseMode.HTML,
             )
             return States.SET_PHONE_NUMBER
         await send_profile_form(update, context)
@@ -289,7 +301,8 @@ async def send_profile_form(update: Update, context: CallbackContext) -> None:
         await query.answer()
         message = await get_message_bot("profile_message")
         await query.edit_message_text(
-            message.format(name, profession, context.user_data["contact"])
+            message.format(name, profession, context.user_data["contact"]),
+            parse_mode=ParseMode.HTML,
         )
         await query.edit_message_reply_markup(profile_keyboard_markup)
     elif not query and update.message:
@@ -297,6 +310,7 @@ async def send_profile_form(update: Update, context: CallbackContext) -> None:
         await update.message.reply_text(
             message.format(name, profession, context.user_data["contact"]),
             reply_markup=profile_keyboard_markup,
+            parse_mode=ParseMode.HTML,
         )
 
 
@@ -324,6 +338,7 @@ async def send_both_users_message(
             recruiter.telegram_username,
             guide_url,
         ),
+        parse_mode=ParseMode.HTML,
     )
     await context.bot.send_message(
         chat_id=recruiter.telegram_id,
@@ -333,6 +348,7 @@ async def send_both_users_message(
             itspecialist.telegram_username,
             guide_url,
         ),
+        parse_mode=ParseMode.HTML,
     )
 
 
@@ -347,7 +363,8 @@ async def confirm_delete_account(
         await query.answer()
         await query.edit_message_reply_markup(reply_markup=None)
         await query.edit_message_text(
-            await get_message_bot("account_deleted_message")
+            await get_message_bot("account_deleted_message"),
+            parse_mode=ParseMode.HTML,
         )
         await query.edit_message_reply_markup(restart_keyboard_markup)
         return States.ACCOUNT_DELETED
@@ -370,13 +387,20 @@ async def calling_is_successful(
     if query.data == "no":
         communicate_url = await get_form_url(FORM_KEYS["FEEDBACK"])
         message = await get_message_bot("post_call_message")
-        await query.edit_message_text(message.format(communicate_url))
+        await query.edit_message_text(
+            message.format(communicate_url),
+            parse_mode=ParseMode.HTML,
+        )
     elif context.user_data["role"] == "recruiter":
         message = await get_message_bot("post_call_message_for_recruiter")
-        await query.edit_message_text(message.format(feedback_url))
+        await query.edit_message_text(
+            message.format(feedback_url),
+            parse_mode=ParseMode.HTML,
+        )
     else:
         await query.edit_message_text(
-            await get_message_bot("post_call_message_for_it_specialist")
+            await get_message_bot("post_call_message_for_it_specialist"),
+            parse_mode=ParseMode.HTML,
         )
     await query.edit_message_reply_markup(reply_markup=start_keyboard_markup)
     return States.START

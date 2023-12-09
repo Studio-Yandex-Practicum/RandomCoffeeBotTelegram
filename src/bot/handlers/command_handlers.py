@@ -1,6 +1,7 @@
 from typing import Literal
 
 from telegram import Update
+from telegram.constants import ParseMode
 from telegram.ext import CallbackContext, CommandHandler
 
 from bot.constants.states import States
@@ -29,6 +30,7 @@ async def start(
         await update.message.reply_text(
             text=await get_message_bot("start_message"),
             reply_markup=start_keyboard_markup,
+            parse_mode=ParseMode.HTML,
         )
     if update.callback_query:
         user = update.callback_query.from_user
@@ -38,6 +40,7 @@ async def start(
         await update.callback_query.edit_message_text(
             text=await get_message_bot("start_message"),
             reply_markup=start_keyboard_markup,
+            parse_mode=ParseMode.HTML,
         )
     return States.START
 
@@ -55,6 +58,7 @@ async def support_bot(
         await update.message.reply_text(
             text=await get_message_bot("assistance_message"),
             reply_markup=await create_support_keyboard(),
+            parse_mode=ParseMode.HTML,
         )
     return States.SUPPORT
 
@@ -85,6 +89,7 @@ async def redirection_to_support(
         await update.callback_query.edit_message_text(
             text=await get_message_bot("assistance_message"),
             reply_markup=await create_support_keyboard(),
+            parse_mode=ParseMode.HTML,
         )
 
 
@@ -98,12 +103,14 @@ async def start_delete_account(update: Update, context: CallbackContext):
         await update.message.reply_text(
             text=message.format(profession),
             reply_markup=delete_keyboard_markup,
+            parse_mode=ParseMode.HTML,
         )
         return States.DELETE_ACCOUNT
     else:
         await update.message.reply_text(
             text=await get_message_bot("not_registred_message"),
             reply_markup=restart_keyboard_markup,
+            parse_mode=ParseMode.HTML,
         )
         return States.NOT_REGISTERED
 

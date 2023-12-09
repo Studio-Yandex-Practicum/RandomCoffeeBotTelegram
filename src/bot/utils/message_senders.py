@@ -1,4 +1,5 @@
 from telegram import Update
+from telegram.constants import ParseMode
 from telegram.ext import CallbackContext
 
 from bot.keyboards.conversation_keyboards import (
@@ -17,6 +18,7 @@ async def send_is_pair_successful_message(context: CallbackContext) -> None:
             chat_id=context.job.user_id,
             text=await get_message_bot("is_pair_successful_message"),
             reply_markup=is_pair_successful_keyboard_markup,
+            parse_mode=ParseMode.HTML,
         )
 
 
@@ -28,6 +30,7 @@ async def send_deleting_from_db_message(context: CallbackContext) -> None:
         await context.bot.send_message(
             chat_id=context.job.user_id,
             text=text.format(context.job.data),
+            parse_mode=ParseMode.HTML,
         )
 
 
@@ -43,11 +46,15 @@ async def send_name_message(update: Update, context: CallbackContext) -> None:
         text = await get_message_bot("guess_name_message")
         context.user_data["name"] = guessed_name
         await query.answer()
-        await query.edit_message_text(text.format(guessed_name))
+        await query.edit_message_text(
+            text.format(guessed_name),
+            parse_mode=ParseMode.HTML,
+        )
         await query.edit_message_reply_markup(guess_name_keyboard_markup)
     elif update.message:
         text = await get_message_bot("guess_name_message")
         await update.message.reply_text(
             text.format(guessed_name),
             reply_markup=guess_name_keyboard_markup,
+            parse_mode=ParseMode.HTML,
         )

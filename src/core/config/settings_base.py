@@ -22,15 +22,11 @@ CSRF_TRUSTED_ORIGINS = env.list("CSRF_TRUSTED_ORIGINS", default=["*"])
 AUTH_USER_MODEL = "admin_user.AdminUser"
 
 DEFAULT_APPS = [
-    "controlcenter",
-    "material",
-    "material.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "ckeditor",
 ]
 
 LOCAL_APPS = [
@@ -38,7 +34,12 @@ LOCAL_APPS = [
     "admin_user",
 ]
 
-EXTERNAL_APPS = []
+EXTERNAL_APPS = [
+    "controlcenter",
+    "material",
+    "material.admin",
+    "ckeditor",
+]
 
 INSTALLED_APPS = EXTERNAL_APPS + DEFAULT_APPS + LOCAL_APPS
 
