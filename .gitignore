@@ -162,3 +162,10 @@ static/
 persistence_data/
 /src/bot/server.py
 logs/
+!static/ckeditor/ckeditor/skins/n1theme/
+!static/ckeditor/ckeditor/plugins/autocomplete/
+!static/ckeditor/ckeditor/plugins/button/
+!static/ckeditor/ckeditor/plugins/emoji/
+!static/ckeditor/ckeditor/plugins/panelbutton/
+!static/ckeditor/ckeditor/plugins/textmatch/
+!static/ckeditor/ckeditor/plugins/textwatcher/
