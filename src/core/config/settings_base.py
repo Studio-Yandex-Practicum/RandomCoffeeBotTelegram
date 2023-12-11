@@ -22,9 +22,6 @@ CSRF_TRUSTED_ORIGINS = env.list("CSRF_TRUSTED_ORIGINS", default=["*"])
 AUTH_USER_MODEL = "admin_user.AdminUser"
 
 DEFAULT_APPS = [
-    "controlcenter",
-    "material",
-    "material.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
@@ -37,7 +34,12 @@ LOCAL_APPS = [
     "admin_user",
 ]
 
-EXTERNAL_APPS = []
+EXTERNAL_APPS = [
+    "controlcenter",
+    "material",
+    "material.admin",
+    "ckeditor",
+]
 
 INSTALLED_APPS = EXTERNAL_APPS + DEFAULT_APPS + LOCAL_APPS
 
@@ -166,4 +168,73 @@ DEFAULT_RECEIVER = env.str("DEFAULT_EMAIL_ADDRESS", default="NOT_SET")
 MATERIAL_ADMIN_SITE = {
     'MAIN_BG_COLOR':  'green',  # Admin site main color, css color should be specified
     'SHOW_THEMES':  True,  #  Show default admin themes button
+}
+
+
+CKEDITOR_CONFIGS = {
+    "default": {
+        "allowedContent": {
+            "strong em u s a": {
+                "attributes": True,
+                "styles": False,
+                "classes": False,
+            }
+        },
+        "autoParagraph": False,
+        "basicEntities": False,
+        "enterMode": 2,
+        "extraPlugins": ["autocomplete", "emoji", "textmatch", "textwatcher"],
+        "forcePasteAsPlainText": True,
+        "height": 300,
+        "ignoreEmptyParagraph": True,
+        "language": "ru",
+        "removePlugins": "stylesheetparser",
+        "resize_enabled": False,
+        "skin": "n1theme",
+        "toolbar": "Custom",
+        "toolbarCanCollapse": False,
+        "toolbar_Custom": [
+            {
+                "name": "upper_buttons",
+                "items": [
+                    "NewPage",
+                    "Preview",
+                    "-",
+                    "Undo",
+                    "Redo",
+                    "-",
+                    "Copy",
+                    "Paste",
+                    "Cut",
+                    "-",
+                    "Find",
+                    "Replace",
+                    "-",
+                    "Maximize",
+                    "-",
+                    "About",
+                ],
+            },
+            "/",
+            {
+                "name": "lower_buttons",
+                "items": [
+                    "SelectAll",
+                    "-",
+                    "Bold",
+                    "Italic",
+                    "Underline",
+                    "Strike",
+                    "RemoveFormat",
+                    "-",
+                    "Link",
+                    "Unlink",
+                    "-",
+                    "SpecialChar",
+                    "EmojiPanel",
+                ],
+            },
+        ],
+        "width": "full",
+    },
 }

@@ -1,6 +1,7 @@
 from unittest.mock import AsyncMock
 
 import pytest
+from telegram.constants import ParseMode
 
 from bot.handlers.conversation_handlers import change_name
 from bot.utils.db_utils.message import get_message_bot
@@ -22,6 +23,7 @@ async def test_change_name(update, context):
     result = await change_name(update, context)
     update.callback_query.answer.assert_awaited_once()
     update.callback_query.edit_message_text.assert_awaited_with(
-        await get_message_bot("change_name_message")
+        await get_message_bot("change_name_message"),
+        parse_mode=ParseMode.HTML,
     )
     assert result == States.SET_NEW_NAME

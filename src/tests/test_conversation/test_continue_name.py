@@ -2,6 +2,7 @@ from unittest.mock import AsyncMock, Mock, patch
 
 import pytest
 from django.conf import settings
+from telegram.constants import ParseMode
 
 from bot.utils.db_utils.message import get_message_bot
 from bot.handlers.conversation_handlers import continue_name
@@ -34,6 +35,7 @@ async def test_continue_name_itspecialist_role(
 
     update.callback_query.edit_message_text.assert_awaited_with(
         await get_message_bot("choose_profession_message"),
+        parse_mode=ParseMode.HTML,
     )
     update.callback_query.edit_message_reply_markup.assert_awaited_with(
         reply_markup=mocked_pagination_reply_markup

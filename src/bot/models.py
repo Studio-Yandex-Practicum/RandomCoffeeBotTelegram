@@ -1,9 +1,10 @@
+from ckeditor.fields import RichTextField
 from django.db import models
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
 
 from bot.utils.transliteration import transliteration
-from bot.utils.validators import validator_message_key
+from bot.utils.validate_message_key import validator_message_key
 
 
 class Profession(models.Model):
@@ -40,6 +41,7 @@ class PracticumUser(models.Model):
     surname = models.CharField(
         max_length=255,
         verbose_name="Фамилия",
+        blank=True,
         null=True,
     )
     telegram_id = models.BigIntegerField(
@@ -186,7 +188,7 @@ class MessageBot(models.Model):
     title = models.CharField(
         max_length=255, unique=True, verbose_name="Название сообщения бота"
     )
-    message = models.TextField(
+    message = RichTextField(
         unique=True,
         verbose_name="Текст сообщения бота",
         help_text=(

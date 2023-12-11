@@ -1,6 +1,7 @@
 from unittest.mock import AsyncMock
 
 import pytest
+from telegram.constants import ParseMode
 
 from bot.utils.db_utils.message import get_message_bot
 from bot.constants.states import States
@@ -25,7 +26,8 @@ async def test_go_user_is_no_exist(update, context):
 
     assert States.ROLE_CHOICE == result
     update.callback_query.edit_message_text.assert_awaited_with(
-        await get_message_bot("choose_role_message")
+        await get_message_bot("choose_role_message"),
+        parse_mode=ParseMode.HTML,
     )
     update.callback_query.edit_message_reply_markup.assert_awaited_with(
         role_choice_keyboard_markup
@@ -48,6 +50,7 @@ async def test_go_user_is_exist(update, context, itspecialist):
     update.callback_query.message.reply_text.assert_awaited_with(
         await get_message_bot("pair_search_message"),
         reply_markup=cancel_pair_search_keyboard_markup,
+        parse_mode=ParseMode.HTML,
     )
 
     assert States.CANCEL == result

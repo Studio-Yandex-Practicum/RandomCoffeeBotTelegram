@@ -23,6 +23,7 @@ pytils = "^0.4.1"
 redis = "^5.0.1"
 django-material-admin = "^1.8.6"
 django-controlcenter = "^0.3.2"
+django-ckeditor = "^6.7.0"
 
 
 [tool.poetry.group.dev.dependencies]

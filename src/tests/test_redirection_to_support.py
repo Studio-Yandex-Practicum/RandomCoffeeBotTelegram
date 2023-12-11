@@ -1,6 +1,7 @@
 from unittest.mock import AsyncMock
 
 import pytest
+from telegram.constants import ParseMode
 
 from bot.utils.db_utils.message import get_message_bot
 from bot.handlers import command_handlers
@@ -26,4 +27,5 @@ async def test_redirection_to_support_handler(
     update.callback_query.edit_message_text.assert_called_with(
         text=await get_message_bot("assistance_message"),
         reply_markup=await create_support_keyboard(),
+        parse_mode=ParseMode.HTML,
     )

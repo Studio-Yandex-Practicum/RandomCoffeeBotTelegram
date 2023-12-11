@@ -1,6 +1,7 @@
 from unittest.mock import AsyncMock
 
 import pytest
+from telegram.constants import ParseMode
 
 from bot.utils.db_utils.message import get_message_bot
 from bot.constants.states import States
@@ -25,7 +26,8 @@ async def test_profile_fill_again(update, context):
     assert States.ROLE_CHOICE == result
 
     update.callback_query.edit_message_text.assert_awaited_with(
-        await get_message_bot("choose_role_message")
+        await get_message_bot("choose_role_message"),
+        parse_mode=ParseMode.HTML,
     )
     update.callback_query.edit_message_reply_markup.assert_awaited_with(
         role_choice_keyboard_markup
@@ -52,7 +54,8 @@ async def test_profile_create_user(update, context):
     }
     result = await profile(update, context)
     update.callback_query.edit_message_text.assert_awaited_with(
-        await get_message_bot("start_pair_search_message")
+        await get_message_bot("start_pair_search_message"),
+        parse_mode=ParseMode.HTML,
     )
     update.callback_query.edit_message_reply_markup.assert_awaited_with(
         reply_markup=start_keyboard_markup
