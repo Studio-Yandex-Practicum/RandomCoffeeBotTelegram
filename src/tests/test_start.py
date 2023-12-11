@@ -1,6 +1,7 @@
 from unittest.mock import AsyncMock
 
 import pytest
+from telegram.constants import ParseMode
 
 from bot.utils.db_utils.message import get_message_bot
 from bot.handlers import command_handlers
@@ -26,4 +27,5 @@ async def test_start_handler_answer_to_user_message(
     update.message.reply_text.assert_called_with(
         text=await get_message_bot("start_message"),
         reply_markup=start_keyboard_markup,
+        parse_mode=ParseMode.HTML,
     )

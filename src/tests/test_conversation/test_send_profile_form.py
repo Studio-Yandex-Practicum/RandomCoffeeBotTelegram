@@ -1,6 +1,7 @@
 from unittest.mock import AsyncMock
 
 import pytest
+from telegram.constants import ParseMode
 
 from bot.utils.db_utils.message import get_message_bot
 from bot.handlers.conversation_handlers import send_profile_form
@@ -28,7 +29,8 @@ async def test_send_profile_form_with_callback_query(update, context):
             context.user_data["name"],
             context.user_data["profession"],
             context.user_data["contact"],
-        )
+        ),
+        parse_mode=ParseMode.HTML,
     )
     update.callback_query.edit_message_reply_markup.assert_awaited_with(
         profile_keyboard_markup
@@ -59,4 +61,5 @@ async def test_send_profile_form_without_callback_query(update, context):
             context.user_data["contact"],
         ),
         reply_markup=profile_keyboard_markup,
+        parse_mode=ParseMode.HTML,
     )

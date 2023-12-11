@@ -1,6 +1,8 @@
 from unittest.mock import AsyncMock
 
 import pytest
+from telegram.constants import ParseMode
+
 from bot.handlers.conversation_handlers import search_pair
 from bot.utils.db_utils.message import get_message_bot
 from bot.constants.states import States
@@ -34,4 +36,5 @@ async def test_search_pair(update, context):
     query.message.reply_text.assert_called_with(
         await get_message_bot("pair_search_message"),
         reply_markup=cancel_pair_search_keyboard_markup,
+        parse_mode=ParseMode.HTML,
     )

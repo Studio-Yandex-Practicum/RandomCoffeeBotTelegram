@@ -4,6 +4,7 @@ from bot.handlers.conversation_handlers import set_new_name
 from bot.constants.states import States
 
 
+@pytest.mark.django_db
 @pytest.mark.asyncio
 async def test_set_new_name(
     update, context, mocked_message, mocked_message_text
