@@ -3,6 +3,7 @@ from django.db import models
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
 
+from bot.constants.models import MAX_LEN_NAME_AND_SURNAME, MAX_LEN_USERNAME
 from bot.utils.transliteration import transliteration
 from bot.utils.validate_message_key import validator_message_key
 
@@ -37,9 +38,11 @@ def create_key(sender, instance, *args, **kwargs) -> None:
 class PracticumUser(models.Model):
     """Базовая модель для пользователей."""
 
-    name = models.CharField(max_length=255, verbose_name="Имя")
+    name = models.CharField(
+        max_length=MAX_LEN_NAME_AND_SURNAME, verbose_name="Имя"
+    )
     surname = models.CharField(
-        max_length=255,
+        max_length=MAX_LEN_NAME_AND_SURNAME,
         verbose_name="Фамилия",
         blank=True,
         null=True,
@@ -49,7 +52,7 @@ class PracticumUser(models.Model):
         verbose_name="Telegram User ID",
     )
     telegram_username = models.CharField(
-        max_length=255,
+        max_length=MAX_LEN_USERNAME,
         verbose_name="Ник телеграма или номер телефона",
         unique=True,
     )

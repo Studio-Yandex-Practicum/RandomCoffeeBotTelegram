@@ -6,6 +6,7 @@ from bot.keyboards.conversation_keyboards import (
     guess_name_keyboard_markup,
     is_pair_successful_keyboard_markup,
 )
+from bot.utils.correction_name_or_surname import correction_name_or_surname
 from bot.utils.db_utils.message import get_message_bot
 from core.config.logging import debug_logger
 
@@ -39,8 +40,12 @@ async def send_name_message(update: Update, context: CallbackContext) -> None:
     """Отправляет сообщение с именем."""
     query = update.callback_query
     if context.user_data:
-        guessed_name = context.user_data.get(
-            "name", query.from_user.first_name if query else "unknown"
+        guessed_name = correction_name_or_surname(
+            str(
+                context.user_data.get(
+                    "name", query.from_user.first_name if query else "unknown"
+                )
+            )
         )
     if query:
         text = await get_message_bot("guess_name_message")

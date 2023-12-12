@@ -3,6 +3,7 @@ from telegram import Update
 from telegram.ext import CallbackContext
 
 from bot.models import ItSpecialist, Profession, Recruiter
+from bot.utils.correction_name_or_surname import correction_name_or_surname
 
 
 async def to_create_user_in_db(
@@ -10,10 +11,14 @@ async def to_create_user_in_db(
 ) -> None:
     """Сохраняет пользователя в базе данных."""
     query = update.callback_query
+    name = correction_name_or_surname(context.user_data["name"])
+    surname = ""
+    if query.from_user.last_name:
+        surname = correction_name_or_surname(query.from_user.last_name)
     user_data = {
         "telegram_id": query.from_user.id,
-        "name": context.user_data["name"],
-        "surname": query.from_user.last_name,
+        "name": name,
+        "surname": surname,
         "telegram_username": context.user_data["contact"],
     }
     try:
