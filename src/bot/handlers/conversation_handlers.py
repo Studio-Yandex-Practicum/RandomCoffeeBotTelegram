@@ -110,14 +110,16 @@ async def found_pair(
             else (found_user, current_user)
         )
         if await make_pair(itspecialist, recruiter):
-            context.job_queue.run_once(  # type: ignore[attr-defined]
+            context.job_queue.run_repeating(  # type: ignore[attr-defined]
                 callback=send_is_pair_successful_message,
-                when=TIME_IN_SECONDS,
+                interval=TIME_IN_SECONDS,
+                data={"start_time": timezone.now(), "role": "itspecialist"},
                 user_id=itspecialist.telegram_id,
             )
-            context.job_queue.run_once(  # type: ignore[attr-defined]
+            context.job_queue.run_repeating(  # type: ignore[attr-defined]
                 callback=send_is_pair_successful_message,
-                when=TIME_IN_SECONDS,
+                interval=TIME_IN_SECONDS,
+                data={"start_time": timezone.now(), "role": "recruiter"},
                 user_id=recruiter.telegram_id,
             )
             await send_both_users_message(
@@ -377,6 +379,8 @@ async def calling_is_successful(
     update: Update, context: CallbackContext
 ) -> Literal[States.START]:
     """Возвращает пользователям сообщение об обратной связи."""
+    if context.user_data.get("job"):
+        context.user_data.get("job").job.remove()
     query = update.callback_query
     feedback_url = await get_form_url(FORM_KEYS["FEEDBACK"])
     pair = await get_active_pair(context.user_data["role"], query.from_user.id)
