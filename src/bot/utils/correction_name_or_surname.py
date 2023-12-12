@@ -5,7 +5,7 @@ from bot.constants.patterns import HTML_TEG_PATTERN
 
 
 def correction_name_or_surname(name: str) -> str:
-    """Удаление тегов HTML в имени/фамилии."""
+    """Удаление тегов HTML в имени/фамилии, обрезка строки."""
     pattern = re.compile(HTML_TEG_PATTERN)
     name = re.sub(pattern, "", name)[:MAX_LEN_NAME_AND_SURNAME]
     if not name:
