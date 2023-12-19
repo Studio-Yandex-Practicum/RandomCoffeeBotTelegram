@@ -18,6 +18,7 @@ from bot.keyboards.conversation_keyboards import (
     role_choice_keyboard_markup,
 )
 from bot.models import ItSpecialist, Profession, Recruiter
+from bot.utils.correction_name_or_surname import correction_name_or_surname
 from bot.utils.db_utils.message import get_message_bot
 from bot.utils.db_utils.pair import (
     delete_pair,
@@ -297,7 +298,7 @@ async def send_profile_form(update: Update, context: CallbackContext) -> None:
     query = update.callback_query
     if context.user_data:
         profession = context.user_data["profession"]
-        name = context.user_data["name"]
+        name = correction_name_or_surname(str(context.user_data["name"]))
     if query:
         context.user_data["contact"] = query.from_user.username
         await query.answer()
