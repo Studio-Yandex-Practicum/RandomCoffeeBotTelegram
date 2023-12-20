@@ -1,5 +1,11 @@
-from admin_user.actions import delete_users_and_send_message
+from admin_user.actions import (
+    delete_inactive_users,
+    delete_users_and_send_message,
+)
 from django.contrib import admin
+from django.http import HttpResponseRedirect
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_protect
 
 from bot.models import (
     CreatedPair,
@@ -11,6 +17,26 @@ from bot.models import (
     Recruiter,
 )
 from bot.utils.forms import ItSpecialistForm, RecruiterForm
+
+csrf_protect_m = method_decorator(csrf_protect)
+
+
+class BaseItSpecialistRecruiterAdmin(admin.ModelAdmin):
+    """Базовый класс админки IT-специалистов и рекрутеров."""
+
+    @csrf_protect_m
+    def changelist_view(self, request, extra_context=None):
+        """
+        Вызывает функцию 'delete_inactive_users'
+        в обход валидации методов базового класса.
+        """
+        if (
+            "action" in request.POST
+            and request.POST["action"] == "delete_inactive_users"
+        ):
+            delete_inactive_users(self.model)
+            return HttpResponseRedirect(request.path)
+        return super().changelist_view(request, extra_context)
 
 
 @admin.register(Profession)
@@ -59,7 +85,7 @@ class PassedPairAdmin(admin.ModelAdmin):
 
 
 @admin.register(ItSpecialist)
-class ItSpecialistAdmin(admin.ModelAdmin):
+class ItSpecialistAdmin(BaseItSpecialistRecruiterAdmin):
     """Управление моделью IT-специалиста."""
 
     form = ItSpecialistForm
@@ -101,12 +127,12 @@ class ItSpecialistAdmin(admin.ModelAdmin):
         "in_search_pair",
     )
     search_fields = ("telegram_id", "telegram_username")
-    actions = [delete_users_and_send_message]
+    actions = (delete_users_and_send_message, delete_inactive_users)
     icon_name = "school"
 
 
 @admin.register(Recruiter)
-class RecruiterAdmin(admin.ModelAdmin):
+class RecruiterAdmin(BaseItSpecialistRecruiterAdmin):
     """Управление моделью рекрутера."""
 
     fields = (
@@ -147,7 +173,7 @@ class RecruiterAdmin(admin.ModelAdmin):
         "registration_date",
     )
     search_fields = ("telegram_id", "telegram_username")
-    actions = [delete_users_and_send_message]
+    actions = (delete_users_and_send_message, delete_inactive_users)
     icon_name = "person"
 
 
