@@ -1,4 +1,5 @@
 import asyncio
+import datetime as dt
 
 from django.apps import apps
 from django.contrib import admin
@@ -23,3 +24,10 @@ def delete_users_and_send_message(modeladmin, request, queryset):
             data=PARENT_CASE_ROLE[queryset.model],
         )
     queryset.delete()
+
+
+@admin.action(description="Удалить пользователей неактивных больше пол года")
+def delete_inactive_users(modeladmin):
+    """Удаляет пользователей неактивных больше пол года."""
+    date = dt.datetime.now() - dt.timedelta(days=183)
+    modeladmin.objects.filter(last_login_date__lte=date).delete()
