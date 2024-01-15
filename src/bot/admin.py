@@ -12,6 +12,7 @@ from bot.models import (
     FormUrl,
     ItSpecialist,
     MessageBot,
+    ParameterBot,
     PassedPair,
     Profession,
     Recruiter,
@@ -217,4 +218,27 @@ class MessageBotAdmin(admin.ModelAdmin):
 
     def has_add_permission(self, request):
         """Запрещает создавать новые сообщения."""
+        return False
+
+
+@admin.register(ParameterBot)
+class ParameterBotAdmin(admin.ModelAdmin):
+    """Управление моделью параметров бота."""
+
+    list_display = (
+        "title",
+        "value",
+        "unit_measurement",
+    )
+    list_filter = ("title",)
+    search_fields = ("title",)
+    exclude = ("parameter_key",)
+    icon_name = "settings"
+
+    def has_delete_permission(self, request, obj=None):
+        """Запрещает удалять параметры."""
+        return False
+
+    def has_add_permission(self, request):
+        """Запрещает создавать новые параметры."""
         return False

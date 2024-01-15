@@ -5,6 +5,7 @@ from django.apps import apps
 from django.contrib import admin
 
 from bot.constants.cases import PARENT_CASE_ROLE
+from bot.models import ParameterBot
 from bot.utils.message_senders import send_deleting_from_db_message
 
 
@@ -26,8 +27,9 @@ def delete_users_and_send_message(modeladmin, request, queryset):
     queryset.delete()
 
 
-@admin.action(description="Удалить пользователей неактивных больше пол года")
+@admin.action(description="Удалить неактивных пользователей")
 def delete_inactive_users(modeladmin):
-    """Удаляет пользователей неактивных больше пол года."""
-    date = dt.datetime.now() - dt.timedelta(days=183)
+    """Удаляет неактивных пользователей."""
+    days = ParameterBot.objects.get(parameter_key="inactive_users_day").value
+    date = dt.datetime.now() - dt.timedelta(days=days)
     modeladmin.objects.filter(last_login_date__lte=date).delete()
