@@ -14,8 +14,7 @@ from bot.utils.db_utils.message import get_message_bot
 from bot.utils.db_utils.pair import delete_pair, get_active_pair
 from core.config.logging import debug_logger
 
-TIME_SECOND_PING = 7
-LAST_TIME = 10
+LAST_TIME = 2
 
 
 @debug_logger
@@ -23,18 +22,21 @@ async def send_is_pair_successful_message(context: CallbackContext) -> None:
     """Отправляет сообщение состоялся ли звонок."""
     if context.job:
         context.user_data["job"] = context.job
-        await context.bot.send_message(
-            chat_id=context.job.user_id,
-            text=await get_message_bot("is_pair_successful_message"),
-            reply_markup=is_pair_successful_keyboard_markup,
-            parse_mode=ParseMode.HTML,
+        question_call_day_in_seconds = context.job.data.get("first")
+        final_response_time = (
+            context.job.data.get("start_time")
+            + timedelta(days=LAST_TIME)
+            + timedelta(seconds=question_call_day_in_seconds)
         )
-        context.job.job.reschedule(
-            trigger="interval", seconds=TIME_SECOND_PING
-        )
-        if timezone.now() > context.job.data.get("start_time") + timedelta(
-            seconds=LAST_TIME
-        ):
+        if timezone.now() < final_response_time:
+            text = await get_message_bot("is_pair_successful_message")
+            await context.bot.send_message(
+                chat_id=context.job.user_id,
+                text=text,
+                reply_markup=is_pair_successful_keyboard_markup,
+                parse_mode=ParseMode.HTML,
+            )
+        elif timezone.now() >= final_response_time:
             pair = await get_active_pair(
                 context.user_data.get("role"), context.job.user_id
             )

@@ -1,11 +1,17 @@
 from ckeditor.fields import RichTextField
+from django.core.validators import MinValueValidator
 from django.db import models
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
 
-from bot.constants.models import MAX_LEN_NAME_AND_SURNAME, MAX_LEN_USERNAME
+from bot.constants.models import (
+    MAX_LEN_KEY,
+    MAX_LEN_NAME_AND_SURNAME,
+    MAX_LEN_TITLE,
+    MAX_LEN_USERNAME,
+)
 from bot.utils.transliteration import transliteration
-from bot.utils.validate_message_key import validator_message_key
+from bot.utils.validate_key import validator_key
 
 
 class Profession(models.Model):
@@ -169,10 +175,12 @@ class PassedPair(CustomPair):
 class FormUrl(models.Model):
     """Модель для ссылок на формы."""
 
-    title = models.CharField(max_length=255, verbose_name="Название ссылки")
+    title = models.CharField(
+        max_length=MAX_LEN_TITLE, verbose_name="Название ссылки"
+    )
     url = models.URLField(verbose_name="Ссылка", null=True)
     url_key = models.CharField(
-        max_length=255,
+        max_length=MAX_LEN_KEY,
         unique=True,
         verbose_name="Ключ ссылки",
     )
@@ -189,7 +197,9 @@ class MessageBot(models.Model):
     """Модель сообщений бота."""
 
     title = models.CharField(
-        max_length=255, unique=True, verbose_name="Название сообщения бота"
+        max_length=MAX_LEN_TITLE,
+        unique=True,
+        verbose_name="Название сообщения бота",
     )
     message = RichTextField(
         unique=True,
@@ -199,15 +209,46 @@ class MessageBot(models.Model):
         ),
     )
     message_key = models.CharField(
-        max_length=255,
+        max_length=MAX_LEN_KEY,
         unique=True,
         verbose_name="Ключ сообщения бота",
-        validators=[validator_message_key()],
+        validators=[validator_key()],
     )
 
     class Meta:
         verbose_name = "Сообщение бота"
         verbose_name_plural = "Сообщения бота"
+
+    def __str__(self):
+        return f"Название '{self.title}'"
+
+
+class ParameterBot(models.Model):
+    """Модель параметров бота."""
+
+    title = models.CharField(
+        max_length=MAX_LEN_TITLE,
+        unique=True,
+        verbose_name="Название параметра бота",
+    )
+    value = models.PositiveSmallIntegerField(
+        verbose_name="Значение параметра бота",
+        validators=[MinValueValidator(1)],
+    )
+    unit_measurement = models.CharField(
+        max_length=50,
+        verbose_name="Единица измерения параметра бота",
+    )
+    parameter_key = models.CharField(
+        max_length=MAX_LEN_KEY,
+        unique=True,
+        verbose_name="Ключ параметра бота",
+        validators=[validator_key()],
+    )
+
+    class Meta:
+        verbose_name = "Параметр бота"
+        verbose_name_plural = "Параметры бота"
 
     def __str__(self):
         return f"Название '{self.title}'"

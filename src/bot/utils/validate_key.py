@@ -3,8 +3,8 @@ from django.core.validators import RegexValidator
 from bot.constants.patterns import MESSAGE_KEY_PATTERN
 
 
-def validator_message_key() -> RegexValidator:
-    """Валидатор ключа сообщения бота."""
+def validator_key() -> RegexValidator:
+    """Валидатор ключа бота."""
     return RegexValidator(
         MESSAGE_KEY_PATTERN,
         message=(

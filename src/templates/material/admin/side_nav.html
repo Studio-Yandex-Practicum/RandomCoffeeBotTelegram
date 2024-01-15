@@ -25,7 +25,7 @@
                 </div>
                 <div class="collapsible-body">
                     {% for model in app.models %}
-                        {% if model.object_name != "FormUrl" %}
+                        {% if model.object_name != "FormUrl" and model.object_name != "MessageBot" and model.object_name != "ParameterBot" %}
                             {% if model.admin_url %}
                                 <div {% if model.admin_url in request.path %}class="active"{% endif %}>
                                     <a href="{{ model.admin_url }}">
@@ -55,12 +55,18 @@
                     Интерфейс администрирования
                 </div>
                 <div class="collapsible-body">
-                    <div >
-                        <a href="/admin/bot/formurl/">
-                            Ссылки на формы
-                        </a>
-                    </div>
-                    <div >
+                    {% for app in available_apps %}
+                        {% for model in app.models %}
+                            {% if model.object_name == "FormUrl" or model.object_name == "MessageBot" or model.object_name == "ParameterBot" %}
+                                <div>
+                                    <a href="{{ model.admin_url }}">
+                                        {{ model.name }}
+                                    </a>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    {% endfor %}
+                    <div>
                         <a href="/admin/dashboard/">
                             Статистика
                         </a>
@@ -72,7 +78,7 @@
     <div class="app">
         <div class="card">
             <div class="card-content">
-                <p>{% trans "You don't have permission to view or edit anything." %}</>
+                <p>{% trans "You don't have permission to view or edit anything." %}</p>
             </div>
         </div>
     </div>

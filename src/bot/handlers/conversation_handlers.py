@@ -28,6 +28,7 @@ from bot.utils.db_utils.pair import (
     make_pair,
     set_now_search_start_time,
 )
+from bot.utils.db_utils.parameter import get_parameter_bot
 from bot.utils.db_utils.user import (
     deleting_account,
     to_create_user_in_db,
@@ -35,16 +36,13 @@ from bot.utils.db_utils.user import (
 )
 from bot.utils.form_url import get_form_url
 from bot.utils.message_senders import (
+    LAST_TIME,
     send_is_pair_successful_message,
     send_name_message,
 )
 from bot.utils.pagination import parse_callback_data
 from bot.utils.validate_phone import validation_phone_number
 from core.config.logging import debug_logger
-
-TIME_IN_SECONDS = (
-    5  # Время, через которое происходит оповещение о состоявщемся интервью
-)
 
 
 @debug_logger
@@ -110,16 +108,29 @@ async def found_pair(
             else (found_user, current_user)
         )
         if await make_pair(itspecialist, recruiter):
+            question_call_day_in_seconds = (
+                await get_parameter_bot("question_call_day") * 86400
+            )
             context.job_queue.run_repeating(  # type: ignore[attr-defined]
                 callback=send_is_pair_successful_message,
-                interval=TIME_IN_SECONDS,
-                data={"start_time": timezone.now(), "role": "itspecialist"},
+                first=question_call_day_in_seconds,
+                interval=LAST_TIME * 86400,
+                data={
+                    "start_time": timezone.now(),
+                    "role": "itspecialist",
+                    "first": question_call_day_in_seconds,
+                },
                 user_id=itspecialist.telegram_id,
             )
             context.job_queue.run_repeating(  # type: ignore[attr-defined]
                 callback=send_is_pair_successful_message,
-                interval=TIME_IN_SECONDS,
-                data={"start_time": timezone.now(), "role": "recruiter"},
+                first=question_call_day_in_seconds,
+                interval=LAST_TIME * 86400,
+                data={
+                    "start_time": timezone.now(),
+                    "role": "recruiter",
+                    "first": question_call_day_in_seconds,
+                },
                 user_id=recruiter.telegram_id,
             )
             await send_both_users_message(
